@@ -124,7 +124,6 @@ export default function Dashboard() {
           position: 'relative',
         }}
       >
-        {/* Flight Section - Positioned at 20% */}
         <Box
           sx={{
             position: 'absolute',
