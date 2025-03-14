@@ -26,7 +26,6 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import { Link } from "@inertiajs/react";
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
@@ -125,7 +124,6 @@ export default function Dashboard() {
           position: 'relative',
         }}
       >
-        {/* Flight Section - Positioned at 20% */}
         <Box
           sx={{
             position: 'absolute',
@@ -185,19 +183,18 @@ export default function Dashboard() {
               fullWidth
               variant="outlined"
               type="date"
-              sx={{ width: '45%', mr: 4 }} // Add margin-right for spacing
+              sx={{ width: '45%', mr: 4 }} 
             />
             <TextField
               fullWidth
               variant="outlined"
               type="date"
-              sx={{ width: '45%' }} // No need for margin-left here
+              sx={{ width: '45%' }} 
             />
 
           </Box>
         </Box>
 
-        {/* Experiences Section - Positioned at 40% */}
         <Box
           sx={{
             position: 'absolute',
@@ -235,7 +232,6 @@ export default function Dashboard() {
           </Select>
         </Box>
 
-        {/* Flight Status Section - Positioned at 60% */}
         <Box
           sx={{
             position: 'absolute',
