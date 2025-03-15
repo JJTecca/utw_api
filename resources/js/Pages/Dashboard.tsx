@@ -9,6 +9,7 @@ import {
   Button,
   Box,
   Avatar,
+  Menu,
   Grid,
   Card,
   CardContent,
@@ -26,17 +27,33 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import { useForm } from '@inertiajs/inertia-react';
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
-  //const [openExperiences, setOpenExperiences] = useState(false);
+  const [anchorEl, setanchorEl] = useState<null | HTMLElement>(null); //variabila standard , ramane asa
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [experienceType, setExperienceType] = useState('');
-  //const [avatarClick, setAvatarClick] = useState('');
 
   const handleFlightStatusClick = () => {
-    setOpenFlightStatus(!openFlightStatus);
+    setOpenFlightStatus(!openFlightStatus)
+  };
+
+  const handleMenuClose = () => {
+    setanchorEl(null)
+  };
+
+  const handleAccountManagement = () => {
+    handleMenuClose();
+    window.location.href='/profileMenu' //dute la profileMenu
+  };
+  
+  const form = useForm();
+
+  const handleLogout = () => {
+    handleMenuClose();
+    form.post('/logout');
   };
 
   const currentDate = new Date().toLocaleDateString('en-GB', {
@@ -97,19 +114,43 @@ export default function Dashboard() {
             >
               <FlightIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               MANAGE YOUR FLIGHTS
+
+            {/*merge si cu div */}
             </Button>
-            <Button
-                sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
-              href="/profileMenu"
-            >
-              <Avatar
+              <Button
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '1.5em',
+                  color: 'black',
+                  mx: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingTop: '5px',
+                }}
+                onClick={(event) => setanchorEl(event.currentTarget)} 
+              >
+                <Avatar
                   alt="Account"
                   src="/Images/login-avatar.jpg"
-                  sx={{ width: 50, height: 50, ml: 2}}
-                >
-              </Avatar>
-            </Button>
-          </Box>
+                  sx={{ width: 50, height: 50, ml: 2 }}
+                />
+              </Button>
+              {/* Dropdown Menu */}
+              <Menu
+                anchorEl={ anchorEl } 
+                open={Boolean(anchorEl)} 
+                onClose={handleMenuClose} 
+              >
+              <MenuItem onClick={handleAccountManagement}>
+                <Typography variant="body1">Account Management</Typography>
+              </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                    <Typography variant="body1" color="error">
+                      Logout
+                    </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
         </Toolbar>
       </AppBar>
 
