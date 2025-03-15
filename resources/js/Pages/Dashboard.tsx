@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import {
@@ -29,11 +29,11 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
-  const [openExperiences, setOpenExperiences] = useState(false);
+  //const [openExperiences, setOpenExperiences] = useState(false);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [experienceType, setExperienceType] = useState('');
-  const [avatarClick, setAvatarClick] = useState('');
+  //const [avatarClick, setAvatarClick] = useState('');
 
   const handleFlightStatusClick = () => {
     setOpenFlightStatus(!openFlightStatus);
@@ -86,14 +86,14 @@ export default function Dashboard() {
             </Button>
             <Button
               sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
-              href="/pricing"
+              href="/worldtour"
             >
               <PublicIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               WORLD TOUR
             </Button>
             <Button
               sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
-              href="/pricing"
+              href="/manage"
             >
               <FlightIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               MANAGE YOUR FLIGHTS

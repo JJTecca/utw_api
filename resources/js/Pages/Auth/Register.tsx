@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Box, Typography, TextField, Button, Checkbox, FormControlLabel, Link, CircularProgress } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Box, Typography, TextField, Button, Checkbox, FormControlLabel, Link, CircularProgress, FormGroup } from '@mui/material';
 import FlightIcon from '@mui/icons-material/Flight';
 import { Head, useForm } from '@inertiajs/react';
 import GuestLayoutRight from '@/Layouts/GuestLayoutRight';
@@ -13,6 +13,7 @@ export default function Register() {
         password: '',
         password_confirmation: '', 
         country: '', 
+        gender: '',
         agreeToTerms: false as boolean, 
     });
 
@@ -23,13 +24,17 @@ export default function Register() {
         });
     };
 
+    const handleGender = (gender : string) => {
+        setData('gender',gender);
+    }
+
     return (
         <GuestLayoutRight>
             <Head title="Register" />
 
             <Box sx={{ maxWidth: 500, mx: 'auto', mt: 4, textAlign: 'center' }}>
                 <FlightIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h3" gutterBottom>
                     Join the Crew
                 </Typography>
 
@@ -109,6 +114,31 @@ export default function Register() {
                             ))}
                         </Select>
                     </FormControl>
+                    <Box sx={{ mt: 2 }}>
+                        <Typography variant="h5" sx={{ mb: 2, fontSize:"1.5rem"}}> 
+                            Gender
+                        </Typography>
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox 
+                                        checked={data.gender === 'male'}
+                                        onChange={() => handleGender('male')}
+                                    />
+                                }
+                                label="Male"
+                                sx={{ ml: 0 }} 
+                            />
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox
+                                        checked={data.gender === 'female'}
+                                        onChange={() => handleGender('female')}
+                                    />
+                                }
+                                label="Female"
+                                sx={{ ml: 0 }} 
+                            />
+                    </Box>
 
                     <FormControlLabel
                         control={

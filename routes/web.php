@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,5 +31,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/profileMenu', function () { //resources\js\Pages\ProfileMenu.tsx
     return Inertia::render('ProfileMenu');
 })->name('profile');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
 
 require __DIR__.'/auth.php';
