@@ -34,4 +34,14 @@ class UserRequest extends FormRequest
             'country' => 'required|string|max:255'
         ];
     }
+    public function messages()
+    {
+        return [
+            'firstName.required' => 'The first name field is required.',
+            'lastName.required' => 'The last name field is required.',
+            'email.unique' => 'This email is already taken.',
+            'password.required' => 'The password field is required.',
+            'country.required' => 'The country field is required'
+        ];
+    }
 }

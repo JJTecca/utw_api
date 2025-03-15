@@ -9,7 +9,6 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 
 export default function ProfileMenu() {
     const [showLayout, setShowLayout] = useState(false); 
-    /*const [expanded, setExpanded] = useState<string | false>(false); */
 
     const handleButtonClick = () => {
         setShowLayout(!showLayout); 
@@ -31,7 +30,7 @@ export default function ProfileMenu() {
                             fontWeight: 'bold',
                             borderRadius: '12px', // Rounded corners
                         }}
-                        onClick={handleButtonClick} // Handle button click
+                        onClick={handleButtonClick} 
                     >
                         Home Of Aviation
                     </Button>
@@ -56,7 +55,7 @@ export default function ProfileMenu() {
                     borderRadius: '12px',
                 }}
             >
-                Currency
+                Payment Methods:
                 <PaymentsIcon sx={{ fontSize: '2rem', ml: 2, color: 'white' }} /> 
                 <CreditCardIcon sx={{ fontSize: '2rem', ml: 2, color: 'white' }} /> 
             </Box>
