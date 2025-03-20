@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('destinations', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('airport_id')->nullable();
+            $table->text('flight_logs');
+            $table->text('maintenance');
+            $table->text('weather');
+            $table->text('financial');
+            $table->text('passenger_reports');
+            $table->text('crew_reports');
+            $table->text('safety_reports');
             $table->timestamps();
         });
     }
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('destinations');
+        Schema::dropIfExists('reports');
     }
 };
