@@ -37,6 +37,7 @@
         "airports-nodejs": "^1.0.7",
         "country-list": "^2.3.0",
         "styled-components": "^6.1.15",
-        "world-countries": "^5.1.0"
+        "world-countries": "^5.1.0",
+        "ziggy": "^2.4.0"
     }
 }

@@ -103,7 +103,7 @@ export default function Dashboard() {
             </Button>
             <Button
               sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
-              href="/worldtour"
+              href={route('dashboard.worldtour')}
             >
               <PublicIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               WORLD TOUR
