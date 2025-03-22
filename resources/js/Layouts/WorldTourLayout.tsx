@@ -8,7 +8,6 @@ export default function WorldTourLayout({ children }: PropsWithChildren) {
                 backgroundImage: 'url(/Images/tourbackground.jpg)',  
                 backgroundSize: 'cover', 
                 backgroundPosition: 'center',
-                transform: 'scale(1)',
             }}
         >
             {children}
