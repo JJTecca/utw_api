@@ -26,13 +26,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dashboard/worldtour', function () { //numai daca esti logat merge
+        return Inertia::render('Tour');
+    })->name('dashboard.worldtour'); // dashboard/worldtour
+
+    Route::get('/profileMenu', function () { //resources\js\Pages\ProfileMenu.tsx
+        return Inertia::render('ProfileMenu');
+    })->name('profile');
+
 });
 
-Route::get('/profileMenu', function () { //resources\js\Pages\ProfileMenu.tsx
-    return Inertia::render('ProfileMenu');
-})->name('profile');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
+
 
 require __DIR__.'/auth.php';
