@@ -89,7 +89,7 @@ export default function Dashboard() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button
               sx={{ fontWeight: 'bold', fontSize: '1.5rem', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
-              href="/about"
+              href={route('dashboard.experiences')}
             >
               <ExploreIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               EXPERIENCE
