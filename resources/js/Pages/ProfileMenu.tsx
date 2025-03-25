@@ -266,35 +266,55 @@ export default function ProfileMenu() {
                             <Typography variant="h6" sx={{ mr: 2 }}>
                                 User Friendly Experience:
                             </Typography>
-                            <Rating name="user-friendly-rating" defaultValue={3.5} precision={0.5} sx={{ color: 'white' }} />
+                            <Rating name="user-friendly-rating" defaultValue={5.0} precision={0.5} sx={{ 
+                                color: 'white' ,
+                                '& .MuiRating-iconHover': { color: 'yellow'},
+                                }}
+                            />
                         </Box>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ mr: 2 }}>
                                 Flight Booking Process:
                             </Typography>
-                            <Rating name="flight-booking-rating" defaultValue={4.0} precision={0.5} sx={{ color: 'white' }} />
+                            <Rating name="flight-booking-rating" defaultValue={5.0} precision={0.5} sx={{ 
+                                color: 'white',
+                                '& .MuiRating-iconHover': { color: 'yellow'},
+                                }} 
+                            />
                         </Box>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ mr: 2 }}>
                                 Customer Support:
                             </Typography>
-                            <Rating name="customer-support-rating" defaultValue={2.5} precision={0.5} sx={{ color: 'white' }} />
+                            <Rating name="customer-support-rating" defaultValue={5.0} precision={0.5} sx={{ 
+                                color: 'white',
+                                '& .MuiRating-iconHover': { color: 'yellow'}, 
+                                }} 
+                            />
                         </Box>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ mr: 2 }}>
                                 In-Flight Experience:
                             </Typography>
-                            <Rating name="in-flight-rating" defaultValue={4.5} precision={0.5} sx={{ color: 'white' }} />
+                            <Rating name="in-flight-rating" defaultValue={5.0} precision={0.5} sx={{ 
+                                color: 'white',
+                                '& .MuiRating-iconHover': { color: 'yellow'}, 
+                                }} 
+                            />
                         </Box>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ mr: 2 }}>
                                 Mobile App Performance:
                             </Typography>
-                            <Rating name="mobile-app-rating" defaultValue={3.0} precision={0.5} sx={{ color: 'white' }} />
+                            <Rating name="mobile-app-rating" defaultValue={5.0} precision={0.5} sx={{ 
+                                color: 'white',
+                                '& .MuiRating-iconHover': { color: 'yellow'}, 
+                                }} 
+                            />
                         </Box>
                     </Box>
 
