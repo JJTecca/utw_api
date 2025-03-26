@@ -113,10 +113,10 @@ export default function Tour() {
             {selectedCountry && (
                 <Box sx={{ 
                     position: 'absolute',
-                    top: '15%',
+                    top: '5%',
                     left: '52%',
                     width: '40%',
-                    height: '80%',
+                    height: '90%',
                     backgroundColor: 'white',
                     display: 'flex',     
                     padding: 6,

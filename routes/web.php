@@ -35,6 +35,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('ProfileMenu');
     })->name('profile');
 
+    Route::get('/dashboard/experiences', function () { //resources\js\Pages\ProfileMenu.tsx
+        return Inertia::render('Experiences');
+    })->name('dashboard.experiences');
+
 });
 
 
