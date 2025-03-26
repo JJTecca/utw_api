@@ -7,7 +7,11 @@ const backgrounds = [
   '/Images/ExperienceTypes/business.jpg',
 ];
 
-export default function ExperienceLayout({ children }: PropsWithChildren) {
+interface ExperienceLayoutProps extends PropsWithChildren {
+  activeIndex: number;
+}
+
+export default function ExperienceLayout({ children, activeIndex }: ExperienceLayoutProps) {
   return (
     <div className="relative min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="fixed inset-0 overflow-y-auto">
@@ -23,7 +27,7 @@ export default function ExperienceLayout({ children }: PropsWithChildren) {
           />
         ))}
       </div>
-      
+
       <div className="relative z-10 pt-6 sm:pt-0">
         {children}
       </div>
