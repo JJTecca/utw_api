@@ -28,33 +28,14 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { useForm } from '@inertiajs/inertia-react';
+import { styles } from './Dashboard.styles'; 
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
-  const [anchorEl, setanchorEl] = useState<null | HTMLElement>(null); //variabila standard , ramane asa
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [experienceType, setExperienceType] = useState('');
-
-  const handleFlightStatusClick = () => {
-    setOpenFlightStatus(!openFlightStatus)
-  };
-
-  const handleMenuClose = () => {
-    setanchorEl(null)
-  };
-
-  const handleAccountManagement = () => {
-    handleMenuClose();
-    window.location.href='/profileMenu' //dute la profileMenu
-  };
-  
-  const form = useForm();
-
-  const handleLogout = () => {
-    handleMenuClose();
-    form.post('/logout');
-  };
 
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -62,17 +43,37 @@ export default function Dashboard() {
     weekday: 'long',
   });
 
+  const form = useForm();
+
+  const handleFlightStatusClick = () => {
+    setOpenFlightStatus(!openFlightStatus);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAccountManagement = () => {
+    handleMenuClose();
+    window.location.href = '/profileMenu';
+  };
+
+  const handleLogout = () => {
+    handleMenuClose();
+    form.post('/logout');
+  };
+
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
-      <AppBar position="static" sx={{ backgroundColor: 'powderblue', minHeight: '120px', paddingTop: '5px' }}>
-        <Toolbar sx={{ minHeight: '100px', px: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <AppBar position="static" sx={styles.appBar}>
+        <Toolbar sx={styles.toolbar}>
+          <Box sx={styles.logoContainer}>
             <IconButton
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2, fontWeight: 'bold', color: 'black' }}
+              sx={styles.logoButton}
             >
               <FlightTakeoffIcon style={{ fontSize: '3rem' }} />
             </IconButton>
@@ -80,7 +81,7 @@ export default function Dashboard() {
             <Typography
               variant="h4"
               component="div"
-              sx={{ fontWeight: 'bold', fontSize: '2.5rem', color: 'black', paddingTop: '5px' }}
+              sx={styles.logoText}
             >
               UTW Airlines
             </Typography>
@@ -88,73 +89,61 @@ export default function Dashboard() {
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button
-              sx={{ fontWeight: 'bold', fontSize: '1.5rem', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
+              sx={styles.navButton}
               href={route('dashboard.experiences')}
             >
               <ExploreIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               EXPERIENCE
             </Button>
             <Button
-              sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
+              sx={styles.navButton}
               href="/settings"
             >
               <EventSeatIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               RESERVE
             </Button>
             <Button
-              sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
+              sx={styles.navButton}
               href={route('dashboard.worldtour')}
             >
               <PublicIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               WORLD TOUR
             </Button>
             <Button
-              sx={{ fontWeight: 'bold', fontSize: '1.5em', color: 'black', mx: 2, display: 'flex', alignItems: 'center', paddingTop: '5px' }}
+              sx={styles.navButton}
               href="/manage"
             >
               <FlightIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               MANAGE YOUR FLIGHTS
-
-            {/*merge si cu div */}
             </Button>
-              <Button
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '1.5em',
-                  color: 'black',
-                  mx: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  paddingTop: '5px',
-                }}
-                onClick={(event) => setanchorEl(event.currentTarget)} 
-              >
-                <Avatar
-                  alt="Account"
-                  src="/Images/login-avatar.jpg"
-                  sx={{ width: 50, height: 50, ml: 2 }}
-                />
-              </Button>
-              {/* Dropdown Menu */}
-              <Menu
-                anchorEl={ anchorEl } 
-                open={Boolean(anchorEl)} 
-                onClose={handleMenuClose} 
-              >
+            <Button
+              sx={styles.accountButton}
+              onClick={(event) => setAnchorEl(event.currentTarget)} 
+            >
+              <Avatar
+                alt="Account"
+                src="/Images/login-avatar.jpg"
+                sx={{ width: 50, height: 50, ml: 2 }}
+              />
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
               <MenuItem onClick={handleAccountManagement}>
                 <Typography variant="body1">Account Management</Typography>
               </MenuItem>
-                <MenuItem onClick={handleLogout}>
-                    <Typography variant="body1" color="error">
-                      Logout
-                    </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+              <MenuItem onClick={handleLogout}>
+                <Typography variant="body1" color="error">
+                  Logout
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Background Image Section */}
       <div
         style={{
           backgroundImage: 'url(/Images/turkish-menu.jpg)',
@@ -165,25 +154,8 @@ export default function Dashboard() {
           position: 'relative',
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '26%',
-            transform: 'translate(-50%, -50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '16px',
-            width: '20%',
-            backgroundColor: 'white',
-            padding: '16px',
-            borderRadius: '8px',
-            height: '65%',
-            paddingBottom: '16px'
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 'bold' ,mb: 2 , mt: 4}}>
+        <Box sx={styles.flightSearchBox}>
+          <Typography variant="h5" sx={styles.searchTitle}>
             Make your destinations come true
           </Typography>
           <Select
@@ -217,7 +189,7 @@ export default function Dashboard() {
             <MenuItem value="Paris">Paris</MenuItem>
           </Select>
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' , ml : 5 , mr : 5 , fontSize:'1.25rem' }}>
+            <Typography variant="h6" sx={styles.dateTitle}>
               Departure day & Return day
             </Typography>     
             <TextField
@@ -232,28 +204,11 @@ export default function Dashboard() {
               type="date"
               sx={{ width: '45%' }} 
             />
-
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '40%',
-            left: '46%',
-            transform: 'translate(-50%, -50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '16px',
-            width: '15%',
-            backgroundColor: 'white',
-            padding: '16px',
-            borderRadius: '8px',
-            
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 'bold' ,mb:4 }}>
+        <Box sx={styles.experienceBox}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', mb:4 }}>
             Experiences
           </Typography>
           <Select
@@ -273,35 +228,13 @@ export default function Dashboard() {
           </Select>
         </Box>
 
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '45%',
-            left: '6%',
-            transform: 'translate(-50%, -50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '16px',
-            width: '15%',
-            backgroundColor: 'white',
-            padding: '16px',
-            borderRadius: '8px',
-          }}
-        >
+        <Box sx={styles.flightStatusBox}>
           <Button
             fullWidth
             variant="contained"
             startIcon={<FlightTakeoffIcon />}
             onClick={handleFlightStatusClick}
-            sx={{
-              backgroundColor: '#0077B6',
-              color: 'white',
-              '&:hover': { backgroundColor: '#005f8a' },
-              textTransform: 'none',
-              padding: '12px',
-              height: '70%'
-            }}
+            sx={styles.flightStatusButton}
           >
             Flight Status
           </Button>
@@ -349,17 +282,16 @@ export default function Dashboard() {
         </Box>
       </div>
 
-      {/* Why Choose UTW Airlines Section */}
-      <Box sx={{ backgroundColor: '#f5f5f5', py: 6, px: 4 }}>
-        <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', textAlign: 'center', mb: 4 }}>
+      <Box sx={styles.whyChooseSection}>
+        <Typography variant="h4" component="div" sx={styles.sectionTitle}>
           Why Choose UTW Airlines?
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={5} sm={6} md={3}>
-            <Card sx={{ textAlign: 'center', padding: '20px' }}>
+            <Card sx={styles.featureCard}>
               <EventSeatIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
               <CardContent>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h6" component="div" sx={styles.featureTitle}>
                   Comfortable Seating
                 </Typography>
                 <Typography variant="body1">
@@ -370,10 +302,10 @@ export default function Dashboard() {
           </Grid>
 
           <Grid item xs={5} sm={6} md={3}>
-            <Card sx={{ textAlign: 'center', padding: '20px' }}>
+            <Card sx={styles.featureCard}>
               <ShieldIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
               <CardContent>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h6" component="div" sx={styles.featureTitle}>
                   Top Safety Standards
                 </Typography>
                 <Typography variant="body1">
@@ -383,11 +315,11 @@ export default function Dashboard() {
             </Card>
           </Grid>
 
-          <Grid item xs={5} sm={6} md={3}> {/*item spans 6 columns and covers 3 columns ,un fel de impartire*/ }
-            <Card sx={{ textAlign: 'center', padding: '20px' }}>
+          <Grid item xs={5} sm={6} md={3}>
+            <Card sx={styles.featureCard}>
               <HeadsetMicIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
               <CardContent>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h6" component="div" sx={styles.featureTitle}>
                   24/7 Customer Support
                 </Typography>
                 <Typography variant="body1">
@@ -398,10 +330,10 @@ export default function Dashboard() {
           </Grid>
           
           <Grid item xs={5} sm={6} md={3}>
-            <Card sx={{ textAlign: 'center', padding: '20px' }}>
+            <Card sx={styles.featureCard}>
               <VerifiedUserIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
               <CardContent>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h6" component="div" sx={styles.featureTitle}>
                   We value your privacy
                 </Typography>
                 <Typography variant="body1">
