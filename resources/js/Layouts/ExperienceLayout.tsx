@@ -14,19 +14,14 @@ interface ExperienceLayoutProps extends PropsWithChildren {
 export default function ExperienceLayout({ children, activeIndex }: ExperienceLayoutProps) {
   return (
     <div className="relative min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="fixed inset-0 overflow-y-auto">
-        {backgrounds.map((bg, index) => (
-          <div 
-            key={index}
-            className="h-screen w-full bg-cover bg-center bg-no-repeat"
-            style={{ 
-              backgroundImage: `url(${bg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
-        ))}
-      </div>
+      <div 
+        className="fixed inset-0 h-screen w-full bg-cover bg-center bg-no-repeat transition-opacity duration-500"
+        style={{ 
+          backgroundImage: `url(${backgrounds[activeIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
       
       <div className="relative z-10 pt-6 sm:pt-0">
         {children}
@@ -34,3 +29,4 @@ export default function ExperienceLayout({ children, activeIndex }: ExperienceLa
     </div>
   );
 }
+
