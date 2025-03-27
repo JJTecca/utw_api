@@ -18,25 +18,25 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard/index');
+    })->name('dashboard');
+
     Route::get('/dashboard/worldtour', function () { //numai daca esti logat merge
-        return Inertia::render('Tour');
+        return Inertia::render('Tour/index');
     })->name('dashboard.worldtour'); // dashboard/worldtour
 
-    Route::get('/profileMenu', function () { //resources\js\Pages\ProfileMenu.tsx
-        return Inertia::render('ProfileMenu');
+    Route::get('/profileMenu', function () { 
+        return Inertia::render('ProfileMenu/index');
     })->name('profile');
 
-    Route::get('/dashboard/experiences', function () { //resources\js\Pages\ProfileMenu.tsx
-        return Inertia::render('Experiences');
+    Route::get('/dashboard/experiences', function () { 
+        return Inertia::render('Experiences/index');
     })->name('dashboard.experiences');
 
 });
