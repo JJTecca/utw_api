@@ -31,9 +31,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Tour/index');
     })->name('dashboard.worldtour'); // dashboard/worldtour
 
-    Route::get('/profileMenu', function () { 
-        return Inertia::render('ProfileMenu/index');
-    })->name('profile');
+    Route::get('/profileMenu', [ProfileController::class, 'profileMenu'])->name('profile');
 
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');

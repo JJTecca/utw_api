@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UserRequest;
+use App\Models\Report;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +18,25 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+
+    public function profileMenu() {
+        //$user = $request->user();
+
+        /*$report = Report::with('booking')
+                        ->whereHas('booking', function($query) use ($user){
+                            $query->where('user_id',$user->id);
+                        }); */
+        $report = Report::find(3);
+        if(!$report) {
+            abort(404,'Error');
+        } 
+        //dd($report);
+        return Inertia::render('ProfileMenu/index',[
+            'report' => $report
+        ]); 
+    }
+
+
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [

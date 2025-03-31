@@ -26,7 +26,21 @@ import {
   statusIconStyles
 } from './ProfileMenu.styles';
 
-export default function ProfileMenu() {
+interface Report {
+    id: number;
+    flight_logs: string;
+    maintenance: string;
+    weather: string;
+    financial: string;
+    passenger_reports: string;
+    crew_reports: string;
+    safety_reports: string;
+}
+interface ProfileMenuProps { //a doua interfata ca altfel da eroare
+    report: Report; 
+}
+
+export default function ProfileMenu( {report}:ProfileMenuProps ) {
     const [showLayout, setShowLayout] = useState(false);
 
     const handleButtonClick = () => {
@@ -72,14 +86,15 @@ export default function ProfileMenu() {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Departure: 10:00 AM<br />
+                                    {/*- Departure: 10:00 AM<br />
                                     - Arrival: 12:00 PM<br />
                                     - Duration: 2 hours<br />
                                     - Route: New York to Chicago<br />
                                     - Aircraft: Boeing 737-800<br />
                                     - Pilot: John Doe<br />
                                     - Co-Pilot: Jane Smith<br />
-                                    - Passengers: 150
+                                    - Passengers: 150 */}
+                                    {report.maintenance}                                  
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
