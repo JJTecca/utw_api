@@ -50,9 +50,6 @@ class User extends Authenticatable
     }
 
     public function booking() {
-        return $this->hasOne(Booking::class);
-    }
-    public function report() {
-        return $this->hasOne(Report::class);
+        return $this->hasMany(Booking::class);
     }
 }

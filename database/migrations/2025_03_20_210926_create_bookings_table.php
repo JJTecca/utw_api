@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('destination_city_name')->unique(); 
             $table->string('destination_airport_id');
             $table->string('arrival_city_name')->unique(); 
             $table->string('arrival_airport_id'); 
             $table->string('experience_type'); 
             $table->unsignedInteger('flight_number')->nullable(); 
-            $table->string('flight_number_date'); 
+            $table->dateTime('flight_number_date'); 
             $table->timestamps();
         });
     }

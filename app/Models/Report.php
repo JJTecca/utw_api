@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     protected $fillable = [
+        'booking_id',
         'flight_logs',
         'maintenance',
         'weather',
@@ -16,7 +17,7 @@ class Report extends Model
         'safety_reports',
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function booking() {
+        return $this->belongsTo(Booking::class);
     }
 }
