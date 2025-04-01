@@ -43,6 +43,24 @@ export default function Tour() {
           {image:"/Images/Attractions/poduldomLuis.jpg", title: "Dom Luis I Bridge", description: "The Dom Luis I Bridge in Porto, Portugal, is an iconic double-deck metal bridge spanning the Douro River, connecting the city's historic Ribeira district with the Vila Nova de Gaia area, famous for its port wine cellars." },
           {image:"/Images/Attractions/Evora_Tours_Portugal_Lisbon-1.jpg", title: "Evora", description: "Evora is a charming medieval town in Portugal's Alentejo region, known for its well-preserved historic center, Roman ruins, and the iconic Chapel of Bones, a macabre chapel adorned with human skulls and bones." }
         ],
+        "AU":[
+            {image:"/Images/Attractions/BarieraCorali.jpg", title: "Great Barrier Reef", description: "The Great Barrier Reef is the world's largest coral reef system, located off the coast of Queensland, Australia, renowned for its stunning biodiversity, vibrant marine life, and breathtaking underwater landscapes." },
+            {image:"/Images/Attractions/Kakadu.jpg", title: "Kakadu National Park", description: "Kakadu National Park is a UNESCO World Heritage site in Australia, known for its stunning landscapes, diverse wildlife, and rich Aboriginal cultural heritage, offering visitors a unique blend of natural beauty and ancient history." },
+            {image:"/Images/Attractions/Sydney.jpg", title: "Sydney Opera House", description: "The Sydney Opera House is an iconic architectural masterpiece located on Sydney Harbour, Australia, known for its distinctive sail-like design and serving as a world-renowned performing arts venue." },
+            {image:"/Images/Attractions/Kangaroo.jpg", title: "Kangaroo Island", description: "Kangaroo Island is a stunning natural paradise off the coast of South Australia, known for its diverse wildlife, pristine beaches, and rugged landscapes, offering visitors a unique opportunity to experience Australia's unique flora and fauna." }
+        ],
+        "AT":[
+             {image:"/Images/Attractions/Viena.jpg", title: "Vienna", description: "Vienna is the capital city of Austria, known for its imperial palaces, classical music heritage, and vibrant cultural scene, offering a blend of history, art, and modernity." },
+             {image:"/Images/Attractions/Lacul Wolfgangsee.jpg", title: "Wolfgangsee Lake", description: "Wolfgangsee Lake is a picturesque alpine lake in Austria, surrounded by stunning mountains and charming villages, offering opportunities for swimming, hiking, and enjoying the breathtaking scenery." },
+             {image:"/Images/Attractions/Salzburg.jpg", title: "Salzburg", description: "Salzburg is a charming city in Austria, known for its baroque architecture, stunning alpine scenery, and as the birthplace of Mozart, offering a rich cultural experience and beautiful landscapes." },
+            
+        ],
+        "BE":[
+            {image:"/Images/Attractions/Bruxelles.jpg", title: "Brussels", description: "Brussels is the capital city of Belgium and the European Union, known for its stunning architecture, rich history, and vibrant culture, offering a blend of medieval charm and modern cosmopolitanism." },
+            {image:"/Images/Attractions/Catedrala Sf. Bavo.jpg", title: "St. Bavo's Cathedral", description: "St. Bavo's Cathedral in Ghent, Belgium, is a stunning Gothic masterpiece known for its intricate architecture, beautiful stained glass windows, and the famous altarpiece, the Ghent Altarpiece." },
+            {image:"/Images/Attractions/Parcul Național Eifel.jpg", title: "Eifel National Park", description: "Eifel National Park is a stunning natural reserve in Belgium, known for its lush forests, rolling hills, and diverse wildlife, offering opportunities for hiking, cycling, and enjoying the beauty of nature." },
+        ],
+       
         // aici mai pot adauga
     }; 
 
