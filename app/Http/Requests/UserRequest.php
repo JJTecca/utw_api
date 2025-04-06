@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Auxiliar\Encrypt;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -11,7 +12,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; 
     }
 
     /**

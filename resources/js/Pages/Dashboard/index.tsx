@@ -29,6 +29,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { useForm } from '@inertiajs/inertia-react';
 import { styles } from './Dashboard.styles'; 
+import axios from 'axios';
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
@@ -53,10 +54,10 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
-  const handleAccountManagement = () => {
-    handleMenuClose();
+  const handleAccountManagement = async () => {
+    handleMenuClose(); // Close the menu
     window.location.href = '/profileMenu';
-  };
+};
 
   const handleLogout = () => {
     handleMenuClose();
