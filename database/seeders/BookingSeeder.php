@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-use function PHPSTORM_META\map;
 
 class BookingSeeder extends Seeder
 {
@@ -17,9 +16,6 @@ class BookingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $user = User::all();
-
         $bookingData = [
             [
                 'user_id' => 1,

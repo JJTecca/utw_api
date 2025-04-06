@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,6 +32,12 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Tour/index');
     })->name('dashboard.worldtour'); // dashboard/worldtour
 
+    Route::get('/get-encrypted-user-id', function (Request $request) {
+        return response()->json([
+            'encrypted_data' => \App\Auxiliar\Encrypt::encryptUserId($request->user()->id),
+        ]);
+    });
+    
     Route::get('/profileMenu', [ProfileController::class, 'profileMenu'])->name('profile');
 
     Route::get('/dashboard/experiences', function () { 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Booking;
 use App\Models\Report;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -19,21 +20,19 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
 
-    public function profileMenu() {
-        //$user = $request->user();
+    public function profileMenu() {         
+        $user = Auth::user(); //aici va veni sa scot reports in functie de bookings-urile userului
+        $reports = Report::join('bookings', 'bookings.id', '=', 'reports.booking_id')
+                    ->where('bookings.user_id', $user->id)
+                    ->get();  
+        //cu first = le va da separate in array
+        //fara first = le va da in acelasi array pe toate
 
-        /*$report = Report::with('booking')
-                        ->whereHas('booking', function($query) use ($user){
-                            $query->where('user_id',$user->id);
-                        }); */
-        $report = Report::find(3);
-        if(!$report) {
-            abort(404,'Error');
-        } 
-        //dd($report);
+        dd($reports);
         return Inertia::render('ProfileMenu/index',[
             'report' => $report
         ]); 
+
     }
 
 
