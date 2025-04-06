@@ -161,6 +161,76 @@ export default function Tour() {
             {image:"/Images/Attractions/tortuguero.jpg", title: "Tortuguero National Park", description: "Tortuguero National Park is a unique coastal reserve in Costa Rica, known for its lush rainforests, intricate canal systems, and as a nesting site for endangered sea turtles." },
             {image:"/Images/Attractions/Monteverde.jpg", title: "Monteverde Cloud Forest", description: "Monteverde Cloud Forest is a stunning ecological reserve in Costa Rica, known for its lush biodiversity, misty cloud cover, and unique ecosystems, offering opportunities for hiking and wildlife observation." },
         ],
+        "CU":[
+            {image:"/Images/Attractions/Cuba.jpg", title: "Havana", description: "Havana is the vibrant capital city of Cuba, known for its rich history, colorful colonial architecture, and lively culture, offering a unique blend of old-world charm and modern energy." },
+            {image:"/Images/Attractions/Varadero.jpg", title: "Varadero Beach", description: "Varadero Beach is a stunning resort destination in Cuba, known for its powdery white sands, crystal-clear turquoise waters, and vibrant nightlife, making it a popular spot for relaxation and water sports." },
+            {image:"/Images/Attractions/Vinales.jpg", title: "Vinales Valley", description: "Vinales Valley is a picturesque region in Cuba, known for its stunning limestone mogotes, lush tobacco fields, and traditional rural lifestyle, offering opportunities for hiking and exploring the countryside." },
+        ],
+        "CW":[
+            {image:"/Images/Attractions/Curacao.jpg", title: "Curaçao", description: "Curaçao is a stunning Caribbean island known for its vibrant culture, colorful colonial architecture, and beautiful beaches, offering a unique blend of Dutch heritage and tropical paradise." },
+            {image:"/Images/Attractions/Curacaoklein.jpg", title: "Klein Curaçao", description: "Klein Curaçao is a small uninhabited island off the coast of Curaçao, known for its stunning beaches, crystal-clear waters, and vibrant marine life, making it a popular destination for snorkeling and relaxation." },
+        ],
+        "CY":[
+            {image:"/Images/Attractions/Nicosia.jpg", title: "Nicosia", description: "Nicosia is the capital city of Cyprus, known for its rich history, vibrant culture, and unique status as the last divided capital in Europe, offering a blend of ancient landmarks and modern amenities." },
+            {image:"/Images/Attractions/Larnaca.jpg", title: "Larnaca", description: "Larnaca is a picturesque coastal city in Cyprus, known for its beautiful beaches, historic sites, and vibrant nightlife, offering a blend of relaxation and cultural experiences." },
+            {image:"/Images/Attractions/AyiaNaca.jpg", title: "Ayia Napa", description: "Ayia Napa is a popular resort town in Cyprus, known for its stunning beaches, vibrant nightlife, and beautiful coastal scenery, making it a favorite destination for tourists." },
+        ],
+        "CZ":[
+            {image:"/Images/Attractions/Praga.jpg", title: "Prague", description: "Prague is the capital city of the Czech Republic, known for its stunning medieval architecture, vibrant culture, and rich history, offering a blend of old-world charm and modern amenities." },
+            {image:"/Images/Attractions/PragaCastel.jpg", title: "Prague Castle", description: "Prague Castle is a historic castle complex in the Czech Republic, known for its stunning architecture, rich history, and as the official residence of the President of the Czech Republic." },
+            {image:"/Images/Attractions/CastelulKarlstejn.jpg", title: "Karlštejn Castle", description: "Karlštejn Castle is a stunning Gothic castle located near Prague, Czech Republic, known for its impressive architecture, rich history, and beautiful surrounding landscapes." },
+        ],
+        "DE":[
+            {image:"/Images/Attractions/Germania.jpg", title: "Berlin", description: "Berlin is the capital city of Germany, known for its rich history, vibrant culture, and diverse architecture, offering a blend of modernity and historical landmarks." },
+            {image:"/Images/Attractions/Munchen.jpg", title: "Munich", description: "Munich is the capital city of Bavaria, Germany, known for its stunning architecture, vibrant culture, and famous beer gardens, offering a unique blend of tradition and modernity." },
+            {image:"/Images/Attractions/CastelulNeuschwanstein.jpg", title: "Neuschwanstein Castle", description: "Neuschwanstein Castle is a stunning fairy-tale castle located in Bavaria, Germany, known for its picturesque setting and romantic architecture, attracting millions of visitors each year." },
+        ],
+        "DK":[
+            {image:"/Images/Attractions/Copenhaga.jpg", title: "Copenhagen", description: "Copenhagen is the capital city of Denmark, known for its stunning architecture, vibrant culture, and beautiful waterfront, offering a blend of modernity and historic charm." },
+            {image:"/Images/Attractions/TivoliGardens.jpg", title: "Tivoli Gardens", description: "Tivoli Gardens is a historic amusement park in Copenhagen, Denmark, known for its beautiful gardens, thrilling rides, and vibrant entertainment options, making it a popular destination for visitors of all ages." },
+            {image:"/Images/Attractions/CastelulKronborg.jpg", title: "Kronborg Castle", description: "Kronborg Castle is a UNESCO World Heritage site located in Helsingør, Denmark, known for its stunning Renaissance architecture and as the setting for Shakespeare's Hamlet." },
+        ],
+        "DO":[
+            {image:"/Images/Attractions/SantoDomingo.jpg", title: "Santo Domingo", description: "Santo Domingo is the capital city of the Dominican Republic, known for its rich history, vibrant culture, and beautiful colonial architecture, offering a blend of modernity and tradition." },
+            {image:"/Images/Attractions/PuntaCana.jpg", title: "Punta Cana", description: "Punta Cana is a popular resort destination in the Dominican Republic, known for its stunning beaches, crystal-clear waters, and vibrant nightlife, making it a favorite spot for tourists." },
+            {image:"/Images/Attractions/LagoEnriquillo.jpg", title: "Lake Enriquillo", description: "Lake Enriquillo is a unique saltwater lake in the Dominican Republic, known for being the largest lake in the Caribbean and the lowest point in Hispaniola, surrounded by stunning landscapes." },
+        ],
+        "DZ":[
+            {image:"/Images/Attractions/Alger.jpg", title: "Algiers", description: "Algiers is the capital city of Algeria, known for its stunning Mediterranean coastline, rich history, and vibrant culture, offering a blend of modernity and ancient heritage." },
+            {image:"/Images/Attractions/Sahara.jpg", title: "Sahara Desert", description: "The Sahara Desert is the largest hot desert in the world, known for its vast sand dunes, unique landscapes, and diverse ecosystems, offering a breathtaking natural experience." },
+            {image:"/Images/Attractions/Casbah.jpg", title: "Casbah of Algiers", description: "The Casbah of Algiers is a historic medina in Algeria, known for its narrow winding streets, traditional architecture, and rich cultural heritage, offering a glimpse into the city's past." },
+        ],
+        "EC":[
+            {image:"/Images/Attractions/Quito.jpg", title: "Quito", description: "Quito is the capital city of Ecuador, known for its stunning colonial architecture, vibrant culture, and breathtaking views of the Andes mountains, offering a blend of history and natural beauty." },
+            {image:"/Images/Attractions/Galapagos.jpg", title: "Galapagos Islands", description: "The Galapagos Islands are a unique archipelago in Ecuador, known for their stunning biodiversity, unique wildlife, and pristine landscapes, offering a one-of-a-kind natural experience." },
+            {image:"/Images/Attractions/AvenueVolcanes.jpg", title: "Avenue of the Volcanoes", description: "The Avenue of the Volcanoes is a stunning region in Ecuador, known for its breathtaking landscapes, towering volcanoes, and rich biodiversity, offering opportunities for hiking and exploration." },
+        ],
+        "EG":[
+            {image:"/Images/Attractions/Cairo.jpg", title: "Cairo", description: "Cairo is the capital city of Egypt, known for its rich history, vibrant culture, and stunning landmarks, including the Pyramids of Giza and the Sphinx." },
+            {image:"/Images/Attractions/Luxor.jpg", title: "Luxor", description: "Luxor is a historic city in Egypt, known for its stunning ancient temples, tombs, and monuments, including the Valley of the Kings and Karnak Temple." },
+            {image:"/Images/Attractions/Aswan.jpg", title: "Aswan", description: "Aswan is a picturesque city in southern Egypt, known for its stunning Nile River views, ancient temples, and vibrant culture, offering a unique blend of history and natural beauty." },
+        ],
+        "ES":[
+            {image:"/Images/Attractions/Madrid.jpg", title: "Madrid", description: "Madrid is the capital city of Spain, known for its stunning architecture, vibrant culture, and rich history, offering a blend of modernity and tradition." },
+            {image:"/Images/Attractions/Barcelona.jpg", title: "Barcelona", description: "Barcelona is a vibrant coastal city in Spain, known for its stunning architecture, rich culture, and beautiful beaches, offering a unique blend of history and modernity." },
+            {image:"/Images/Attractions/SagradaFamilia.jpg", title: "Sagrada Familia", description: "The Sagrada Familia is a stunning basilica in Barcelona, Spain, designed by architect Antoni Gaudí, known for its unique architecture and intricate details." },
+            {image:"/Images/Attractions/Alhambra.jpg", title: "Alhambra", description: "The Alhambra is a stunning palace and fortress complex in Granada, Spain, known for its intricate Islamic architecture, beautiful gardens, and rich history." },
+        ],
+        "EE":[
+            {image:"/Images/Attractions/Tallinn.jpg", title: "Tallinn", description: "Tallinn is the capital city of Estonia, known for its well-preserved medieval architecture, vibrant culture, and beautiful coastal views, offering a blend of history and modernity." },
+            {image:"/Images/Attractions/Soomaa.jpg", title: "Soomaa National Park", description: "Soomaa National Park is a stunning natural reserve in Estonia, known for its unique bog landscapes, diverse wildlife, and opportunities for hiking and canoeing." },
+            {image:"/Images/Attractions/Parnu.jpg", title: "Pärnu", description: "Pärnu is a picturesque coastal town in Estonia, known for its beautiful beaches, vibrant culture, and rich history, offering a blend of relaxation and exploration." },
+        ],
+        "FI":[
+            {image:"/Images/Attractions/Helsinki.jpg", title: "Helsinki", description: "Helsinki is the capital city of Finland, known for its stunning architecture, vibrant culture, and beautiful coastal views, offering a blend of modernity and history." },
+            {image:"/Images/Attractions/Laponia.jpg", title: "Lapland", description: "Lapland is a stunning region in northern Finland, known for its breathtaking landscapes, unique wildlife, and opportunities for winter sports and Northern Lights viewing." },
+            {image:"/Images/Attractions/Suomenlinna.jpg", title: "Suomenlinna", description: "Suomenlinna is a UNESCO World Heritage site located on a group of islands near Helsinki, Finland, known for its historic fortress, beautiful landscapes, and cultural significance." },
+        ],
+        "FR":[
+            {image:"/Images/Attractions/TourEiffel.jpg", title: "Eiffel Tower", description: "The Eiffel Tower is an iconic iron lattice tower located in Paris, France, known for its stunning views of the city and as a symbol of French culture and engineering." },
+            {image:"/Images/Attractions/Luvru.jpg", title: "Louvre Museum", description: "The Louvre Museum is one of the world's largest and most visited art museums, located in Paris, France, known for its stunning collection of art and historical artifacts." },
+            {image:"/Images/Attractions/Versailles.jpg", title: "Palace of Versailles", description: "The Palace of Versailles is a stunning royal residence located just outside Paris, France, known for its opulent architecture, beautiful gardens, and rich history." },
+        ],
         // aici mai pot adauga
     }; 
 
