@@ -231,8 +231,83 @@ export default function Tour() {
             {image:"/Images/Attractions/Luvru.jpg", title: "Louvre Museum", description: "The Louvre Museum is one of the world's largest and most visited art museums, located in Paris, France, known for its stunning collection of art and historical artifacts." },
             {image:"/Images/Attractions/Versailles.jpg", title: "Palace of Versailles", description: "The Palace of Versailles is a stunning royal residence located just outside Paris, France, known for its opulent architecture, beautiful gardens, and rich history." },
         ],
+        "FO":[
+            {image:"/Images/Attractions/Torshavn.jpg", title: "Torshavn", description: "Torshavn is the capital city of the Faroe Islands, known for its picturesque harbor, colorful houses, and rich Viking history, offering a unique blend of culture and stunning natural landscapes." },
+            {image:"/Images/Attractions/Gasadalur.jpg", title: "Gasadalur", description: "Gasadalur is a picturesque village in the Faroe Islands, known for its stunning landscapes, traditional grass-roofed houses, and breathtaking views of the surrounding mountains and waterfalls." },
+            {image:"/Images/Attractions/Gjogv.jpg", title: "Gjogv", description: "Gjogv is a charming village in the Faroe Islands, known for its stunning natural harbor, colorful houses, and breathtaking landscapes, offering a unique blend of culture and outdoor adventures." },
+            {image:"/Images/Attractions/Saksun.jpg", title: "Saksun", description: "Saksun is a picturesque village in the Faroe Islands, known for its stunning landscapes, traditional grass-roofed houses, and breathtaking views of the surrounding mountains and fjords." },
+        ],
+        "GA":[
+            {image:"/Images/Attractions/Libreville.jpg", title: "Libreville", description: "Libreville is the capital city of Gabon, known for its stunning coastal views, vibrant culture, and rich history, offering a blend of modernity and traditional African heritage." },
+            {image:"/Images/Attractions/Ogooué.jpg", title: "Ogooué River", description: "The Ogooué River is a stunning river in Gabon, known for its beautiful landscapes, diverse ecosystems, and opportunities for canoeing and wildlife observation." },
+        ],
+        "ENG":[
+            {image:"/Images/Attractions/Londra.jpg", title: "London", description: "London is the capital city of the United Kingdom, known for its rich history, vibrant culture, and iconic landmarks, offering a blend of modernity and tradition." },
+            {image:"/Images/Attractions/Oxford.jpg", title: "Oxford", description: "Oxford is a historic city in England, known for its prestigious university, stunning architecture, and rich cultural heritage, offering a unique blend of history and modernity." },
+            {image:"/Images/Attractions/CastelulEdinburgh.jpg", title: "Edinburgh Castle", description: "Edinburgh Castle is a historic fortress located on Castle Rock in Edinburgh, Scotland, known for its stunning architecture, rich history, and breathtaking views of the city." },
+            {image:"/Images/Attractions/Stonehenge.jpg", title: "Stonehenge", description: "Stonehenge is a prehistoric monument located in Wiltshire, England, known for its massive stone circle and rich archaeological significance, offering a glimpse into ancient civilizations." },
+        ],
+        "GE":[
+            {image:"/Images/Attractions/Tbilisi.jpg", title: "Tbilisi", description: "Tbilisi is the capital city of Georgia, known for its stunning architecture, vibrant culture, and rich history, offering a blend of modernity and ancient heritage." },
+            {image:"/Images/Attractions/Kazbegi.jpg", title: "Kazbegi", description: "Kazbegi is a stunning mountainous region in Georgia, known for its breathtaking landscapes, unique architecture, and opportunities for hiking and adventure." },
+            {image:"/Images/Attractions/Sighnaghi.jpg", title: "Sighnaghi", description: "Sighnaghi is a picturesque town in Georgia, known for its stunning landscapes, charming architecture, and rich cultural heritage, offering a unique blend of history and natural beauty." },
+            {image:"/Images/Attractions/Uplistsikhe.jpg", title: "Uplistsikhe", description: "Uplistsikhe is an ancient rock-hewn town in Georgia, known for its stunning architecture, rich history, and unique geological formations, offering a glimpse into ancient civilizations." },
+        ],
+        "GG":[
+            {image:"/Images/Attractions/Guernsey.jpg", title: "Guernsey", description: "Guernsey is a picturesque island in the English Channel, known for its stunning coastal views, rich history, and vibrant culture, offering a unique blend of British and French influences." },
+            {image:"/Images/Attractions/Sark.jpg", title: "Sark", description: "Sark is a small island in the English Channel, known for its stunning landscapes, unique car-free environment, and rich history, offering a peaceful escape from modern life." },
+            {image:"/Images/Attractions/TheLittleChapel.jpg", title: "The Little Chapel", description: "The Little Chapel is a unique and charming chapel located in Guernsey, known for its stunning mosaics, intricate designs, and rich history, offering a peaceful retreat for visitors." },
+        ],
+        "GH":[
+            {image:"/Images/Attractions/Acca.jpg", title: "Accra", description: "Accra is the capital city of Ghana, known for its vibrant culture, rich history, and stunning coastal views, offering a blend of modernity and traditional African heritage." },
+            {image:"/Images/Attractions/Kakum.jpg", title: "Kakum National Park", description: "Kakum National Park is a stunning rainforest reserve in Ghana, known for its unique canopy walkways, diverse wildlife, and rich biodiversity, offering opportunities for hiking and exploration." },
+            {image:"/Images/Attractions/CapeCoast.jpg", title: "Cape Coast Castle", description: "Cape Coast Castle is a historic slave trade fort located in Ghana, known for its rich history, stunning coastal views, and cultural significance, offering a glimpse into the country's past." },
+        ],
+        "GI":[
+            {image:"/Images/Attractions/Gibraltar.jpg", title: "Gibraltar", description: "Gibraltar is a British Overseas Territory located at the southern tip of Spain, known for its stunning rock formations, rich history, and unique blend of British and Mediterranean cultures." },
+            {image:"/Images/Attractions/RockofGibraltar.jpg", title: "Rock of Gibraltar", description: "The Rock of Gibraltar is a stunning limestone promontory located at the entrance to the Mediterranean Sea, known for its breathtaking views, rich history, and unique wildlife." },
+            {image:"/Images/Attractions/StMichaelCave.jpg", title: "St. Michael's Cave", description: "St. Michael's Cave is a stunning limestone cave located in Gibraltar, known for its unique rock formations, rich history, and breathtaking views of the surrounding landscapes." },
+        ],
+        "GN":[
+            {image:"/Images/Attractions/Conakry.jpg", title: "Conakry", description: "Conakry is the capital city of Guinea, known for its vibrant culture, rich history, and stunning coastal views, offering a blend of modernity and traditional African heritage." },
+            {image:"/Images/Attractions/Kankan.jpg", title: "Kankan", description: "Kankan is a picturesque town in Guinea, known for its stunning landscapes, rich cultural heritage, and vibrant markets, offering a unique blend of history and natural beauty." },
+            {image:"/Images/Attractions/Nimba.jpg", title: "Mount Nimba", description: "Mount Nimba is a stunning mountain range located on the border of Guinea and Ivory Coast, known for its breathtaking landscapes, rich biodiversity, and unique ecosystems." },
+        ],
+        "GP":[
+            {image:"/Images/Attractions/Guadalupe.jpg", title: "Guadeloupe", description: "Guadeloupe is a stunning Caribbean island known for its beautiful beaches, lush rainforests, and vibrant culture, offering a unique blend of French and Caribbean influences." },
+            {image:"/Images/Attractions/LeSoufriere.jpg", title: "La Soufrière", description: "La Soufrière is an active volcano located on the island of Guadeloupe, known for its stunning landscapes, rich biodiversity, and opportunities for hiking and exploration." },
+            {image:"/Images/Attractions/GrandeTerre.jpg", title: "Grande-Terre", description: "Grande-Terre is a picturesque island in Guadeloupe, known for its stunning beaches, vibrant culture, and rich history, offering a unique blend of relaxation and exploration." },
+        ],
+        "GR":[
+            {image:"/Images/Attractions/Athena.jpg", title: "Athens", description: "Athens is the capital city of Greece, known for its rich history, stunning ancient landmarks, and vibrant culture, offering a blend of modernity and ancient heritage." },
+            {image:"/Images/Attractions/Santorini.jpg", title: "Santorini", description: "Santorini is a picturesque island in Greece, known for its stunning sunsets, whitewashed buildings, and crystal-clear waters, offering a unique blend of relaxation and exploration." },
+            {image:"/Images/Attractions/Creta.jpg", title: "Crete", description: "Crete is the largest island in Greece, known for its stunning landscapes, rich history, and vibrant culture, offering a unique blend of relaxation and adventure." },
+            {image:"/Images/Attractions/Meteora.jpg", title: "Meteora", description: "Meteora is a stunning rock formation in Greece, known for its unique monasteries perched on top of towering cliffs, offering breathtaking views and rich cultural heritage." },
+        ],
+        "GD":[
+            {image:"/Images/Attractions/StGeorge.jpg", title: "St. George's", description: "St. George's is the capital city of Grenada, known for its stunning coastal views, vibrant culture, and rich history, offering a blend of relaxation and exploration." },
+            {image:"/Images/Attractions/GrandAnse.jpg", title: "Grand Anse Beach", description: "Grand Anse Beach is a stunning beach destination in Grenada, known for its powdery white sands, crystal-clear waters, and vibrant marine life, making it a paradise for beach lovers." },
+        ],
+        "HR":[
+            {image:"/Images/Attractions/Zagreb.jpg", title: "Zagreb", description: "Zagreb is the capital city of Croatia, known for its stunning architecture, vibrant culture, and rich history, offering a blend of modernity and tradition." },
+            {image:"/Images/Attractions/Dubrovnik.jpg", title: "Dubrovnik", description: "Dubrovnik is a picturesque coastal city in Croatia, known for its stunning medieval architecture, vibrant culture, and beautiful beaches, offering a unique blend of history and relaxation." },
+            {image:"/Images/Attractions/Plitvice.jpg", title: "Plitvice Lakes National Park", description: "Plitvice Lakes National Park is a stunning UNESCO World Heritage site in Croatia, known for its breathtaking waterfalls, crystal-clear lakes, and rich biodiversity." },
+            {image:"/Images/Attractions/Hvar.jpg", title: "Hvar", description: "Hvar is a picturesque island in Croatia, known for its stunning beaches, vibrant nightlife, and rich cultural heritage, offering a unique blend of relaxation and exploration." },
+        ],
+        "HT":[
+            {image:"/Images/Attractions/PetionVille.jpg", title: "Petion-Ville", description: "Petion-Ville is a vibrant suburb of Port-au-Prince, Haiti, known for its upscale neighborhoods, cultural attractions, and vibrant nightlife, offering a blend of modernity and traditional Haitian culture." },
+            {image:"/Images/Attractions/Citadel.jpg", title: "Citadelle Laferrière", description: "Citadelle Laferrière is a historic fortress located in northern Haiti, known for its stunning architecture, rich history, and breathtaking views of the surrounding landscapes." },
+            {image:"/Images/Attractions/Labadee.jpg", title: "Labadee", description: "Labadee is a picturesque coastal destination in Haiti, known for its stunning beaches, vibrant culture, and rich history, offering a unique blend of relaxation and exploration." },
+            {image:"/Images/Attractions/CapHaitien.jpg", title: "Cap-Haïtien", description: "Cap-Haïtien is a historic city in northern Haiti, known for its stunning colonial architecture, vibrant culture, and rich history, offering a blend of relaxation and exploration." },
+        ],
+        "HU":[
+            {image:"/Images/Attractions/Budapesta.jpg", title: "Budapest", description: "Budapest is the capital city of Hungary, known for its stunning architecture, vibrant culture, and rich history, offering a blend of modernity and tradition." },
+            {image:"/Images/Attractions/LaculBalaton.jpg", title: "Lake Balaton", description: "Lake Balaton is the largest lake in Central Europe, known for its stunning landscapes, vibrant culture, and rich history, offering a unique blend of relaxation and exploration." },
+            {image:"/Images/Attractions/CastelulBuda.jpg", title: "Buda Castle", description: "Buda Castle is a historic castle complex located in Budapest, Hungary, known for its stunning architecture, rich history, and breathtaking views of the Danube River." },
+            {image:"/Images/Attractions/SpaTermale.jpg", title: "Thermal Baths", description: "Budapest is famous for its thermal baths, known for their healing properties and stunning architecture, offering a unique blend of relaxation and cultural experience." },
+        ],
         // aici mai pot adauga
-    }; 
+    };
 
     const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
