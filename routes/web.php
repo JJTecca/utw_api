@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Booking;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,6 +42,8 @@ Route::middleware('auth')->group(function () {
     });
     
     Route::get('/profileMenu', [ProfileController::class, 'profileMenu'])->name('profile');
+
+    Route::post('/dashboard/bookings', [BookingController::class, 'storeBooking'])->name('dashboard.bookings');
 
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');

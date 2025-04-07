@@ -9,12 +9,13 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'destination_city_name',
-        'destination_arrival_id',
+        'destination_airport_id',
         'arrival_city_name',
         'arrival_airport_id',
         'experience_type',
         'flight_number',
-        'flight_number_date'        
+        'departure_day_date',
+        'arrival_day_date'        
     ];
 
     public function user() {

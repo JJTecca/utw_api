@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [experienceType, setExperienceType] = useState('');
+  const [departureDate, setDepartureDate] = useState('');
+  const [arrivalDate, setArrivalDate] = useState('');
 
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -57,7 +59,35 @@ export default function Dashboard() {
   const handleAccountManagement = async () => {
     handleMenuClose(); // Close the menu
     window.location.href = '/profileMenu';
-};
+  };
+
+  const handleBooking = async () => {
+    try {
+      const csrfMeta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null;
+      
+      if (!csrfMeta || !csrfMeta.content) {
+        throw new Error("CSRF token meta tag missing or empty. Please reload the page.");
+      } //trb verificat daca e NULL sau nu , nu inteleg dc nu merge fara if
+  
+      const response = await fetch('/dashboard/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csrfMeta.content
+        },
+        body: JSON.stringify({
+          destination_city_name: departureCity,
+          arrival_city_name: arrivalCity,
+          experience_type: experienceType,       
+        })
+      });
+
+    } catch (error) {
+      console.error("Booking error:", error);
+    }
+  };
+  
 
   const handleLogout = () => {
     handleMenuClose();
@@ -197,12 +227,16 @@ export default function Dashboard() {
               fullWidth
               variant="outlined"
               type="date"
+              value={departureDate}
+              onChange={(e) => setDepartureDate(e.target.value)}
               sx={{ width: '45%', mr: 4 }} 
             />
             <TextField
               fullWidth
               variant="outlined"
               type="date"
+              value={arrivalDate}
+              onChange={(e) => setArrivalDate(e.target.value)}
               sx={{ width: '45%' }} 
             />
           </Box>
@@ -227,6 +261,39 @@ export default function Dashboard() {
             <MenuItem value="Across Country">Across Country</MenuItem>
             <MenuItem value="Business">Business</MenuItem>
           </Select>
+        </Box>
+        
+        <Box sx={{
+          position: 'absolute',
+          top: '75%',
+          left: '35%'
+        }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            startIcon={<FlightTakeoffIcon />}
+            onClick={handleBooking}
+            sx={{
+              backgroundColor: 'orange',
+              '&:hover': {
+                backgroundColor: 'darkorange',
+              },
+              padding: '12px 24px',
+              borderRadius: '10px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+            }}
+          >
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 'bold',
+                color: 'white', 
+              }}
+            >
+              Book a flight
+            </Typography>
+          </Button>
         </Box>
 
         <Box sx={styles.flightStatusBox}>
