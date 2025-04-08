@@ -203,6 +203,14 @@ export default function Dashboard() {
             <MenuItem value="London">London</MenuItem>
             <MenuItem value="Tokyo">Tokyo</MenuItem>
             <MenuItem value="Paris">Paris</MenuItem>
+            <MenuItem value="Lisbon">Lisbon</MenuItem>
+            <MenuItem value="Berlin">Berlin</MenuItem>
+            <MenuItem value="Rome">Rome</MenuItem>
+            <MenuItem value="Madrid">Madrid</MenuItem>
+            <MenuItem value="Barcelona">Barcelona</MenuItem>
+            <MenuItem value="Amsterdam">Amsterdam</MenuItem>
+            <MenuItem value="Viena">Vienna</MenuItem>
+            <MenuItem value="Prague">Prague</MenuItem>
           </Select>
           <Select
             fullWidth
@@ -218,6 +226,14 @@ export default function Dashboard() {
             <MenuItem value="London">London</MenuItem>
             <MenuItem value="Tokyo">Tokyo</MenuItem>
             <MenuItem value="Paris">Paris</MenuItem>
+            <MenuItem value="Lisbon">Lisbon</MenuItem>
+            <MenuItem value="Berlin">Berlin</MenuItem>
+            <MenuItem value="Rome">Rome</MenuItem>
+            <MenuItem value="Madrid">Madrid</MenuItem>
+            <MenuItem value="Barcelona">Barcelona</MenuItem>
+            <MenuItem value="Amsterdam">Amsterdam</MenuItem>
+            <MenuItem value="Viena">Vienna</MenuItem>
+            <MenuItem value="Prague">Prague</MenuItem>
           </Select>
           <Box>
             <Typography variant="h6" sx={styles.dateTitle}>
