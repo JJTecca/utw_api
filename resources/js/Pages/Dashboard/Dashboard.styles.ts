@@ -46,7 +46,7 @@ export const styles = {
     },
     flightSearchBox: {
       position: 'absolute',
-      top: '50%',
+      top: '35%',
       left: '26%',
       transform: 'translate(-50%, -50%)',
       display: 'flex',
@@ -62,8 +62,8 @@ export const styles = {
     },
     experienceBox: {
       position: 'absolute',
-      top: '40%',
-      left: '46%',
+      top: '85%',
+      left: '26%',
       transform: 'translate(-50%, -50%)',
       display: 'flex',
       flexDirection: 'column',
