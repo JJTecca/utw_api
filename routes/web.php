@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/dashboard/bookings', [BookingController::class, 'storeBooking'])->name('dashboard.bookings');
 
+    Route::get('/dashboard/view-bookings/destination', [BookingController::class, 'index'])->name('dashboard.view');
+
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');
     })->name('dashboard.experiences');
