@@ -18,7 +18,8 @@ class BookingResource extends JsonResource
         return [
             'destination_city_name' => $this->destination_city_name,
             'arrival_city_name' => $this->arrival_city_name,
-            'experience_type' => $this->experience_type
+            'experience_type' => $this->experience_type,
+            'description' => $this->description
         ];
     }
 }

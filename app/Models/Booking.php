@@ -15,7 +15,8 @@ class Booking extends Model
         'experience_type',
         'flight_number',
         'departure_day_date',
-        'arrival_day_date'        
+        'arrival_day_date',
+        'description'        
     ];
 
     public function user() {

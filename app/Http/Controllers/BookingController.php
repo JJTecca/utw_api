@@ -15,12 +15,14 @@ class BookingController extends Controller
         $arrival = $request->query('arrival_city_name');
         $experience = $request->query('experience_type');
         $bookings = Booking::where('destination_city_name', $destination)
-        ->where('arrival_city_name',$arrival)->where('experience_type',$experience)
-        ->select([
-            'destination_city_name',
-            'arrival_city_name',
-            'experience_type'
-        ])->get(); //first=primu element din colectie , get = all colectie */
+                    ->where('arrival_city_name',$arrival)->where('experience_type',$experience)
+                    ->select([
+                        'destination_city_name',
+                        'arrival_city_name',
+                        'experience_type',
+                        'description'
+                    ])->get(); //first=primu element din colectie , get = all colectie */
+                    //dd($bookings);
         //dd($bookings);
         return Inertia::render('Booking/index',[
             'bookings' => BookingResource::collection($bookings)->resolve() //buna functie , unwraps collection to array

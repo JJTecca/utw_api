@@ -1,5 +1,5 @@
 import BookingLayout from '@/Layouts/BookingLayout';
-import { Box, Typography, Rating, Accordion, AccordionSummary, AccordionDetails, Button, CardMedia, CardContent, Card, CardActionArea, CardActions } from "@mui/material";
+import { Box, Typography, Rating, Accordion, AccordionSummary, AccordionDetails, Button, CardContent, Card, CardActionArea, CardActions } from "@mui/material";
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import CardTravelIcon from '@mui/icons-material/CardTravel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -10,11 +10,14 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import { styles } from './Booking.styles';
 
 interface BookingInterface {
     destination_city_name: string,
     arrival_city_name: string,
-    experience_type: string
+    experience_type: string,
+    description: string
 }
 
 interface BookingInterfaceProps {
@@ -22,9 +25,6 @@ interface BookingInterfaceProps {
 }
 
 interface TextBoxInterface {
-    title: string,
-    description: string,
-    logo: React.ReactNode,
     activeIndex: number
 }
 
@@ -34,8 +34,8 @@ const titles = [
     "Elevate Your Travel Standards.",
     "Trusted Skies, Tailored Journeys.",
     "Book With Ease, Travel With Confidence.",
-    "More Than a Ticket—It’s an Experience."
-  ];
+    "More Than a Ticket—It's an Experience."
+];
 
 const descriptions = [
     "Because your journey deserves reliability and comfort.",
@@ -43,329 +43,142 @@ const descriptions = [
     "Luxury, punctuality, and personalized service in every flight.",
     "Because we make every mile memorable and stress-free.",
     "Top-tier technology meets world-class customer care.",
-    "From takeoff to landing, we’re redefining the way you fly."
-  ];
-  
-  const logos = [
-    <FlightTakeoffIcon sx={{ fontSize: 60 }} />,
-    <AirplaneTicketIcon sx={{ fontSize: 60 }} />,
-    <WorkspacePremiumIcon sx={{ fontSize: 60 }} />,
-    <TravelExploreIcon sx={{ fontSize: 60 }} />,
-    <VerifiedUserIcon sx={{ fontSize: 60 }} />,
-    <EmojiEventsIcon sx={{ fontSize: 60 }} />
-  ];
+    "From takeoff to landing, we're redefining the way you fly."
+];
 
-  const TextBox: React.FC<TextBoxInterface> = ({ activeIndex }) => {
+const logos = [
+    <FlightTakeoffIcon sx={styles.iconStyles} />,
+    <AirplaneTicketIcon sx={styles.iconStyles} />,
+    <WorkspacePremiumIcon sx={styles.iconStyles} />,
+    <TravelExploreIcon sx={styles.iconStyles} />,
+    <VerifiedUserIcon sx={styles.iconStyles} />,
+    <EmojiEventsIcon sx={styles.iconStyles} />
+];
+
+const TextBox: React.FC<TextBoxInterface> = ({ activeIndex }) => {
     return (
-      <Card sx={{ 
-        width: '100%',
-        height: '100%', 
-        textAlign: 'center',
-        borderRadius: '20px', 
-        transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out', 
-        '&:hover': {
-          transform: 'scale(1.05)', // zoom in
-        },
-      }}>
-        <CardActionArea>
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            height: 120,
-            backgroundColor: 'turquoise', 
-            borderRadius: '12px', 
-            padding: '20px', 
-          }}>
-            {logos[activeIndex]}
-          </Box>
-          <CardContent sx={{
-            padding: '20px', 
-            borderRadius: '15px', 
-          }}>
-            <Typography gutterBottom variant="h5" component="div" sx={{
-              fontWeight: 'bold',
-              fontSize: '1.5rem',
-              color: 'black',
-              textTransform: 'uppercase', 
-            }}>
-              {titles[activeIndex]}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{
-              fontSize: '1.25rem',
-              padding: '10px', 
-            }}>
-              {descriptions[activeIndex]}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions sx={{ 
-          justifyContent: 'center', 
-          marginTop: 'auto',
-          padding: '10px',
-        }}>
-        </CardActions>
-      </Card>
+        <Card sx={styles.textBoxCard}>
+            <CardActionArea>
+                <Box sx={styles.textBoxHeader}>
+                    {logos[activeIndex]}
+                </Box>
+                <CardContent sx={styles.textBoxContent}>
+                    <Typography gutterBottom variant="h5" component="div" sx={styles.textBoxTitle}>
+                        {titles[activeIndex]}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={styles.textBoxDescription}>
+                        {descriptions[activeIndex]}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions sx={styles.textBoxActions}>
+            </CardActions>
+        </Card>
     );
-  };
+};
 
 export default function Booking({ bookings }: BookingInterfaceProps) {
     const [expandedIndex, setExpandedIndex] = useState<number | false>(false);
-    const [activeIndex, setActiveIndex] = useState(0); 
+    const [activeIndex, setActiveIndex] = useState(0);
 
-    const handleAccordionChange = (index: number) => 
+    const handleAccordionChange = (index: number) =>
         (event: React.SyntheticEvent, isExpanded: boolean) => {
             setExpandedIndex(isExpanded ? index : false);
         };
+
     const handleNext = (step: number) => {
-        if (!(activeIndex === 0 && step === -1)) //sa nu se faca prev la prima pagina
-             setActiveIndex((prevIndex) => (prevIndex + step) % 6); 
+        if (!(activeIndex === 0 && step === -1))
+            setActiveIndex((prevIndex) => (prevIndex + step) % 6);
     };
 
     return (
         <BookingLayout>
-            <Box sx={{
-                position:'absolute',
-                top:'5%',
-                left:'1%',
-                height:'45%',
-                width:'38%',
-                backgroundColor:'gray',
-                borderRadius:'15px',
-                mt:'1%'
-            }}>
-            <img src="https://publish.finviz.com/041425/sec_d1_064929712.png" alt="Finviz Map" style={{ width: '100%' }} />
+            <Box sx={styles.mapContainer}>
+                <img src="https://publish.finviz.com/041425/sec_d1_064929712.png" alt="Finviz Map" style={{ width: '100%' }} />
             </Box>
-            <Box sx={{
-                position: 'absolute',
-                top: '56%',
-                left: '1%',
-                height: '42%',
-                width: '38%',
-                backgroundColor: 'gray',
-                borderRadius: '15px',
-                display: 'flex',          
-                justifyContent: 'space-between', 
-                alignItems: 'center',  
-                padding: '0 20px',        
-            }}>
-                <Typography variant='h5' sx={{
-                    position: 'absolute',
-                    top: '5%',
-                    left: '34%',
-                    textAlign: 'center',
-                    fontSize: '2.5rem',
-                    fontWeight: 'bold', // Makes the title bold to stand out
-                    color: '#ffffff', // White color for good contrast against gray box
-                    }}>
+            
+            <Box sx={styles.whyContainer}>
+                <Typography variant='h5' sx={styles.whyTitle}>
                     Why with UTW?
                 </Typography>
-                <Button 
+                
+                <Button
                     onClick={() => handleNext(-1)}
-                    sx={{
-                        backgroundColor: 'blue',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: 'darkblue', 
-                        },
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        fontSize: '1rem',
-                    }}
+                    startIcon={<ArrowBack />}
+                    sx={styles.navButton}
                 >
                     Prev
                 </Button>
-                <Box sx={{
-                    display: 'flex',       
-                    flexDirection: 'column',  
-                    position:'absolute',
-                    left:'20%',
-                    top:'20%',
-                    width: '60%',
-                    height:'75%',      
-                    }}>
-                    <TextBox 
-                        title={titles[activeIndex]}
-                        description={descriptions[activeIndex]}
-                        logo={logos[activeIndex]}
-                        activeIndex={activeIndex}
-                    />
+                
+                <Box sx={styles.textBoxContainer}>
+                    <TextBox activeIndex={activeIndex} />
                 </Box>
-                <Button 
+                
+                <Button
                     onClick={() => handleNext(1)}
-                    sx={{
-                        backgroundColor: 'blue', 
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: 'darkblue', 
-                        },
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        fontSize: '1rem',
-                    }}
+                    endIcon={<ArrowForward />}
+                    sx={styles.navButton}
                 >
                     Next
                 </Button>
             </Box>
-            <Box sx={{
-                position: 'absolute',
-                top: '5%',
-                left: '40%',
-                height: '60%',
-                width: '55%',
-                backgroundColor: 'white',
-                borderRadius: '15px',
-                padding: 3,
-                overflowY: 'auto',
-            }}>
-                <Box sx={{
-                    backgroundColor: 'aliceblue',
-                    borderRadius: '8px', 
-                    padding: '12px 20px',
-                    marginBottom: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                    <CardTravelIcon sx={{ 
-                        color: 'red', 
-                        fontSize: '2rem',
-                        mr: 2 
-                    }} />
-                    <Typography variant="h5" sx={{ 
-                        fontWeight: 'bold', 
-                        color: 'black', 
-                    }}>
+            
+            <Box sx={styles.mainPanel}>
+                <Box sx={styles.panelHeader}>
+                    <CardTravelIcon sx={{ color: 'red', fontSize: '2rem', mr: 2 }} />
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'black' }}>
                         Your Main Panel of Bookings
                     </Typography>
                 </Box>
 
                 {bookings.map((booking, index) => (
-                    <Accordion 
+                    <Accordion
                         key={index}
                         expanded={expandedIndex === index}
                         onChange={handleAccordionChange(index)}
-                        sx={{
-                            mb: 3,
-                            border: '1px solid whitesmoke',
-                            borderRadius: '8px',
-                            backgroundColor: 'ghostwhite',
-                            '&:hover': {
-                                transform: 'translateY(-2px)',
-                                backgroundColor: 'white'
-                            },
-                        }}
+                        sx={styles.accordion}
                     >
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Box sx={{ 
-                                display: 'flex', 
-                                width: '100%',
-                                alignItems: 'center'
-                            }}>    
-                                <Box sx={{ 
-                                    textAlign: 'center', 
-                                    flex: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center'
-                                }}>
-                                    <FlightTakeoffIcon sx={{ 
-                                        color: 'green', 
-                                        fontSize: '2rem',
-                                        mb: 1 
-                                    }} />
-                                    <Typography variant="subtitle2" sx={{ 
-                                        color: 'gray', 
-                                        fontSize: '1.2rem', 
-                                        mb: 1,
-                                        fontWeight: 'bold'
-                                    }}>
+                            <Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                                <Box sx={styles.cityBox}>
+                                    <FlightTakeoffIcon sx={{ color: 'green', ...styles.iconStyles }} />
+                                    <Typography variant="subtitle2" sx={styles.subtitleStyles}>
                                         From
                                     </Typography>
-                                    <Typography variant="h6" sx={{ 
-                                        fontWeight: 'bold', 
-                                        color: 'navy',
-                                        fontSize: '1.4rem'
-                                    }}>
+                                    <Typography variant="h6" sx={styles.cityNameStyles}>
                                         {booking.destination_city_name}
                                     </Typography>
                                 </Box>
-                                
-                                <Box sx={{ 
-                                    textAlign: 'center', 
-                                    flex: 1,
-                                    mx: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center'
-                                }}>
-                                    <Rating readOnly defaultValue={2.0} precision={0.5} sx={{color:'yellow'}} />
-                                    <Typography variant="subtitle2" sx={{ 
-                                        color: 'gray', 
-                                        fontSize: '1.2rem', 
-                                        mb: 1,
-                                        fontWeight: 'bold'
-                                    }}>
+
+                                <Box sx={styles.experienceBox}>
+                                    <Rating readOnly defaultValue={2.0} precision={0.5} sx={{ color: 'yellow' }} />
+                                    <Typography variant="subtitle2" sx={styles.subtitleStyles}>
                                         Experience
                                     </Typography>
-                                    <Typography variant="h6" sx={{ 
-                                        fontWeight: 'bold', 
-                                        color: 'dodgerblue',
-                                        backgroundColor: 'aliceblue',
-                                        borderRadius: '8px',
-                                        px: 2,
-                                        py: 1,
-                                        display: 'inline-block',
-                                        fontSize: '1.2rem',
-                                        border: '1px solid lightblue'
-                                    }}>
+                                    <Typography variant="h6" sx={styles.experienceTag}>
                                         {booking.experience_type}
                                     </Typography>
                                 </Box>
 
-                                <Box sx={{ 
-                                    textAlign: 'center', 
-                                    flex: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center'
-                                }}>
-                                    <FlightLandIcon sx={{ 
-                                        color: 'orange', 
-                                        fontSize: '2rem',
-                                        mb: 1 
-                                    }} />
-                                    <Typography variant="subtitle2" sx={{ 
-                                        color: 'gray', 
-                                        fontSize: '1.2rem', 
-                                        mb: 1,
-                                        fontWeight: 'bold'
-                                    }}>
+                                <Box sx={styles.cityBox}>
+                                    <FlightLandIcon sx={{ color: 'orange', ...styles.iconStyles }} />
+                                    <Typography variant="subtitle2" sx={styles.subtitleStyles}>
                                         To
                                     </Typography>
-                                    <Typography variant="h6" sx={{ 
-                                        fontWeight: 'bold', 
-                                        color: 'navy',
-                                        fontSize: '1.4rem'
-                                    }}>
+                                    <Typography variant="h6" sx={styles.cityNameStyles}>
                                         {booking.arrival_city_name}
                                     </Typography>
                                 </Box>
                             </Box>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography variant="h5" sx={{ 
-                                textAlign: 'center',
-                                color: 'black',
-                                fontWeight: 'bold',
-                            }}>
-                                THIS IS DESCRIPTION OF THE FLIGHT
+                            <Typography variant="h5" sx={styles.descriptionText}>
+                                {booking.description}
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
                 ))}
             </Box>
-            
         </BookingLayout>
     );
 }
