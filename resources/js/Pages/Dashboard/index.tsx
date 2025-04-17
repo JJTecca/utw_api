@@ -30,6 +30,7 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { useForm } from '@inertiajs/inertia-react';
 import { styles } from './Dashboard.styles'; 
 import axios from 'axios';
+import { TrySharp } from '@mui/icons-material';
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
@@ -82,6 +83,14 @@ export default function Dashboard() {
           experience_type: experienceType,       
         })
       });
+
+      if(!response) {
+        alert("Problems with the response");
+      } else {
+        window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${departureCity}&arrival_city_name=${arrivalCity}&experience_type=${experienceType}`;
+
+        //trb luate bookingurile care deja erau in db
+      }
 
     } catch (error) {
       console.error("Booking error:", error);
