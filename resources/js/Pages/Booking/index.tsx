@@ -11,6 +11,7 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import SendIcon from '@mui/icons-material/Send';
 import { styles } from './Booking.styles';
 
 interface BookingInterface {
@@ -91,6 +92,21 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
             setActiveIndex((prevIndex) => (prevIndex + step) % 6);
     };
 
+    const getStarsValue = (experienceTypeString : string) : number => {
+        switch(experienceTypeString) {
+             case 'Casual':
+                return 1;
+            case 'Across Country':
+                return 3;
+            case 'Exotic':
+                return 4;
+            case 'Business':
+                return 5;
+            default:
+                return 2; // default value for unknown types
+        }
+    }
+
     return (
         <BookingLayout>
             <Box sx={styles.mapContainer}>
@@ -126,7 +142,7 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
             <Box sx={styles.mainPanel}>
                 <Box sx={styles.panelHeader}>
                     <CardTravelIcon sx={{ color: 'red', fontSize: '2rem', mr: 2 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'black' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'black' }}>
                         Your Main Panel of Bookings
                     </Typography>
                 </Box>
@@ -151,7 +167,11 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
                                 </Box>
 
                                 <Box sx={styles.experienceBox}>
-                                    <Rating readOnly defaultValue={2.0} precision={0.5} sx={{ color: 'yellow' }} />
+                                    <Rating 
+                                        readOnly 
+                                        value={ getStarsValue(booking.experience_type) } 
+                                        precision={0.5} 
+                                        sx={{ color: 'yellow' }} />
                                     <Typography variant="subtitle2" sx={styles.subtitleStyles}>
                                         Experience
                                     </Typography>
@@ -175,6 +195,11 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
                             <Typography variant="h5" sx={styles.descriptionText}>
                                 {booking.description}
                             </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                            <Button variant="contained" startIcon={<SendIcon/>} size="large"sx={styles.submitButtonStyles} >
+                                Select Flight
+                            </Button>
                         </AccordionDetails>
                     </Accordion>
                 ))}

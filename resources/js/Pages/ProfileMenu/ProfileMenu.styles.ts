@@ -166,3 +166,12 @@ export const statusIconStyles: SxProps = {
   ml: 2,
   color: '#4caf50'
 };
+
+export const submitButtonStyles: SxProps = {
+  position:'absolute',
+  top:'50%',
+  right:'5%',
+  width:'35%',
+  height:'15%',
+  backgroundColor:'blueviolet'
+}

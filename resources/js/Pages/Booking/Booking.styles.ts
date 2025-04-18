@@ -1,3 +1,5 @@
+import { submitButtonStyles } from "../ProfileMenu/ProfileMenu.styles";
+
 // styles/Booking.styles.ts
 export const styles = {
     mapContainer: {
@@ -71,7 +73,7 @@ export const styles = {
     },
 
     panelHeader: {
-        backgroundColor: 'aliceblue',
+        backgroundColor: 'turquoise',
         borderRadius: '8px',
         padding: '12px 20px',
         marginBottom: '24px',
@@ -139,6 +141,7 @@ export const styles = {
     },
 
     descriptionText: {
+        mb:'3%',
         textAlign: 'center',
         color: 'black',
         fontWeight: 'bold',
@@ -187,5 +190,14 @@ export const styles = {
         justifyContent: 'center',
         marginTop: 'auto',
         padding: '10px',
+    },
+
+    submitButtonStyles : {
+        position:'absolute',
+        top:'75%',
+        right:'2%',
+        width:'35%',
+        height:'15%',
+        backgroundColor:'blueviolet'
     }
 };

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $fillable = [
-        'user_id',
+        'passenger_count',
         'destination_city_name',
         'destination_airport_id',
         'arrival_city_name',

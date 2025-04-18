@@ -27,10 +27,11 @@ class ProfileController extends Controller
                     ->get();  
         //cu first = le va da separate in array
         //fara first = le va da in acelasi array pe toate
-
-        dd($reports);
+        //submit button + notif
+        //reports from latest booking
+        //dd($reports);
         return Inertia::render('ProfileMenu/index',[
-            'report' => $report
+            'report' => $reports
         ]); 
 
     }
