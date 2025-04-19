@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Requests\UserRequest;
-use App\Models\Booking;
-use App\Models\Report;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,16 +18,13 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
 
-    public function profileMenu() {         
-        $user = Auth::user(); //aici va veni sa scot reports in functie de bookings-urile userului
-        $reports = Report::join('bookings', 'bookings.id', '=', 'reports.booking_id')
-                    ->where('bookings.user_id', $user->id)
-                    ->get();  
-        //cu first = le va da separate in array
-        //fara first = le va da in acelasi array pe toate
-        //submit button + notif
-        //reports from latest booking
-        //dd($reports);
+    public function profileMenu() {  
+        $reports = DB::table('reports')
+                ->join('bookings', 'reports.booking_id', '=', 'bookings.id')
+                ->join('user_booking_links', 'bookings.id', '=', 'user_booking_links.booking_id')
+                ->where('user_booking_links.user_id', Auth::user()->id)
+                ->select('reports.*')
+                ->first();
         return Inertia::render('ProfileMenu/index',[
             'report' => $reports
         ]); 

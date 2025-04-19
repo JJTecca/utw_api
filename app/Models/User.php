@@ -49,7 +49,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function booking() {
-        return $this->hasMany(Booking::class);
+    public function bookings() {
+        return $this->belongsToMany(Booking::class,'user_booking_links');
     }
 }
