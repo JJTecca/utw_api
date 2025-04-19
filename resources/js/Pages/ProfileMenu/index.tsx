@@ -88,15 +88,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    {/*- Departure: 10:00 AM<br />
-                                    - Arrival: 12:00 PM<br />
-                                    - Duration: 2 hours<br />
-                                    - Route: New York to Chicago<br />
-                                    - Aircraft: Boeing 737-800<br />
-                                    - Pilot: John Doe<br />
-                                    - Co-Pilot: Jane Smith<br />
-                                    - Passengers: 150 */}
-                                    {report.maintenance}                                  
+                                    {report.flight_logs}                                  
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -107,13 +99,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Last Maintenance: 2023-10-01<br />
-                                    - Next Maintenance: 2023-11-01<br />
-                                    - Component Replaced: Engine<br />
-                                    - Maintenance Hours: 120<br />
-                                    - Technician: Michael Brown<br />
-                                    - Status: Completed<br />
-                                    - Notes: Engine oil changed, filters replaced
+                                    {report.maintenance}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -124,13 +110,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Current: Sunny<br />
-                                    - Wind: 10 mph<br />
-                                    - Temperature: 75°F<br />
-                                    - Humidity: 60%<br />
-                                    - Visibility: 10 miles<br />
-                                    - Pressure: 1013 hPa<br />
-                                    - Forecast: Clear skies for the next 24 hours
+                                    {report.weather}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -141,14 +121,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Revenue: $50,000<br />
-                                    - Expenses: $30,000<br />
-                                    - Profit: $20,000<br />
-                                    - Fuel Costs: $10,000<br />
-                                    - Maintenance Costs: $5,000<br />
-                                    - Crew Salaries: $8,000<br />
-                                    - Passenger Revenue: $35,000<br />
-                                    - Cargo Revenue: $15,000
+                                    {report.financial}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -159,13 +132,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Total Passengers: 150<br />
-                                    - Business Class: 20<br />
-                                    - Economy Class: 130<br />
-                                    - Checked Bags: 120<br />
-                                    - Carry-On Bags: 150<br />
-                                    - Special Requests: 5 (e.g., wheelchair assistance)<br />
-                                    - Passenger Feedback: 4.5/5
+                                    {report.passenger_reports}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -176,13 +143,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Total Crew: 10<br />
-                                    - Pilots: 2<br />
-                                    - Cabin Crew: 8<br />
-                                    - Flight Hours: 120<br />
-                                    - Rest Periods: Compliant<br />
-                                    - Training Status: Up-to-date<br />
-                                    - Incidents: 0
+                                    {report.crew_reports}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -193,12 +154,7 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography sx={accordionTextStyles}>
-                                    - Safety Inspections: 5<br />
-                                    - Incidents: 0<br />
-                                    - Emergency Drills: 2<br />
-                                    - Compliance: 100%<br />
-                                    - Safety Equipment: Fully functional<br />
-                                    - Notes: No issues reported
+                                    {report.safety_reports}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>

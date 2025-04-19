@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $fillable = [
+        'user_id',
         'passenger_count',
         'destination_city_name',
         'destination_airport_id',
@@ -19,8 +20,8 @@ class Booking extends Model
         'description'        
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function users() {
+        return $this->belongsToMany(User::class, 'user_booking_links');
     }
 
     public function report() {

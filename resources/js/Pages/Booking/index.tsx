@@ -103,7 +103,7 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
             case 'Business':
                 return 5;
             default:
-                return 2; // default value for unknown types
+                return 2; 
         }
     }
 
