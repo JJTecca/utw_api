@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
+import SendIcon from '@mui/icons-material/Send';
 import {
   headerContainerStyles,
   mainButtonStyles,
@@ -23,7 +24,8 @@ import {
   favoritePlaneStyles,
   weatherBoxStyles,
   iconStyles,
-  statusIconStyles
+  statusIconStyles,
+  submitButtonStyles
 } from './ProfileMenu.styles';
 
 interface Report {
@@ -242,6 +244,11 @@ export default function ProfileMenu( {report}:ProfileMenuProps ) {
                             </Typography>
                             <Rating name="mobile-app-rating" defaultValue={5.0} precision={0.5} sx={ratingComponentStyles} />
                         </Box>
+                        
+                        <Button variant="contained" startIcon={<SendIcon/>} size="large"sx={submitButtonStyles} >
+                            Submit Review
+                        </Button>
+                        
                     </Box>
 
                     {/* Progress Box */}

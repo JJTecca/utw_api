@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('passenger_count')->default(0);
             $table->string('destination_city_name'); 
             $table->string('destination_airport_id')->nullable();
             $table->string('arrival_city_name');
