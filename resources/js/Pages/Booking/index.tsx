@@ -109,10 +109,6 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
 
     return (
         <BookingLayout>
-            <Box sx={styles.mapContainer}>
-                <img src="https://publish.finviz.com/041425/sec_d1_064929712.png" alt="Finviz Map" style={{ width: '100%' }} />
-            </Box>
-            
             <Box sx={styles.whyContainer}>
                 <Typography variant='h5' sx={styles.whyTitle}>
                     Why with UTW?

@@ -41,7 +41,6 @@ class BookingController extends Controller
             ]); 
         }
         
-        
         return Inertia::render('Booking/index',[
             'bookings' => BookingResource::collection($bookings)->resolve() //buna functie , unwraps collection to array
         ]);

@@ -10,7 +10,6 @@ import {
   Box,
   Avatar,
   Menu,
-  Grid,
   Card,
   CardContent,
   TextField,
@@ -18,6 +17,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import ExploreIcon from '@mui/icons-material/Explore';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
@@ -27,10 +27,11 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useForm } from '@inertiajs/inertia-react';
 import { styles } from './Dashboard.styles'; 
-import axios from 'axios';
-import { TrySharp } from '@mui/icons-material';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export default function Dashboard() {
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
@@ -40,6 +41,7 @@ export default function Dashboard() {
   const [experienceType, setExperienceType] = useState('');
   const [departureDate, setDepartureDate] = useState('');
   const [arrivalDate, setArrivalDate] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0); 
 
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -61,6 +63,11 @@ export default function Dashboard() {
     handleMenuClose(); // Close the menu
     window.location.href = '/profileMenu';
   };
+
+  const handleNext = (step: number) => {
+    if (!(activeIndex === 0 && step === -1)) 
+            setActiveIndex((prevIndex) => (prevIndex + step) % 3); 
+  }
 
   const handleBooking = async () => {
     try {
@@ -103,6 +110,9 @@ export default function Dashboard() {
     form.post('/logout');
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
@@ -132,15 +142,8 @@ export default function Dashboard() {
               sx={styles.navButton}
               href={route('dashboard.experiences')}
             >
-              <ExploreIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
+              <ExploreIcon style={{ fontSize: '1.5rem', marginRight: '5%' }} />
               EXPERIENCE
-            </Button>
-            <Button
-              sx={styles.navButton}
-              href="/settings"
-            >
-              <EventSeatIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
-              RESERVE
             </Button>
             <Button
               sx={styles.navButton}
@@ -148,13 +151,6 @@ export default function Dashboard() {
             >
               <PublicIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
               WORLD TOUR
-            </Button>
-            <Button
-              sx={styles.navButton}
-              href="/manage"
-            >
-              <FlightIcon style={{ fontSize: '1.5rem', marginRight: '8px' }} />
-              MANAGE YOUR FLIGHTS
             </Button>
             <Button
               sx={styles.accountButton}
@@ -166,6 +162,7 @@ export default function Dashboard() {
                 sx={{ width: 50, height: 50, ml: 2 }}
               />
             </Button>
+            
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -194,7 +191,24 @@ export default function Dashboard() {
           position: 'relative',
         }}
       >
-        <Box sx={styles.flightSearchBox}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIosNewIcon />}
+          sx={styles.prevButton}
+          onClick={() => handleNext(-1)} 
+        >
+          <Typography>Previous</Typography>
+        </Button>
+
+        <Button
+          variant="outlined"
+          endIcon={<ArrowForwardIosIcon />}
+          sx={styles.nextButton}
+          onClick={() => handleNext(1)} 
+        >
+          <Typography>Next</Typography>
+        </Button>
+        { activeIndex===0 && <Box sx={styles.flightSearchBox}>
           <Typography variant="h5" sx={styles.searchTitle}>
             Make your destinations come true
           </Typography>
@@ -265,9 +279,9 @@ export default function Dashboard() {
               sx={{ width: '45%' }} 
             />
           </Box>
-        </Box>
+        </Box> }
 
-        <Box sx={styles.experienceBox}>
+        {activeIndex===1 && <Box sx={styles.experienceBox}>
           <Typography variant="h5" sx={{ fontWeight: 'bold', mb:4 }}>
             Experiences
           </Typography>
@@ -286,13 +300,9 @@ export default function Dashboard() {
             <MenuItem value="Across Country">Across Country</MenuItem>
             <MenuItem value="Business">Business</MenuItem>
           </Select>
-        </Box>
+        </Box> }
         
-        <Box sx={{
-          position: 'absolute',
-          top: '75%',
-          left: '35%'
-        }}
+        <Box sx={styles.bookFlightButton}
         >
           <Button
             fullWidth
@@ -319,9 +329,9 @@ export default function Dashboard() {
               Book a flight
             </Typography>
           </Button>
-        </Box>
+        </Box> 
 
-        <Box sx={styles.flightStatusBox}>
+        {activeIndex==2 && <Box sx={styles.flightStatusBox}>
           <Button
             fullWidth
             variant="contained"
@@ -330,7 +340,7 @@ export default function Dashboard() {
             sx={styles.flightStatusButton}
           >
             Flight Status
-          </Button>
+          </Button> 
 
           <Collapse in={openFlightStatus} timeout="auto" unmountOnExit>
             <Box
@@ -372,7 +382,7 @@ export default function Dashboard() {
               </Box>
             </Box>
           </Collapse>
-        </Box>
+        </Box> }
       </div>
 
       <Box sx={styles.whyChooseSection}>
@@ -380,62 +390,63 @@ export default function Dashboard() {
           Why Choose UTW Airlines?
         </Typography>
         <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={5} sm={6} md={3}>
-            <Card sx={styles.featureCard}>
-              <EventSeatIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
-              <CardContent>
-                <Typography variant="h6" component="div" sx={styles.featureTitle}>
-                  Comfortable Seating
-                </Typography>
-                <Typography variant="body1">
-                  Enjoy the most comfortable seats in the sky.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+      `<Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <EventSeatIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              Comfortable Seating
+            </Typography>
+            <Typography variant="body1">
+              Enjoy the most comfortable seats in the sky.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
 
-          <Grid item xs={5} sm={6} md={3}>
-            <Card sx={styles.featureCard}>
-              <ShieldIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
-              <CardContent>
-                <Typography variant="h6" component="div" sx={styles.featureTitle}>
-                  Top Safety Standards
-                </Typography>
-                <Typography variant="body1">
-                  Your safety is our top priority.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+      <Grid item xs={12} sm={12} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <ShieldIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              Top Safety Standards
+            </Typography>
+            <Typography variant="body1">
+              Your safety is our top priority.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
 
-          <Grid item xs={5} sm={6} md={3}>
-            <Card sx={styles.featureCard}>
-              <HeadsetMicIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
-              <CardContent>
-                <Typography variant="h6" component="div" sx={styles.featureTitle}>
-                  24/7 Customer Support
-                </Typography>
-                <Typography variant="body1">
-                  We're here to help you anytime.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={5} sm={6} md={3}>
-            <Card sx={styles.featureCard}>
-              <VerifiedUserIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
-              <CardContent>
-                <Typography variant="h6" component="div" sx={styles.featureTitle}>
-                  We value your privacy
-                </Typography>
-                <Typography variant="body1">
-                  We highly value your privacy across the world
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+      <Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <HeadsetMicIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              24/7 Customer Support
+            </Typography>
+            <Typography variant="body1">
+              We're here to help you anytime.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <VerifiedUserIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              We value your privacy
+            </Typography>
+            <Typography variant="body1">
+              We highly value your privacy across the world
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+
       </Box>
     </AuthenticatedLayout>
   );

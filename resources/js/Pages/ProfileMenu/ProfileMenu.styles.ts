@@ -1,134 +1,183 @@
 import { SxProps } from '@mui/material';
 
+
+export const responsiveContainerStyles: SxProps = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  overflowY: 'auto',
+  maxHeight: '100vh',
+  padding: '20px',
+  gap: '20px',
+  justifyContent: 'center',
+  '@media (max-width:600px)': {
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+  },
+};
+
 export const headerContainerStyles: SxProps = {
   display: 'flex',
   alignItems: 'center',
   position: 'absolute',
   top: '5%',
-  left: '5%'
+  left: '5%',
+  mb:'2%',
+  mt:'2%',
+  '@media (max-width:600px)': {
+    position: 'static',
+    width: '90%',
+    justifyContent: 'center',
+    marginBottom: '20px',
+  },
 };
+
 
 export const mainButtonStyles: SxProps = {
   fontSize: '2.25rem',
   padding: '16px',
-  height: '100px',
-  width: '600px',
+  height: '10%',
+  width: '150%',
   backgroundColor: 'black',
   color: 'white',
   fontWeight: 'bold',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  mt:'3%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+    fontSize: '1.5rem',
+    height: '80px',
+  },
 };
+
 
 export const paymentMethodsStyles: SxProps = {
   fontSize: '2.25rem',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  position: 'absolute',
-  top: '5%',
-  left: '35%',
   padding: '16px',
-  height: '100px',
-  width: '600px',
+  height: '15%',
+  width: '30%',
   backgroundColor: 'black',
   color: 'white',
   fontWeight: 'bold',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  mt:'2%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+    fontSize: '1.5rem',
+    height: '80px',
+  },
 };
+
 
 export const statusStyles: SxProps = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  position: 'absolute',
-  top: '5%',
-  left: '70%',
   fontSize: '2.25rem',
   padding: '16px',
-  height: '100px',
-  width: '600px',
+  height: '10%',
+  width: '30%',
   backgroundColor: 'black',
   color: 'white',
   fontWeight: 'bold',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  mt:'2%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+    fontSize: '1.5rem',
+    height: '80px',
+  },
 };
 
-// Report Box Styles
+
 export const reportBoxStyles: SxProps = {
-  position: 'absolute',
-  top: '20%',
-  left: '5%',
   width: '630px',
   height: 'auto',
   backgroundColor: 'black',
   padding: '20px',
   borderRadius: '12px',
   boxShadow: '0px 4px 15px rgba(255, 255, 255, 0.2)',
-  color: 'white'
+  mt:'2%',
+  mb:'2%',
+  color: 'white',
+  '@media (max-width:600px)': {
+    width: '90%',
+  },
 };
+
 
 export const accordionStyles: SxProps = {
   mb: 1,
   background: '#111',
-  borderRadius: '8px'
+  borderRadius: '8px',
 };
+
 
 export const accordionTextStyles: SxProps = {
-  color: 'white'
+  color: 'white',
 };
 
-// Rating Box Styles
+
 export const ratingBoxStyles: SxProps = {
-  position: 'absolute',
-  top: '20%',
-  left: '35%',
   width: '770px',
   height: 'auto',
   backgroundColor: 'black',
   padding: '20px',
   borderRadius: '12px',
-  color: 'white'
+  color: 'white',
+  mt:'2%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+  },
 };
 
 export const ratingItemStyles: SxProps = {
   display: 'flex',
   alignItems: 'center',
-  mb: 2
+  mb: 2,
 };
+
 
 export const ratingComponentStyles: SxProps = {
   color: 'white',
-  '& .MuiRating-iconHover': { color: 'yellow' }
+  '& .MuiRating-iconHover': { color: 'yellow' },
 };
 
-// Progress Box Styles
+
 export const progressBoxStyles: SxProps = {
-  position: 'absolute',
-  top: '55%',
-  left: '35%',
   width: '770px',
   height: 'auto',
   backgroundColor: 'black',
   padding: '20px',
   borderRadius: '12px',
-  color: 'white'
+  color: 'white',
+  mt:'2%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+  },
 };
 
+
 export const progressItemStyles: SxProps = {
-  mb: 2
+  mb: 2,
 };
+
 
 export const progressBarStyles: SxProps = {
   height: '10px',
   borderRadius: '5px',
-  backgroundColor: 'green'
+  backgroundColor: 'green',
 };
 
-// Favorite Plane Box Styles
 export const favoritePlaneStyles: SxProps = {
-  position: 'absolute',
-  top: '20%',
-  left: '70%',
   width: '660px',
   height: '370px',
   backgroundColor: 'black',
@@ -136,14 +185,19 @@ export const favoritePlaneStyles: SxProps = {
   padding: '20px',
   borderRadius: '12px',
   color: 'white',
-  backgroundImage: 'url(/Images/turkish-fav-plane.jpg)'
+  backgroundImage: 'url(/Images/turkish-fav-plane.jpg)',
+  mt:'2%',
+  mb:'2%',
+  '@media (max-width:600px)': {
+    width: '90%',
+    height: 'auto',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  },
 };
 
-// Weather Box Styles
+
 export const weatherBoxStyles: SxProps = {
-  position: 'absolute',
-  top: '60%',
-  left: '70%',
   width: '660px',
   height: '30%',
   backgroundColor: 'black',
@@ -151,27 +205,35 @@ export const weatherBoxStyles: SxProps = {
   backgroundSize: 'cover',
   padding: '20px',
   borderRadius: '12px',
-  color: 'white'
+  color: 'white',
+  '@media (max-width:600px)': {
+    width: '90%',
+    height: 'auto',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  },
 };
 
-// Icon Styles
 export const iconStyles: SxProps = {
   fontSize: '2rem',
   ml: 2,
-  color: 'white'
+  color: 'white',
 };
+
 
 export const statusIconStyles: SxProps = {
   fontSize: '2rem',
   ml: 2,
-  color: '#4caf50'
+  color: '#4caf50',
 };
 
+
 export const submitButtonStyles: SxProps = {
-  position:'absolute',
-  top:'50%',
-  right:'5%',
-  width:'35%',
-  height:'15%',
-  backgroundColor:'blueviolet'
-}
+  width: '35%',
+  height: '15%',
+  backgroundColor: 'blueviolet',
+  '@media (max-width:600px)': {
+    width: '90%',
+    height: 'auto',
+  },
+};
