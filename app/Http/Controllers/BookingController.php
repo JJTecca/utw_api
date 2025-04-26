@@ -34,13 +34,12 @@ class BookingController extends Controller
                 ->increment('passenger_count', 1); //SAU ASA 
                 //->update('passenger_count' , DB::raw('passenger_count + 1'));
         
-        foreach($bookings as $currentBooking) {
+        /*foreach($bookings as $currentBooking) {
             UserBookingLink::create([
                 'user_id' => Auth::user()->id,
                 'booking_id' => $currentBooking->id 
             ]); 
-        }
-        
+        }  asta nu mai are ce cauta aici */ 
         
         return Inertia::render('Booking/index',[
             'bookings' => BookingResource::collection($bookings)->resolve() //buna functie , unwraps collection to array
@@ -48,6 +47,31 @@ class BookingController extends Controller
         
     }
     
+    public function submitBooking(BookingRequest $request) {
+        $validate = $request->validated();
+        $booking = Booking::where('destination_city_name', $request->destination_city_name)
+                ->where('arrival_city_name', $request->arrival_city_name)
+                ->where('experience_type', $request->experience_type)
+                ->select([
+                    'id',
+                    'passenger_count',
+                    'destination_city_name',
+                    'arrival_city_name',
+                    'experience_type',
+                    'description'
+                ])
+                ->first();
+        UserBookingLink::create([
+            'user_id' => Auth::user()->id,
+            'booking_id' => $booking->id 
+        ]);  
+
+        return response()->json([
+            'message' => 'Booking linked successfully',
+            'user_id' => Auth::user()->id
+        ], 201); //mai trb schimbat
+    }
+
     public function storeBooking(BookingRequest $request) {
         $validated = $request->validated();
         $currentBooking =  Booking::create($validated);

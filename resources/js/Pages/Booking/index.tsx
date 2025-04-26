@@ -13,6 +13,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import { styles } from './Booking.styles';
+import axios from 'axios';
 
 interface BookingInterface {
     destination_city_name: string,
@@ -81,6 +82,8 @@ const TextBox: React.FC<TextBoxInterface> = ({ activeIndex }) => {
 export default function Booking({ bookings }: BookingInterfaceProps) {
     const [expandedIndex, setExpandedIndex] = useState<number | false>(false);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
 
     const handleAccordionChange = (index: number) =>
         (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -91,6 +94,27 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
         if (!(activeIndex === 0 && step === -1))
             setActiveIndex((prevIndex) => (prevIndex + step) % 6);
     };
+
+    const handleClose = async () => {
+        setAnchorEl(null);
+    }
+
+    const handleBooking = async (booking : BookingInterface) => {
+        handleClose(); // aici vine submitu de flight request 
+        try {
+            await axios.post('/dashboard/submit-booking',{
+                destination_city_name: booking.destination_city_name,
+                arrival_city_name: booking.arrival_city_name,
+                experience_type: booking.experience_type
+            },{
+                withCredentials: true // <== IMPORTANT!
+            });
+            console.log('Booking sent suucesfully');
+
+        }catch (error) {
+            console.error('Failed to add user:', error);
+          }
+    }
 
     const getStarsValue = (experienceTypeString : string) : number => {
         switch(experienceTypeString) {
@@ -109,10 +133,6 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
 
     return (
         <BookingLayout>
-            <Box sx={styles.mapContainer}>
-                <img src="https://publish.finviz.com/041425/sec_d1_064929712.png" alt="Finviz Map" style={{ width: '100%' }} />
-            </Box>
-            
             <Box sx={styles.whyContainer}>
                 <Typography variant='h5' sx={styles.whyTitle}>
                     Why with UTW?
@@ -197,7 +217,12 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
                             </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
-                            <Button variant="contained" startIcon={<SendIcon/>} size="large"sx={styles.submitButtonStyles} >
+                            <Button 
+                                variant="contained" 
+                                startIcon={<SendIcon/>} 
+                                onClick={() => handleBooking(booking)} //se trimit parametrii
+                                size="large"
+                                sx={styles.submitButtonStyles} >
                                 Select Flight
                             </Button>
                         </AccordionDetails>

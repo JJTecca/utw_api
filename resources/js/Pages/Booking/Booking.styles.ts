@@ -1,6 +1,3 @@
-import { submitButtonStyles } from "../ProfileMenu/ProfileMenu.styles";
-
-// styles/Booking.styles.ts
 export const styles = {
     mapContainer: {
         position: 'absolute',
@@ -10,9 +7,16 @@ export const styles = {
         width: '38%',
         backgroundColor: 'gray',
         borderRadius: '15px',
-        mt: '1%'
+        mt: '1%',
+        '@media (max-width: 800px)': {
+            position: 'relative',
+            width: '95%',
+            height: '250px',
+            margin: '10px auto',
+            left: 'auto',
+            top: 'auto'
+        },
     },
-
     whyContainer: {
         position: 'absolute',
         top: '56%',
@@ -26,6 +30,17 @@ export const styles = {
         alignItems: 'center',
         padding: '0 20px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+        '@media (max-width: 800px)': {
+            position: 'relative',
+            width: '95%',
+            height: 'auto',
+            minHeight: '250px',
+            margin: '10px auto',
+            left: 'auto',
+            top: 'auto',
+            flexDirection: 'column',
+            padding: '20px'
+        }
     },
 
     whyTitle: {
@@ -36,6 +51,13 @@ export const styles = {
         fontSize: '3rem',
         fontWeight: 'bold',
         color: '#ffffff',
+        '@media (max-width: 800px)': {
+            position: 'static',
+            fontSize: '1.8rem',
+            marginBottom: '10px',
+            textAlign: 'center',
+        }
+        
     },
 
     navButton: {
@@ -48,6 +70,10 @@ export const styles = {
         borderRadius: '8px',
         fontSize: '1rem',
         transition: 'background-color 0.3s ease',
+        '@media (max-width: 800px)': {
+            width: '100%',
+            marginTop: '8px',
+        }
     },
 
     textBoxContainer: {
@@ -58,6 +84,12 @@ export const styles = {
         top: '20%',
         width: '60%',
         height: '75%',
+        '@media (max-width: 800px)': {
+            position: 'static',
+            width: '100%',
+            height: 'auto',
+        }
+        
     },
 
     mainPanel: {
@@ -70,7 +102,17 @@ export const styles = {
         borderRadius: '15px',
         padding: 3,
         overflowY: 'auto',
+        '@media (max-width: 800px)': {
+            position: 'relative',
+            width: '95%',
+            margin: '20px auto',
+            left: 'auto',
+            top: 'auto',
+            height: 'auto',
+            maxHeight: 'none'
+        }
     },
+
 
     panelHeader: {
         backgroundColor: 'turquoise',
@@ -198,6 +240,12 @@ export const styles = {
         right:'2%',
         width:'35%',
         height:'15%',
-        backgroundColor:'blueviolet'
+        backgroundColor:'blueviolet',
+        '@media (max-width: 800px)': {
+            position: 'static',
+            width: '100%',
+            height: '50px',
+            marginTop: '10px',
+        },
     }
 };
