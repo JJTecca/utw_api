@@ -70,7 +70,7 @@ export const styles = {
   },
   flightSearchBox: {
     position: 'absolute',
-    top: '35%',
+    top: '25%',
     left: '25%',
     transform: 'translate(-50%, -50%)',
     display: 'flex',
@@ -79,14 +79,15 @@ export const styles = {
     gap: '16px',
     width: '20%',
     backgroundColor: 'white',
-    padding: '16px',
+    padding: '10px',
     borderRadius: '8px',
     height: '65%',
     paddingBottom: '16px',
     '@media (max-width: 800px)': {
-      width: '80%',
+      width: '70%',
       top: '35%',
-      left:'50%'
+      left:'50%',
+      
     },
   },
   experienceBox: {
@@ -123,7 +124,6 @@ export const styles = {
     borderRadius: '8px',
     '@media (max-width: 800px)': {
       width: '80%',
-      top: '35%',
       left:'50%'
     },
   },
@@ -135,19 +135,21 @@ export const styles = {
     padding: '12px',
     height: '70%',
     '@media (max-width: 800px)': {
-      width: '100%', 
+      width: '50%', 
     },
   },
   bookFlightButton: {
     position: 'absolute',
     top: '75%',
     left: '20%',
-    '@media (max-width: 800px)': {
-      left: '30%',  
-      top: '90%',  
-      padding: '5px 12px', 
+    '@media (max-width: 500px)': {
+      left: '10%',  
+      top: '85%', 
+      width:' 80%',
+      padding: '3px 3px', 
     },
   },
+
   whyChooseSection: {
     backgroundColor: '#f5f5f5',
     py: 6,
@@ -192,6 +194,7 @@ export const styles = {
     fontSize: '1.25rem',
     '@media (max-width: 800px)': {
       fontSize: '1rem',
+      top: '80%',
     },
   },
 
@@ -208,7 +211,7 @@ export const styles = {
     },
     '@media (max-width: 800px)': {
       left: '5%',  
-      top: '80%',  
+      top: '100%',  
       padding: '5px 12px', 
     },
   },
@@ -227,7 +230,7 @@ export const styles = {
     },
     '@media (max-width: 800px)': {
       left: '75%',  
-      top: '80%',   
+      top: '100%',   
       padding: '5px 12px',  
     },
   },
