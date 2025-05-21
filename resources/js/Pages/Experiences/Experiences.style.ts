@@ -7,7 +7,15 @@ export const mainBoxStyles: (activeIndex : number) => SxProps = (activeIndex) =>
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
-    gap: 2
+    gap: 2,
+    '@media (max-width: 800px)': {
+        position: 'fixed',
+    top: '5%',
+    right: '5%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    },
 });
 
 export const secondaryBoxStyles: (activeIndex : number) => SxProps = (activeIndex) => ({
@@ -22,6 +30,19 @@ export const secondaryBoxStyles: (activeIndex : number) => SxProps = (activeInde
     maxWidth: '1000px',
     rowGap: 30,
     columnGap: 10,
+    '@media (max-width: 800px)': {
+        position: 'fixed',
+    top: '20%',
+    right: '5%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    maxWidth: '1000px',
+    rowGap: 30,
+    columnGap: 10,
+    },
 });
 
 export const NextButtonStyles: (activeIndex : number) => SxProps = (activeIndex) => ({
@@ -40,6 +61,10 @@ export const NextButtonStyles: (activeIndex : number) => SxProps = (activeIndex)
         '&:hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
     },
+    '@media (max-width: 800px)': {
+        top: '80%',
+        right: '10%',
+    },
 });
 
 export const PreviousButtonStyles: (activeIndex : number) => SxProps = (activeIndex) => ({
@@ -57,5 +82,22 @@ export const PreviousButtonStyles: (activeIndex : number) => SxProps = (activeIn
     textAlign: 'center',
         '&:hover': {
              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
+    '@media (max-width: 800px)': {
+       position: 'fixed',
+    top: '80%',
+    right: '50%',
+    height: 60,
+    width: 130,
+    borderRadius: 30,
+    backgroundColor: 'black',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
     },
 });
