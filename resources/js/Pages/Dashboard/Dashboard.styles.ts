@@ -70,7 +70,7 @@ export const styles = {
   },
   flightSearchBox: {
     position: 'absolute',
-    top: '25%',
+    top: '35%',
     left: '25%',
     transform: 'translate(-50%, -50%)',
     display: 'flex',
@@ -79,15 +79,14 @@ export const styles = {
     gap: '16px',
     width: '20%',
     backgroundColor: 'white',
-    padding: '10px',
+    padding: '16px',
     borderRadius: '8px',
     height: '65%',
     paddingBottom: '16px',
     '@media (max-width: 800px)': {
-      width: '70%',
+      width: '80%',
       top: '35%',
-      left:'50%',
-      
+      left:'50%'
     },
   },
   experienceBox: {
@@ -106,7 +105,8 @@ export const styles = {
     '@media (max-width: 800px)': {
       width: '70%', 
       top: '35%',
-      left:'50%'
+      left:'50%',
+      
     },
   },
   flightStatusBox: {
@@ -124,6 +124,7 @@ export const styles = {
     borderRadius: '8px',
     '@media (max-width: 800px)': {
       width: '80%',
+      top: '35%',
       left:'50%'
     },
   },
@@ -135,21 +136,19 @@ export const styles = {
     padding: '12px',
     height: '70%',
     '@media (max-width: 800px)': {
-      width: '50%', 
+      width: '100%', 
     },
   },
   bookFlightButton: {
     position: 'absolute',
     top: '75%',
     left: '20%',
-    '@media (max-width: 500px)': {
-      left: '10%',  
-      top: '85%', 
-      width:' 80%',
-      padding: '3px 3px', 
+    '@media (max-width: 800px)': {
+      left: '30%',  
+      top: '90%',  
+      padding: '5px 12px', 
     },
   },
-
   whyChooseSection: {
     backgroundColor: '#f5f5f5',
     py: 6,
@@ -193,8 +192,7 @@ export const styles = {
     mr: 5,
     fontSize: '1.25rem',
     '@media (max-width: 800px)': {
-      fontSize: '1rem',
-      top: '80%',
+      display: 'none',
     },
   },
 
@@ -211,7 +209,7 @@ export const styles = {
     },
     '@media (max-width: 800px)': {
       left: '5%',  
-      top: '100%',  
+      top: '80%',  
       padding: '5px 12px', 
     },
   },
@@ -230,8 +228,22 @@ export const styles = {
     },
     '@media (max-width: 800px)': {
       left: '75%',  
-      top: '100%',   
+      top: '80%',   
       padding: '5px 12px',  
     },
   },
+  departureDateStyle: {
+     width: '45%',
+      mr: 4,
+      '@media (max-width: 800px)': {
+        display: 'none'
+    },
+  },
+  arrivalDateStyle: {
+    width: '45%',
+    '@media (max-width: 800px)': {
+      display: 'none'
+    },
+  }
+
 };
