@@ -144,9 +144,10 @@ export const styles = {
     top: '75%',
     left: '20%',
     '@media (max-width: 800px)': {
-      left: '30%',  
+      left: '20%',  
       top: '90%',  
-      padding: '5px 12px', 
+      padding: '3px 9px',
+      right: '20%', 
     },
   },
   whyChooseSection: {
