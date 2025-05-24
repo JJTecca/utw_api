@@ -84,7 +84,6 @@ export default function Booking({ bookings }: BookingInterfaceProps) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-
     const handleAccordionChange = (index: number) =>
         (event: React.SyntheticEvent, isExpanded: boolean) => {
             setExpandedIndex(isExpanded ? index : false);
