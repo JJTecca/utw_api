@@ -29,6 +29,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Link from '@mui/material/Link';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import { useForm } from '@inertiajs/inertia-react';
 import { styles } from './Dashboard.styles'; 
 import { useMediaQuery, useTheme } from '@mui/material';
@@ -445,6 +447,56 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </Grid>
+      
+      <Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <TravelExploreIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              Check out Our Sponsors
+            </Typography>
+            <Typography variant="h6">
+              <Link href="https://scanstart.ro"  target="_blank" rel="noopener" underline="hover">
+                scanstart.ro
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      
+      <Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <TravelExploreIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              Check out Our Sponsors
+            </Typography>
+            <Typography variant="h6">
+              <Link href="https://csac.ro" target="_blank" rel="noopener" underline="hover">
+                csac.ro
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={2.5}>
+        <Card sx={styles.featureCard}>
+          <TravelExploreIcon style={{ fontSize: '3rem', color: '#0077B6' }} />
+          <CardContent>
+            <Typography variant="h6" component="div" sx={styles.featureTitle}>
+              Check out Our Sponsors
+            </Typography>
+            <Typography variant="h6">
+              <Link href="https://www.instagram.com/cie.engineering_ulbs/?hl=en" target="_blank" rel="noopener" underline="hover">
+                https://www.instagram.com/cie.engineering_ulbs/?hl=en
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      
     </Grid>
 
       </Box>
