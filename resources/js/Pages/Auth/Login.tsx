@@ -12,8 +12,17 @@ export default function Login() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('login')); // Dute la ruta login
-    };
+
+        post(route('login'), {
+            onSuccess: () => {
+                window.location.href = route('dashboard'); // redirect on success
+            },
+            onError: (errors) => {
+                console.log('Login failed:', errors);
+            },
+    });
+};
+
 
     return (
         <GuestLayout>
