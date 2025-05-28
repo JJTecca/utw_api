@@ -21,6 +21,6 @@ class UserController extends Controller
         ]);
         Auth::login($user);
         
-        return back()->withErrors(['email' => 'Authentication failed.']);
+        return redirect()->route('dashboard');
     }
 }
