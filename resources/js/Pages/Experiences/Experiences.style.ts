@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material";
 
 export const mainBoxStyles: (activeIndex : number) => SxProps = (activeIndex) => ({
-    position: 'fixed',
+    position: 'fixed', //pozitia ramane fixa , sa vedem
     top: activeIndex === 3 ? '8%' : '5%',
     right: activeIndex === 3 ? '60%' : '15%',
     display: 'flex',

@@ -17,7 +17,7 @@ export default defineConfig({
   base: '/',
   server: {
     hmr: {
-      protocol: 'wss'
+      protocol: 'wss' //wss pentru https
     }
   }
 });
