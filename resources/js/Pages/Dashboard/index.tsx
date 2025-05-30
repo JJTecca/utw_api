@@ -270,7 +270,7 @@ export default function Dashboard() {
               type="date"
               value={departureDate}
               onChange={(e) => setDepartureDate(e.target.value)}
-              sx={{ width: '45%', mr: 4 }} 
+              sx={ styles.departureDateStyle} 
             />
             <TextField
               fullWidth
@@ -278,7 +278,7 @@ export default function Dashboard() {
               type="date"
               value={arrivalDate}
               onChange={(e) => setArrivalDate(e.target.value)}
-              sx={{ width: '45%' }} 
+              sx={styles.arrivalDateStyle} 
             />
           </Box>
         </Box> }

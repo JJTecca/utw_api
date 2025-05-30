@@ -105,7 +105,8 @@ export const styles = {
     '@media (max-width: 800px)': {
       width: '70%', 
       top: '35%',
-      left:'50%'
+      left:'50%',
+      
     },
   },
   flightStatusBox: {
@@ -143,9 +144,10 @@ export const styles = {
     top: '75%',
     left: '20%',
     '@media (max-width: 800px)': {
-      left: '30%',  
+      left: '20%',  
       top: '90%',  
-      padding: '5px 12px', 
+      padding: '3px 9px',
+      right: '20%', 
     },
   },
   whyChooseSection: {
@@ -191,7 +193,7 @@ export const styles = {
     mr: 5,
     fontSize: '1.25rem',
     '@media (max-width: 800px)': {
-      fontSize: '1rem',
+      display: 'none',
     },
   },
 
@@ -231,4 +233,18 @@ export const styles = {
       padding: '5px 12px',  
     },
   },
+  departureDateStyle: {
+     width: '45%',
+      mr: 4,
+      '@media (max-width: 800px)': {
+        display: 'none'
+    },
+  },
+  arrivalDateStyle: {
+    width: '45%',
+    '@media (max-width: 800px)': {
+      display: 'none'
+    },
+  }
+
 };

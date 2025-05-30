@@ -1,20 +1,20 @@
 import { SxProps } from '@mui/material';
 
 
-export const responsiveContainerStyles: SxProps = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  overflowY: 'auto',
-  maxHeight: '100vh',
-  padding: '20px',
-  gap: '20px',
-  justifyContent: 'center',
-  '@media (max-width:600px)': {
-    flexDirection: 'column',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
-  },
-};
+// export const responsiveContainerStyles: SxProps = {
+//   display: 'flex',
+//   flexWrap: 'wrap',
+//   overflowY: 'auto',
+//   maxHeight: '100vh',
+//   padding: '20px',
+//   gap: '20px',
+//   justifyContent: 'center',
+//   '@media (max-width:600px)': {
+//     flexDirection: 'column',
+//     flexWrap: 'nowrap',
+//     alignItems: 'center',
+//   },
+// };
 
 export const headerContainerStyles: SxProps = {
   display: 'flex',
