@@ -1,102 +1,77 @@
 import { SxProps } from "@mui/material";
 
 export const mainBoxStyles: (activeIndex: number) => SxProps = (activeIndex) => ({
-  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'flex-start',
+  gap: 4,
+  padding: '24px',
   overflowY: 'auto',
   maxHeight: '100vh',
-  padding: '24px',
-  gap: 4,
   '@media (max-width: 800px)': {
-    position: 'relative',
     padding: '16px',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    gap: 3,
   },
 });
 
 export const secondaryBoxStyles: (activeIndex: number) => SxProps = (activeIndex) => ({
-  position: 'relative',
-  top: activeIndex === 3 ? '20%' : '20%',
-  right: activeIndex === 3 ? '45%' : '5%',
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  rowGap: 30,
+  columnGap: 10,
   width: '100%',
-  maxWidth: '500px',
-  overflowY: 'auto',
-  paddingBottom: '2rem',
-  '@media (max-width: 800px)': {
-    position: 'relative',
-    top: '20%',
-    right: '5%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
-    maxWidth: '100%',
-  },
+  maxWidth: '1000px',
 });
-
 export const NextButtonStyles: (activeIndex: number) => SxProps = (activeIndex) => ({
-  position: 'absolute',
-  alignSelf: 'flex-end',
-  width: '140px',
-  height: 'auto',
-  minHeight: '50px',
+  position: 'fixed',
+  top: '10px',                   // fixed near the top, with some spacing
+  right: '10px',                 // fixed near the right edge
+  height: '50px',
+  width: '120px',
   borderRadius: '25px',
   backgroundColor: 'black',
-  right: '5%',
-  color: 'white',
-  fontWeight: 'bold',
-  fontSize: '1rem',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  marginTop: '20px',   
+  cursor: 'pointer',
   '&:hover': {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
-  '@media (max-width: 800px)': {
-    width: '140px',
-    height: 'auto',
-    minHeight: '50px',
-    borderRadius: '25px',
-    marginTop: '16px',
+  '@media (max-width: 600px)': {
+    width: '100px',
+    height: '45px',
+    top: '5px',
+    right: '5px',
   },
 });
 
 export const PreviousButtonStyles: (activeIndex: number) => SxProps = (activeIndex) => ({
-  position: 'absolute',
-   
-  alignSelf: 'flex-start', 
-  width: '140px',
-  height: 'auto',
-  minHeight: '50px',
+  position: 'fixed',
+  top: '10px',                   // fixed near the top, same vertical position as Next button
+  left: '10px',                  // fixed near the left edge
+  height: '50px',
+  width: '120px',
   borderRadius: '25px',
   backgroundColor: 'black',
-  color: 'white',
-  fontWeight: 'bold',
-  fontSize: '1rem',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  marginTop: '20px',  
+  cursor: 'pointer',
   '&:hover': {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
-  '@media (max-width: 800px)': {
-    width: '140px',
-    height: 'auto',
-    minHeight: '50px',
-    borderRadius: '25px',
-    marginTop: '16px',
+  '@media (max-width: 600px)': {
+    width: '100px',
+    height: '45px',
+    top: '5px',
+    left: '5px',
   },
 });
+
