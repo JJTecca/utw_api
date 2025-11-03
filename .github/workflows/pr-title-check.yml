@@ -1,0 +1,25 @@
+name: "Enforce PR Title Convention"
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const pattern = /^\[(FEATURE|BUG|HOTFIX|DOCS|REFACTOR|TEST|CHORE)\]\s.+/i;
+
+            if (!pattern.test(title)) {
+              core.setFailed(
+                `❌ Invalid PR title: "${title}".\n` +
+                `Title must start with one of [FEATURE], [BUG], [HOTFIX], [DOCS], [REFACTOR], [TEST], or [CHORE].`
+              );
+            } else {
+              console.log(`✅ Valid PR title: "${title}"`);
+            }
