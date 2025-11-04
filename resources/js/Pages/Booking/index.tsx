@@ -1,3 +1,26 @@
+/*************************************************
+ * @format Booking Screen 
+ * @author Maior Cristian
+ * ********************************************* */ 
+/****************************************************************************************************
+ * 1. Import only necessary modules, in the correct logical order.
+ * 2. Import screen components from their correct paths. 
+ *    - If there's an error, try saving the file (Ctrl+S) or retyping with autocomplete.
+ * 3. Import any react-native or gluestack themed necessarry UI 
+ * 4. Define props (if any) using camelCase — similar to C's `typedef struct` style.
+ * 5. Declare const variables.
+ * 6. Add any extra/helper functions.
+ * 7. Export the main component function.
+ * 8. EVERY index.tsx FILE MUST HAVE A .ts FILE 
+ * 9. Every style that has more than 2 props, put it in the .ts file , otherwise let it be here
+ * 10. This shall be the ONLY home screen we have, as we need further improvements
+ * 11. This file is #1 prior and needs the most frontend attention
+ ****************************************************************************************************/
+/****************************************************************************************************
+ * 1. Dynamically displays available bookings, allowing users to expand each for detailed information.
+ * 2. Integrates an interactive promotional section (“Why with UTW?”) that cycles through highlight cards.
+ * 3. Handles flight booking submissions securely via Axios POST requests to the backend API.
+ ****************************************************************************************************/
 import BookingLayout from '@/Layouts/BookingLayout';
 import { Box, Typography, Rating, Accordion, AccordionSummary, AccordionDetails, Button, CardContent, Card, CardActionArea, CardActions } from "@mui/material";
 import FlightLandIcon from '@mui/icons-material/FlightLand';
