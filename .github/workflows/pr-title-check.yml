@@ -35,7 +35,7 @@ jobs:
         with:
           script: |
             const title = context.payload.pull_request.title;
-            const maxLength = 30;
+            const maxLength = 40;
 
             if (title.length > maxLength) {
               core.setFailed(
