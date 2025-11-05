@@ -17,7 +17,9 @@ export default defineConfig({
   base: '/',
   server: {
     hmr: {
-      protocol: 'wss' //wss pentru https
+      //protocol: 'wss' //wss pentru https
+      protocol: 'ws', // use ws for local HTTP
+      host: '127.0.0.1', // optional, ensures IPv4
     }
   }
 });
