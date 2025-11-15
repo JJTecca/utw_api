@@ -12,7 +12,7 @@ export default defineConfig({
         react(),
     ],
     build: {
-      chunkSizeWarningLimit: 1000, // am limitat la 1000
+      chunkSizeWarningLimit: 1000,
     }
     //PRODUCTION : Update to wss protocol
   // base: '/',
