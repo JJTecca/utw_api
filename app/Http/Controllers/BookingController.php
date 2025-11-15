@@ -8,7 +8,6 @@ use App\Models\Booking;
 use App\Models\UserBookingLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -33,13 +32,6 @@ class BookingController extends Controller
                 ->where('experience_type', $experience)
                 ->increment('passenger_count', 1); //SAU ASA 
                 //->update('passenger_count' , DB::raw('passenger_count + 1'));
-        
-        /*foreach($bookings as $currentBooking) {
-            UserBookingLink::create([
-                'user_id' => Auth::user()->id,
-                'booking_id' => $currentBooking->id 
-            ]); 
-        }  asta nu mai are ce cauta aici */ 
         
         return Inertia::render('Booking/index',[
             'bookings' => BookingResource::collection($bookings)->resolve() //buna functie , unwraps collection to array
