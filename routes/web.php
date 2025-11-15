@@ -3,10 +3,8 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Booking;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,6 +16,16 @@ use Inertia\Inertia;
         'phpVersion' => PHP_VERSION,
     ]);
 });*/
+
+/**********************************************************
+ * Web Routes
+ * 1. Each route shall have an implementation
+ * 2. Majority of routes have to be inside middleware
+ * 3. Make sure to call the right controller based on action
+ * 4. Routes returning sensitive data (like user IDs) should protect it (for example, encrypt it before sending).
+ * 5. Dashboard, tours, and experiences pages are only accessible to authenticated users.
+ * 6. Booking-related routes should validate inputs and ensure only authorized users can create, view, or submit bookings.
+ **********************************************************/
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -31,9 +39,9 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard/index');
     })->name('dashboard');
 
-    Route::get('/dashboard/worldtour', function () { //numai daca esti logat merge
+    Route::get('/dashboard/worldtour', function () {
         return Inertia::render('Tour/index');
-    })->name('dashboard.worldtour'); // dashboard/worldtour
+    })->name('dashboard.worldtour');
 
     Route::get('/get-encrypted-user-id', function (Request $request) {
         return response()->json([
