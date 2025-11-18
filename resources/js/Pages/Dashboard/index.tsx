@@ -98,6 +98,19 @@ export default function Dashboard() {
     weekday: 'long',
   });
 
+  /*************************************
+  *   Event Handlers of Dashboard/index.tsx 
+  * -> useState() update UI component State
+  * -> purpose: Use Interaction handle with proper calls
+  * -> Keep handlers focused on single responsibilities
+  * 1. handleFlightStatusClick
+  * 2. handleMenuClose
+  * 3. handleAccountManagement
+  * 4. handleNext
+  * 5. handleSwapCities
+  * 6. handleBooking
+  * 7. handleLogout
+  *************************************/
   const form = useForm();
 
   const handleFlightStatusClick = () => {
@@ -168,6 +181,11 @@ export default function Dashboard() {
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
+      {/******************************************
+       * Nav bar which contains all the user options
+       * Clickable, each section NEEDS to be implemented
+       * Each Box, Button shall be implemented
+       * ********************************************/}
       <AppBar position="static" sx={styles.appBar}>
         <Toolbar sx={styles.toolbar}>
           <Box sx={styles.logoContainer}>
@@ -204,6 +222,12 @@ export default function Dashboard() {
               <PublicIcon style={{ fontSize: '1.25rem' }} />
               WORLD TOUR
             </Button>
+            {/***************************************************
+             * Avatar Role : Open the Menu with an "accordion" UI
+             * All the options shall be listed in the Menu UI 
+             * It shall list the profile of the User with user-options
+             * TODO : Functionalities will be implemented 
+             ***************************************************/ }
             <Button
               sx={styles.accountButton}
               onClick={(event) => setAnchorEl(event.currentTarget)} 
@@ -266,7 +290,13 @@ export default function Dashboard() {
               ✈️ Where Will You Fly Today?
             </Typography>
 
-            {/* Trip Type Selector */}
+            {/************************************************************************
+            *   Trip Type Selector 
+            * Here we have to chose all the type of trips the client wants
+            * 1. One Way Trip (It shall eliminate the destination option)
+            * 2. Round trip (It shall enable both destination and arrival labels)
+            * 3. TODO: Multi City feature 
+            ************************************************************************/}
             <Box sx={styles.tripTypeContainer}>
               {['round', 'oneway'].map((type) => (
                 <Box 
@@ -301,6 +331,9 @@ export default function Dashboard() {
                   displayEmpty
                   sx={styles.citySelect}
                 >
+                  {/********************************************************
+                   *DEPARTURE CITY -> Can be mapped but visually looks better
+                   ******************************************************/}
                   <MenuItem value="" disabled sx={styles.placeholderText}>
                     🛫 Departure City
                   </MenuItem>
@@ -319,7 +352,9 @@ export default function Dashboard() {
                 </Select>
               </Box>
 
-              {/* Swap Button */}
+              {/***********************************************
+               * Swap Button -> Desintation City = Arrival City
+              ************************************************/}
               <IconButton 
                 sx={styles.swapButton}
                 onClick={handleSwapCities}
@@ -361,7 +396,13 @@ export default function Dashboard() {
               </Box>
             </Box>
 
-            {/* Dates and Passengers */}
+            {/*******************************************************************************
+             *    Dates and Passengers
+             *  1. Box for DEPARTURE DATE
+             *  2. Box for ARRIVAL DATE
+             *  3. BOX FOR PASSENGER COUNT
+             * NOTE: When User Select One Way type of trip , the arrival date will disappear
+            **********************************************************************************/}
             <Box sx={styles.datesPassengersContainer}>
               <Box sx={styles.dateContainer}>
                 <Typography variant="h6" sx={styles.inputLabel}>
@@ -509,6 +550,10 @@ export default function Dashboard() {
       </Box>
 
       {/* Why Choose Us Section */}
+      {/**************************************************************************
+       * Big Grid -> array of Items -> map(feature,index)-> generate x small Grids 
+       * Grid shall contain : featureCard, featureIcon, featureDescription
+      ***************************************************************************/}
       <Box sx={styles.whyChooseSection}>
         <Typography variant="h4" component="div" sx={styles.sectionTitle}>
           Why Choose UTW Airlines?
