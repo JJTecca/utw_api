@@ -28,7 +28,7 @@ export default function Login() {
         <GuestLayout>
             <Head title="Log in" />
 
-            <Box sx={{ maxWidth: 500, mx: 'auto', mt: 8, textAlign: 'center' }}>
+            <Box sx={{transform: 'scale(0.85)', mx: 'auto', mt: 8, textAlign: 'center' }}>
                 <Typography variant="h4" gutterBottom>
                     Welcome Back
                 </Typography>

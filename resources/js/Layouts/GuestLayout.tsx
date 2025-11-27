@@ -11,7 +11,13 @@ export default function Guest({ children }: PropsWithChildren) {
                 backgroundPosition: 'center',
             }}
         >
-            <div className="mt-8 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg dark:bg-gray-800 ml-10">
+            {/*****************************
+             * Login Box Adjust Content 
+             * Margin Top : 8 
+             * Width : full
+             ****************************/}
+            <div className="mt-8 w-full overflow-hidden bg-white sm:max-w-sm  ml-10"
+                 style={{ transform: 'scale(0.75)', transformOrigin: 'top left' }}>
                 {children}
             </div>
         </div>
