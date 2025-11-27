@@ -179,6 +179,7 @@ export default function Dashboard() {
   };
 
   return (
+    /* TODO : REMOVE ME AFTER MERGE */
     <AuthenticatedLayout>
       <Head title="Dashboard" />
       {/******************************************
