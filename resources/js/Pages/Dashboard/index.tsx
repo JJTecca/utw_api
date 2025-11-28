@@ -231,7 +231,6 @@ export default function Dashboard() {
   };
 
   return (
-    /* TODO : REMOVE ME AFTER MERGE */
     <AuthenticatedLayout>
       <Head title="Dashboard" />
       {/******************************************
@@ -333,10 +332,15 @@ export default function Dashboard() {
           Next
         </Button>
 
-        {/* Animated Sections Container */}
+        {/************************************************************************
+            *    Flight Search Section 
+            *  1. Apply the motion.div styling for smooth animation
+            *  2. Use Extra Props if it's not clickable because the animation
+            *  3. "Big" Box includes : Search options, City Selection, Swap Feature etc.
+            ********************************************************************/}
         <Box sx={{ position: 'relative', width: '100%', height: '100%', minHeight: '400px' }}>
           <AnimatePresence mode="wait" custom={activeIndex}>
-            {/* Flight Search Section */}
+            {/* Animated Sections Container */}
             {/* TODO: Place this in styling files */}
             {activeIndex === 0 && (
               <motion.div
@@ -715,6 +719,7 @@ export default function Dashboard() {
           initial="hidden"
           animate="visible"
         >
+          {/* FEATURE : Implemented animations*/}
           <Grid container spacing={2} justifyContent="center">
             {[
               { icon: <EventSeatIcon />, title: "Premium Comfort", description: "Experience unparalleled comfort with our spacious seating and premium amenities." },
