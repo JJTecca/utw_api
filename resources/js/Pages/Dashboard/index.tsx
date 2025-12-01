@@ -18,7 +18,7 @@
  ****************************************************************************************************/
 /****************************************************************************************************
  * 1. Provides an interactive airline dashboard where users can search, select, and book flights.
- * 2. Integrates dynamic UI sections that cycle between flight search, experience selection, and flight status.
+* 2. Integrates dynamic UI sections that cycle between flight search, experience selection, and flight status.
  * 3. Connects with backend routes to securely handle bookings, account management, and user authentication.
  ****************************************************************************************************/
 import { useState, useEffect } from 'react';

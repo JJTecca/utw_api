@@ -31,6 +31,14 @@ class ProfileController extends Controller
 
     }
 
+    /*************************************
+     *   NEW Profile Management Profile view
+     *  TODO : Remove the old one when done
+     **************************************/
+    public function profileManagement() {
+        return Inertia::render('ProfileManagement/index');
+    }
+
 
     public function edit(Request $request): Response
     {
