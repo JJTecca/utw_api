@@ -4,8 +4,8 @@ import { Height } from "@mui/icons-material";
 export const styles = {
   // AppBar Styles
   appBar: {
-    backgroundColor: '#1e40af',
-    background: 'linear-gradient(135deg, #1e40af 0%, #3730a3 100%)',
+    backgroundColor: 'rgba(30, 64, 175, 1)',
+    background: 'linear-gradient(135deg, #090909ff 0%, #3730a3 100%)',
     minHeight: '25%',
     boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
   },
@@ -330,7 +330,8 @@ export const styles = {
 
   // Why Choose Section
   whyChooseSection: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'rgba(30, 64, 175, 1)',
+    background: 'linear-gradient(135deg, #090909ff 0%, #3730a3 100%)',
     py: 8,
     px: 4,
   },
@@ -338,7 +339,7 @@ export const styles = {
     fontWeight: 'bold',
     textAlign: 'center',
     mb: 6,
-    background: 'linear-gradient(135deg, #1e40af 0%, #3730a3 100%)',
+    background: 'white',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
