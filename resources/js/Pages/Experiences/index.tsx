@@ -25,7 +25,7 @@
         5. Helper/Utility Functions
         6. Component Return Statement
         7. Export the main function / import the layout </div>
-    **************************************************************************************************/}
+  ***************************************************************************************************/}
 import React, { useState } from 'react';
 import {
   Grid,
