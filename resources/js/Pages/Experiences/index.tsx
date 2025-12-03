@@ -16,6 +16,16 @@
  * 10. This shall be the ONLY layout screen we have, as we need further improvements
  * 11. This file is #1 prior and needs the most frontend attention
  ****************************************************************************************************/
+{/**************************************************************************************************
+              File Structure Convention:
+        1. Imports
+        2. React Hooks (useState, useEffect, etc.)
+        3. Type Definitions (Interfaces/Types)
+        4. Static/Constant Data
+        5. Helper/Utility Functions
+        6. Component Return Statement
+        7. Export the main function / import the layout </div>
+    **************************************************************************************************/}
 import React, { useState } from 'react';
 import {
   Grid,
@@ -70,9 +80,6 @@ const navItems = [
 const FlightExperienceApp: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const [verificationOpen, setVerificationOpen] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState("unverified");
-  const [showSuccess, setShowSuccess] = useState(false);
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -167,7 +174,9 @@ const FlightExperienceApp: React.FC = () => {
     </Box>
   );
 
-  // About Dialog Component
+  {/*******************************************
+        About Dialog Component -> Pop-Up 
+    ********************************************/}
   const aboutDialog = (
     <Dialog
       open={aboutDialogOpen}
@@ -215,6 +224,7 @@ const FlightExperienceApp: React.FC = () => {
               }
             }}
           >
+            {/* Enum on the classes */}
             <Tab 
               icon={<DiamondIcon />} 
               label="First Class" 
@@ -233,6 +243,12 @@ const FlightExperienceApp: React.FC = () => {
           </Tabs>
         </Box>
         
+        {/****************************************
+         *          FEATURE SELECTION 
+         *  1. selectedTab === 0 -> First Class
+         *  2. selectedTab === 1 -> Business Class
+         *  3. selectedTab === 2 -> Economy Class
+         **************************************/}
         <Box sx={{ padding: 3 }}>
           {selectedTab === 0 && (
             <Fade in={selectedTab === 0} timeout={300}>
@@ -378,7 +394,20 @@ const FlightExperienceApp: React.FC = () => {
       background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
       color: 'white'
     }}>
-      {/* Header/Navigation */}
+      {/*******************************************
+       *            HEADER NAVIGATION
+       *  Structure:
+       *  1. AppBar + Toolbar for primary navigation
+       *  2. Logo section (left-aligned)
+       *  3. Mobile menu toggle (hidden on desktop)
+       *  4. Desktop navigation items (hidden on mobile)
+       *  
+       *  Features:
+       *  - Responsive design (mobile/desktop breakpoints)
+       *  - Gradient background with accent border
+       *  - Active state styling for navigation items
+       *  - Hover effects with brand colors
+       * **************************************** */}
       <AppBar position="sticky" sx={{ 
         backgroundColor: '#0f172a', 
         background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
@@ -485,7 +514,26 @@ const FlightExperienceApp: React.FC = () => {
         </Breadcrumbs>
       </Container>
 
-      {/* Main Content */}
+       {/*************************************************
+       *            MAIN CONTENT
+       *  
+       *  IMPLEMENTATION DETAILS:
+       *  - Uses Material-UI Container for max-width constraints
+       *  - Flexbox layout with column direction for vertical stacking
+       *  - Dynamic card generation via classesData.map()
+       *  - Each card contains:
+       *      - Responsive CardMedia (image section)
+       *      - CardContent with:
+       *        - Title and price badge (flex row layout)
+       *        - Description paragraph
+       *        - Features grid (2-column on desktop)
+       *        - Footer with CTA button and disclaimer
+       *  
+       *  STATE MANAGEMENT:
+       *  - No local state in this section
+       *  - Pure presentation based on classesData constant
+       *  
+       * *************************************************/}
       <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
@@ -684,7 +732,7 @@ const FlightExperienceApp: React.FC = () => {
           backdropFilter: 'blur(10px)'
         }}>
           
-          {/* Premium Aviation Features */}
+          {/* Classic footer */}
           <Box sx={{ mt: 4 }}>
             <Box sx={{ 
                 display: 'flex', 
