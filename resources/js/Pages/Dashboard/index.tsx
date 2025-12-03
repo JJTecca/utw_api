@@ -1,5 +1,5 @@
 /*************************************************
- * @format Dashboard Screen 
+ * @format Dashboard Screen (The new one)
  * @author Maior Cristian
  * ********************************************* */ 
 /****************************************************************************************************
@@ -21,6 +21,16 @@
 * 2. Integrates dynamic UI sections that cycle between flight search, experience selection, and flight status.
  * 3. Connects with backend routes to securely handle bookings, account management, and user authentication.
  ****************************************************************************************************/
+{/**************************************************************************************************
+              File Structure Convention:
+        1. Imports
+        2. React Hooks (useState, useEffect, etc.)
+        3. Type Definitions (Interfaces/Types)
+        4. Static/Constant Data
+        5. Helper/Utility Functions
+        6. Component Return Statement
+        7. Export the main function / import the layout </div>
+    **************************************************************************************************/}
 import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
