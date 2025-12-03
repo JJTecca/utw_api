@@ -143,10 +143,8 @@ function ProfileItem({ icon, label, value, children, clickable = false, onClick 
   );
 }
 
-// Add this component function near your other components (after FundCard)
 function FundsProgressCircle() {
   const availableFunds = 1800; // €
-  const investedFunds = 2100.30; // €
   const insufficientFunds = 2500; // Target or required funds
   
   const percentage = Math.min(Math.round((availableFunds / insufficientFunds) * 100), 100);
