@@ -16,6 +16,16 @@
  * 10. This shall be the ONLY layout screen we have, as we need further improvements
  * 11. This file is #1 prior and needs the most frontend attention
  ****************************************************************************************************/
+{/**************************************************************************************************
+              File Structure Convention:
+        1. Imports
+        2. React Hooks (useState, useEffect, etc.)
+        3. Type Definitions (Interfaces/Types)
+        4. Static/Constant Data
+        5. Helper/Utility Functions
+        6. Component Return Statement
+        7. Export the main function / import the layout </div>
+  ***************************************************************************************************/}
 import { PropsWithChildren, ReactNode } from 'react';
 import {
   AppBar,
