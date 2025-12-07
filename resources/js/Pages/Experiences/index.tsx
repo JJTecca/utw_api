@@ -71,7 +71,9 @@ import EconomyIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import firstClassExperience from '../../../../public/Images/experience-first-class.png';
 import businessClassExperience from '../../../../public/Images/experience-business-class.jpg';
 import economyClassExperience from '../../../../public/Images/experience-economy-class.jpg';
+import { styles } from './Experiences.styles';
 import { Star } from '@mui/icons-material';
+import { s } from 'framer-motion/client';
 
 const navItems = [ 
   { label: 'About', icon: <InfoCircleOutlined />, path: '/about' } 
@@ -146,9 +148,9 @@ const FlightExperienceApp: React.FC = () => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250, backgroundColor: '#0f172a', height: '100%', color: 'white' }}>
-      <Toolbar sx={{ justifyContent: 'center', py: 3 }}>
-        <FlightTakeoffIcon style={{ fontSize: '2rem', marginRight: 8, color: '#a7e90e' }} />
+    <Box sx={styles.drawer.box}>
+      <Toolbar sx={styles.drawer.box.toolbar}>
+        <FlightTakeoffIcon style={styles.drawer.box.toolbar.flightTakeoffIcon} />
         <Typography variant="h6" fontWeight="bold" color="white">
           UTW Airlines
         </Typography>
@@ -158,13 +160,9 @@ const FlightExperienceApp: React.FC = () => {
           <ListItem
             key={item.label} 
             disablePadding
-            sx={{ 
-              color: 'white',
-              py: 2,
-              '&:hover': { backgroundColor: '#1e293b' }
-            }}
+            sx={styles.drawer.box.listItems}
           >
-            <Box sx={{ mr: 2, color: '#a7e90e' }}>{item.icon}</Box>
+            <Box sx={styles.drawer.box.listItems.innerBox}>{item.icon}</Box>
             <ListItemText 
               primary={item.label} 
             />
@@ -183,46 +181,22 @@ const FlightExperienceApp: React.FC = () => {
       onClose={handleAboutClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: '#1e293b',
-          border: '1px solid #334155',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          maxHeight: '80vh'
-        }
-      }}
+      sx={styles.aboutDialog.Paper}
     >
-      <DialogTitle sx={{ 
-        backgroundColor: '#0f172a', 
-        color: '#a7e90e',
-        borderBottom: '1px solid #334155',
-        fontWeight: 'bold',
-        fontSize: '1.5rem'
-      }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <DialogTitle sx={styles.aboutDialog.dialogTitle}>
+        <Box sx={styles.aboutDialog.dialogTitle.Box}>
           <InfoCircleOutlined />
           About Our Premium Flight Experiences
         </Box>
       </DialogTitle>
       
-      <DialogContent sx={{ padding: 0 }}>
-        <Box sx={{ borderBottom: 1, borderColor: '#334155' }}>
+      <DialogContent sx={styles.aboutDialog.content}>
+        <Box sx={styles.aboutDialog.content.box}>
           <Tabs 
             value={selectedTab} 
             onChange={handleTabChange}
             variant="fullWidth"
-            sx={{
-              '& .MuiTab-root': {
-                color: '#94a3b8',
-                '&.Mui-selected': {
-                  color: '#a7e90e',
-                },
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#a7e90e',
-              }
-            }}
+            sx={styles.aboutDialog.content.box.tabs}
           >
             {/* Enum on the classes */}
             <Tab 
@@ -249,15 +223,15 @@ const FlightExperienceApp: React.FC = () => {
          *  2. selectedTab === 1 -> Business Class
          *  3. selectedTab === 2 -> Economy Class
          **************************************/}
-        <Box sx={{ padding: 3 }}>
+        <Box sx={styles.aboutDialog.content.selectionBox}>
           {selectedTab === 0 && (
             <Fade in={selectedTab === 0} timeout={300}>
               <Box>
-                <Typography variant="h5" gutterBottom sx={{ color: '#a7e90e', fontWeight: 'bold' }}>
+                <Typography variant="h5" gutterBottom sx={styles.aboutDialog.content.selectionBox.firstClass.typography}>
                   First Class Excellence
                 </Typography>
                 
-                <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
+                <Typography variant="h6" sx={styles.aboutDialog.content.selectionBox.firstClass.typography2}>
                   Exclusive Features:
                 </Typography>
                 <Grid container spacing={2}>
@@ -270,16 +244,12 @@ const FlightExperienceApp: React.FC = () => {
                     { title: "Luxury Amenities", desc: "Premium skincare products, pajamas, and memory foam bedding" }
                   ].map((item, index) => (
                     <Grid item xs={12} sm={6} key={index}>
-                      <Card sx={{ 
-                        backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                        border: '1px solid #334155',
-                        '&:hover': { borderColor: '#a7e90e' }
-                      }}>
+                      <Card sx={styles.aboutDialog.content.selectionBox.firstClass.card}>
                         <CardContent>
-                          <Typography variant="subtitle1" sx={{ color: '#a7e90e', fontWeight: 'bold', mb: 1 }}>
+                          <Typography variant="subtitle1" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographySubtitle1}>
                             {item.title}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                          <Typography variant="body2" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographyBody2}>
                             {item.desc}
                           </Typography>
                         </CardContent>
@@ -294,7 +264,7 @@ const FlightExperienceApp: React.FC = () => {
           {selectedTab === 1 && (
             <Fade in={selectedTab === 1} timeout={300}>
               <Box>
-                <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
+                <Typography variant="h6" sx={styles.aboutDialog.content.selectionBox.firstClass.typography2}>
                   Business Features:
                 </Typography>
                 <Grid container spacing={2}>
@@ -307,16 +277,12 @@ const FlightExperienceApp: React.FC = () => {
                     { title: "Business Amenities", desc: "Noise-canceling headphones and premium amenity kits" }
                   ].map((item, index) => (
                     <Grid item xs={12} sm={6} key={index}>
-                      <Card sx={{ 
-                        backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                        border: '1px solid #334155',
-                        '&:hover': { borderColor: '#a7e90e' }
-                      }}>
+                      <Card sx={styles.aboutDialog.content.selectionBox.firstClass.card}>
                         <CardContent>
-                          <Typography variant="subtitle1" sx={{ color: '#a7e90e', fontWeight: 'bold', mb: 1 }}>
+                          <Typography variant="subtitle1" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographySubtitle1}>
                             {item.title}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                          <Typography variant="body2" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographyBody2}>
                             {item.desc}
                           </Typography>
                         </CardContent>
@@ -331,7 +297,7 @@ const FlightExperienceApp: React.FC = () => {
           {selectedTab === 2 && (
             <Fade in={selectedTab === 2} timeout={300}>
               <Box>
-                <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
+                <Typography variant="h6" sx={styles.aboutDialog.content.selectionBox.firstClass.typography2}>
                   Economy Features:
                 </Typography>
                 <Grid container spacing={2}>
@@ -344,16 +310,12 @@ const FlightExperienceApp: React.FC = () => {
                     { title: "WiFi Access", desc: "Affordable WiFi packages for staying connected" }
                   ].map((item, index) => (
                     <Grid item xs={12} sm={6} key={index}>
-                      <Card sx={{ 
-                        backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                        border: '1px solid #334155',
-                        '&:hover': { borderColor: '#a7e90e' }
-                      }}>
+                      <Card sx={styles.aboutDialog.content.selectionBox.firstClass.card}>
                         <CardContent>
-                          <Typography variant="subtitle1" sx={{ color: '#a7e90e', fontWeight: 'bold', mb: 1 }}>
+                          <Typography variant="subtitle1" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographySubtitle1}>
                             {item.title}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                          <Typography variant="body2" sx={styles.aboutDialog.content.selectionBox.firstClass.card.cardContent.typographyBody2}>
                             {item.desc}
                           </Typography>
                         </CardContent>
@@ -367,17 +329,10 @@ const FlightExperienceApp: React.FC = () => {
         </Box>
       </DialogContent>
       
-      <DialogActions sx={{ 
-        padding: 3, 
-        borderTop: '1px solid #334155',
-        backgroundColor: '#0f172a'
-      }}>
+      <DialogActions sx={styles.aboutDialog.content.dialogActions}>
         <Button 
           onClick={handleAboutClose}
-          sx={{ 
-            color: '#94a3b8',
-            '&:hover': { color: '#a7e90e' }
-          }}
+          sx={styles.aboutDialog.content.dialogActions.button}
         >
           Close
         </Button>
@@ -386,14 +341,7 @@ const FlightExperienceApp: React.FC = () => {
   );
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      minHeight: '100vh', 
-      backgroundColor: '#0f172a', 
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-      color: 'white'
-    }}>
+    <Box sx={styles.mainPageBox}>
       {/*******************************************
        *            HEADER NAVIGATION
        *  Structure:
@@ -408,28 +356,24 @@ const FlightExperienceApp: React.FC = () => {
        *  - Active state styling for navigation items
        *  - Hover effects with brand colors
        * **************************************** */}
-      <AppBar position="sticky" sx={{ 
-        backgroundColor: '#0f172a', 
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        borderBottom: '1px solid #334155'
-      }}>
+      <AppBar position="sticky" sx={styles.mainPageBox.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' }, color: '#a7e90e' }}
+            sx={styles.mainPageBox.appBar.iconButton}
           >
             <MenuIcon />
           </IconButton>
           
-          <FlightTakeoffIcon style={{ fontSize: '1.8rem', marginRight: 12, color: '#a7e90e' }} />
+          <FlightTakeoffIcon style={styles.mainPageBox.appBar.flightTakeoffIcon} />
           
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', color: 'white' }}>
+          <Typography variant="h6" component="div" sx={styles.mainPageBox.appBar.title}>
             UTW Airlines
           </Typography>
           
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
+          <Box sx={styles.mainPageBox.appBar.navBox}>
             {navItems.map((item) => (
               <Button 
                 key={item.label} 
@@ -439,11 +383,7 @@ const FlightExperienceApp: React.FC = () => {
                 sx={{ 
                   fontWeight: item.label === 'Experience' ? 'bold' : 'normal',
                   borderBottom: item.label === 'Experience' ? '2px solid #a7e90e' : 'none',
-                  color: 'white',
-                  '&:hover': { 
-                    backgroundColor: 'rgba(167, 233, 14, 0.1)',
-                    color: '#a7e90e'
-                  }
+                  ...styles.mainPageBox.appBar.navBox.navButton
                 }}
               >
                 {item.label}
@@ -453,17 +393,7 @@ const FlightExperienceApp: React.FC = () => {
           
           <Button 
             variant="contained" 
-            sx={{ 
-              ml: 2, 
-              backgroundColor: '#a7e90e', 
-              color: '#0f172a',
-              fontWeight: 'bold',
-              '&:hover': { 
-                backgroundColor: '#94c11e',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 4px 12px rgba(167, 233, 14, 0.3)'
-              }
-            }}
+            sx={styles.mainPageBox.appBar.bookingButton}
           >
             Book Now
           </Button>
@@ -476,13 +406,7 @@ const FlightExperienceApp: React.FC = () => {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
-        sx={{ 
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': {
-            backgroundColor: '#0f172a',
-            borderRight: '1px solid #334155'
-          }
-        }}
+        sx={styles.mainPageBox.drawer2}
       >
         {drawer}
       </Drawer>
@@ -497,12 +421,7 @@ const FlightExperienceApp: React.FC = () => {
             color="inherit" 
             href="/" 
             underline="hover"
-            sx={{ 
-              color: '#94a3b8',
-              display: 'flex',
-              alignItems: 'center',
-              '&:hover': { color: '#a7e90e' }
-            }}
+            sx={styles.mainPageBox.navLink}
           >
             <HomeOutlined style={{ marginRight: 4 }} />
             Home
@@ -541,60 +460,31 @@ const FlightExperienceApp: React.FC = () => {
             component="h1"
             gutterBottom
             fontWeight="bold"
-            sx={{ 
-              color: 'white',
-              mb: 2,
-              background: 'linear-gradient(45deg, #a7e90e 30%, #94c11e 90%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
+            sx={styles.mainPageBox.mainContent.headline}
           >
             Elevate Your Journey
           </Typography>
-          <Typography variant="h5" sx={{ 
-            maxWidth: 800, 
-            mx: 'auto', 
-            mb: 4, 
-            color: '#cbd5e1',
-            fontWeight: 300 
-          }}>
+          <Typography variant="h5" 
+          sx={styles.mainPageBox.mainContent.secondTitle}>
             Discover our premium cabin experiences designed for comfort, luxury, and exceptional service
           </Typography>
           
           {/* Quick Stats */}
           <Grid container spacing={2} justifyContent="center" sx={{ mb: 4 }}>
             <Grid item>
-              <Box sx={{ 
-                p: 2, 
-                backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                borderRadius: 2,
-                border: '1px solid #334155',
-                backdropFilter: 'blur(10px)'
-              }}>
+              <Box sx={styles.mainPageBox.mainContent.statsBox}>
                 <Typography variant="h6" sx={{ color: '#a7e90e' }}>180+</Typography>
                 <Typography variant="body2" sx={{ color: '#94a3b8' }}>Destinations</Typography>
               </Box>
             </Grid>
             <Grid item>
-              <Box sx={{ 
-                p: 2, 
-                backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                borderRadius: 2,
-                border: '1px solid #334155',
-                backdropFilter: 'blur(10px)'
-              }}>
+              <Box sx={styles.mainPageBox.mainContent.statsBox}>
                 <Typography variant="h6" sx={{ color: '#a7e90e' }}>★ 4.8</Typography>
                 <Typography variant="body2" sx={{ color: '#94a3b8' }}>Customer Rating</Typography>
               </Box>
             </Grid>
             <Grid item>
-              <Box sx={{ 
-                p: 2, 
-                backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-                borderRadius: 2,
-                border: '1px solid #334155',
-                backdropFilter: 'blur(10px)'
-              }}>
+              <Box sx={styles.mainPageBox.mainContent.statsBox}>
                 <Typography variant="h6" sx={{ color: '#a7e90e' }}>500+</Typography>
                 <Typography variant="body2" sx={{ color: '#94a3b8' }}>Daily Flights</Typography>
               </Box>
@@ -607,40 +497,17 @@ const FlightExperienceApp: React.FC = () => {
           {classesData.map((classInfo, index) => (
             <Card
               key={index}
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
-                borderRadius: 3,
-                overflow: 'hidden',
-                backgroundColor: '#1e293b',
-                border: '1px solid #334155',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  boxShadow: '0 8px 40px rgba(167, 233, 14, 0.2)',
-                  transform: 'translateY(-4px)',
-                  borderColor: '#a7e90e'
-                }
-              }}
+              sx={styles.mainPageBox.mainContent.flightClassesGen}
             >
               <CardMedia
                 component="img"
-                sx={{
-                  width: { xs: '100%', md: '40%' },
-                  height: { xs: 240, md: 'auto' },
-                  objectFit: 'cover'
-                }}
+                sx={styles.mainPageBox.mainContent.flightClassesGen.imageCard}
                 image={classInfo.image}
                 alt={classInfo.title}
               />
               
-              <CardContent sx={{ 
-                p: 4, 
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+              <CardContent sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard}>
+                <Box sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.contentBox}>
                   <Typography
                     variant="h4"
                     component="h2"
@@ -649,14 +516,7 @@ const FlightExperienceApp: React.FC = () => {
                   >
                     {classInfo.title}
                   </Typography>
-                  <Box sx={{ 
-                    backgroundColor: '#a7e90e', 
-                    color: '#0f172a', 
-                    px: 2, 
-                    py: 0.5, 
-                    borderRadius: 2,
-                    fontWeight: 'bold'
-                  }}>
+                  <Box sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.contentBox.priceBox}>
                     <Typography variant="body2" fontWeight="bold">
                       {classInfo.priceRange}
                     </Typography>
@@ -676,13 +536,7 @@ const FlightExperienceApp: React.FC = () => {
                   {classInfo.features.map((feature, idx) => (
                     <Grid item xs={12} sm={6} key={idx}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box sx={{ 
-                          width: 8, 
-                          height: 8, 
-                          backgroundColor: '#a7e90e', 
-                          borderRadius: '50%',
-                          mr: 1.5 
-                        }} />
+                        <Box sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.featuresBox} />
                         <Typography variant="body2" sx={{ color: '#94a3b8' }}>
                           {feature}
                         </Typography>
@@ -691,24 +545,12 @@ const FlightExperienceApp: React.FC = () => {
                   ))}
                 </Grid>
                 
-                <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.buttonBox}>
                   <Button
                     variant="contained"
                     endIcon={<ArrowRightOutlined />}
                     size="large"
-                    sx={{
-                      backgroundColor: '#a7e90e',
-                      color: '#0f172a',
-                      borderRadius: 2,
-                      px: 4,
-                      py: 1,
-                      fontWeight: 'bold',
-                      '&:hover': {
-                        backgroundColor: '#94c11e',
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 4px 12px rgba(167, 233, 14, 0.3)'
-                      }
-                    }}
+                    sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.buttonBox.detailsButton}
                   >
                     {classInfo.buttonText}
                   </Button>
@@ -723,20 +565,14 @@ const FlightExperienceApp: React.FC = () => {
         </Box>
 
         {/* Additional Information Section */}
-        <Box sx={{ 
-          mt: 8, 
-          p: 4, 
-          backgroundColor: 'rgba(30, 41, 59, 0.7)', 
-          borderRadius: 3,
-          border: '1px solid #334155',
-          backdropFilter: 'blur(10px)'
-        }}>
+        <Box sx={styles.mainPageBox.aditionalInfoBox}>
           
           {/* Classic footer */}
           <Box sx={{ mt: 4 }}>
             <Box sx={{ 
                 display: 'flex', 
-                flexDirection: { xs: 'column', md: 'row' }}}>
+                flexDirection: { xs: 'column', md: 'row' }
+                }}>
                 <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ color: 'white', mb: 4, marginLeft:'10%' }}>
                     Why Choose UTW Airlines?
                 </Typography>
@@ -747,48 +583,29 @@ const FlightExperienceApp: React.FC = () => {
             <Grid container spacing={3}>
               {[
                 { 
-                  icon: <EventSeatIcon sx={{ fontSize: 30, color: '#a7e90e' }} />, 
+                  icon: <EventSeatIcon sx={styles.mainPageBox.aditionalInfoBox.infoGrid} />, 
                   title: "Premium Comfort", 
                   description: "Experience unparalleled comfort with our spacious seating and premium amenities." 
                 },
                 { 
-                  icon: <ShieldIcon sx={{ fontSize: 30, color: '#a7e90e' }} />, 
+                  icon: <ShieldIcon sx={styles.mainPageBox.aditionalInfoBox.infoGrid} />, 
                   title: "Top Safety", 
                   description: "Your safety is our priority with the highest international safety standards." 
                 },
                 { 
-                  icon: <HeadsetMicIcon sx={{ fontSize: 30, color: '#a7e90e' }} />, 
+                  icon: <HeadsetMicIcon sx={styles.mainPageBox.aditionalInfoBox.infoGrid} />, 
                   title: "24/7 Support", 
                   description: "Round-the-clock customer service to assist you throughout your journey." 
                 },
                 { 
-                  icon: <VerifiedUser sx={{ fontSize: 30, color: '#a7e90e' }} />, 
+                  icon: <VerifiedUser sx={styles.mainPageBox.aditionalInfoBox.infoGrid} />, 
                   title: "Privacy First", 
                   description: "We protect your data with enterprise-grade security and privacy measures." 
                 },
               ].map((feature, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
-                  <Card sx={{
-                    backgroundColor: '#1e293b',
-                    borderRadius: '12px',
-                    border: '1px solid #334155',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                    transition: 'all 0.3s ease',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: '0 8px 24px rgba(167, 233, 14, 0.2)',
-                      borderColor: '#a7e90e',
-                    }
-                  }}>
-                    <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: 3,
-                      paddingBottom: 2,
-                    }}>
+                  <Card sx={styles.mainPageBox.aditionalInfoBox.infoCard}>
+                    <Box sx={styles.mainPageBox.aditionalInfoBox.infoCard.outerIconBox}>
                       <Box sx={{
                         width: 70,
                         height: 70,
@@ -802,25 +619,11 @@ const FlightExperienceApp: React.FC = () => {
                         {feature.icon}
                       </Box>
                     </Box>
-                    <CardContent sx={{
-                      flexGrow: 1,
-                      padding: 3,
-                      paddingTop: 0,
-                      textAlign: 'center',
-                    }}>
-                      <Typography variant="h6" component="div" sx={{
-                        fontWeight: 'bold',
-                        color: '#f1f5f9',
-                        marginBottom: 1,
-                        fontSize: '1.1rem',
-                      }}>
+                    <CardContent sx={styles.mainPageBox.aditionalInfoBox.infoCard.featureCard}>
+                      <Typography variant="h6" component="div" sx={styles.mainPageBox.aditionalInfoBox.infoCard.featureCard.featureTitle}>
                         {feature.title}
                       </Typography>
-                      <Typography variant="body2" sx={{
-                        color: '#94a3b8',
-                        lineHeight: 1.6,
-                        fontSize: '0.9rem',
-                      }}>
+                      <Typography variant="body2" sx={styles.mainPageBox.aditionalInfoBox.infoCard.featureCard.featureDescription}>
                         {feature.description}
                       </Typography>
                     </CardContent>
