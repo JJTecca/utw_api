@@ -77,6 +77,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import { useState } from 'react';
 import { styles } from './ProfileManagement.styles';
+import { UploadButton } from '@/Components/UploadButton';
 
 interface ProfileItemProps {
   icon: ReactNode;
@@ -86,6 +87,21 @@ interface ProfileItemProps {
   clickable?: boolean;
   onClick?: () => void;
 }
+
+const handleSelectedFiles = async(files:File[]) => {
+	const formData = new FormData();
+	files.forEach((file) => formData.append('files', file));
+	
+	const response = await fetch('<URL HERE>', {method: 'POST',body: formData}); //Backend URL to handle uploads
+
+  if (!response.ok) {
+    console.log(`Upload failed: ${response.status}`);
+  }
+
+  return response.json();
+	
+};
+
 
 function ProfileItem({ icon, label, value, children, clickable = false, onClick }: ProfileItemProps) {
   const isVerified = value === 'verified';
@@ -661,17 +677,12 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
                     <Typography variant="h6" sx={styles.cardTitle}>
                       Flight Documents
                     </Typography>
-                    <Button
-                      variant="outlined"
-                      startIcon={<Assignment />}
-                      fullWidth
-                      sx={{ 
-                        ...styles.outlinedButton,
-                        marginBottom: 1 
-                      }}
-                    >
-                      Upload Documents
-                    </Button>
+                    <UploadButton
+                      label="Upload Documents"
+                      allowMultiple
+                      onFileSelect={handleSelectedFiles}
+                      styles={{...styles.outlinedButton, marginBottom: 1}}
+                    />
                     <Typography variant="caption" sx={{ color: '#94a3b8' }}>
                       Latest upload: Flight log • Dec 01 2025
                     </Typography>
