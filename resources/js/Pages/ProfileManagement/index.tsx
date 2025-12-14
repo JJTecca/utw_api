@@ -92,7 +92,7 @@ const handleSelectedFiles = async(files:File[]) => {
 	const formData = new FormData();
 	files.forEach((file) => formData.append('files', file));
 	
-	const response = await fetch('<URL HERE>', {method: 'POST',body: formData});
+	const response = await fetch('<URL HERE>', {method: 'POST',body: formData}); //Backend URL to handle uploads
 
   if (!response.ok) {
     console.log(`Upload failed: ${response.status}`);
@@ -746,6 +746,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
                       label="Upload Documents"
                       allowMultiple
                       onFileSelect={handleSelectedFiles}
+                      styles={{...styles.outlinedButton, marginBottom: 1}}
                     />
                     <Typography variant="caption" sx={{ color: '#94a3b8' }}>
                       Latest upload: Flight log • Dec 01 2025

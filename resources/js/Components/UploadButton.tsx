@@ -1,15 +1,24 @@
 import React, { useRef } from 'react';
+import { Button } from '@mui/material';
+import { Assignment } from '@mui/icons-material';
+
 type UploadButtonProps = {
 	label: string;
 	fileTypes?: string[];
 	allowMultiple?: boolean;
 	maxFileSize?: number;
     onFileSelect?: (files: File[]) => void;
+	styles?: React.CSSProperties;
 }
 
-
-
-export const UploadButton = ({label, maxFileSize = Number.MAX_SAFE_INTEGER, fileTypes, allowMultiple, onFileSelect}:UploadButtonProps) => {
+export const UploadButton = ({
+		label, 
+		maxFileSize = Number.MAX_SAFE_INTEGER, 
+		fileTypes, 
+		allowMultiple, 
+		onFileSelect,
+		styles
+	}:UploadButtonProps) => {
 
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,16 +51,24 @@ export const UploadButton = ({label, maxFileSize = Number.MAX_SAFE_INTEGER, file
 	};
 
 	return (
-	<div>
+		<div>
 		<input
-		  ref={inputRef}
-          accept={fileTypes?.join(',')}
-          multiple={allowMultiple ?? false}
-          onChange={handleFileInput}
-          style={{ display: 'none' }}
-          type="file"
-        />
-		<button onClick={()=>inputRef?.current?.click()}>{label}</button>
+			ref={inputRef}
+			accept={fileTypes?.join(',')}
+			multiple={allowMultiple ?? false}
+			onChange={handleFileInput}
+			style={{ display: 'none' }}
+			type="file"
+		/>
+		<Button
+			variant="outlined"
+			startIcon={<Assignment />}
+			fullWidth
+			sx={styles}
+			onClick={()=>inputRef?.current?.click()}
+		>
+			{label}
+		</Button>
 	</div>
 	);
 }
