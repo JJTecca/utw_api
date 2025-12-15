@@ -11,6 +11,10 @@ type UploadButtonProps = {
 	styles?: React.CSSProperties;
 }
 
+	/*******************************************************
+     * Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. 
+	 * Copyright from lib.es2015.core.d.ts
+	********************************************************/
 export const UploadButton = ({
 		label, 
 		maxFileSize = Number.MAX_SAFE_INTEGER, 

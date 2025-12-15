@@ -17,6 +17,8 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    /* Laravel convention : Don't really need to have 1st arg the id of the table*/
     protected $fillable = [
         'firstName',
         'lastName',
@@ -49,7 +51,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function bookings() {
+    /*****************************************************************************
+     * Laravel convention : Singular function name, plural is highly discouraged
+     /*****************************************************************************/
+    public function booking() {
         return $this->belongsToMany(Booking::class,'user_booking_links');
+    }
+
+    public function wallet() {
+        return $this->hasMany(Wallet::class);
     }
 }
