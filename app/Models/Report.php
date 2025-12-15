@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
+    /* Laravel convention : Don't really need to have 1st arg the id of the table*/
     protected $fillable = [
         'booking_id',
         'flight_logs',
@@ -17,6 +18,9 @@ class Report extends Model
         'safety_reports',
     ];
 
+   /*****************************************************************************
+     * Laravel convention : Singular function name, plural is highly discouraged
+     /*****************************************************************************/
     public function booking() {
         return $this->belongsTo(Booking::class);
     }

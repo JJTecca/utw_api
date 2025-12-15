@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    /* Laravel convention : Don't really need to have 1st arg the id of the table*/
     protected $fillable = [
         'user_id',
         'passenger_count',
@@ -20,7 +21,10 @@ class Booking extends Model
         'description'        
     ];
 
-    public function users() {
+    /*****************************************************************************
+     * Laravel convention : Singular function name, plural is highly discouraged
+     /*****************************************************************************/
+    public function user() {
         return $this->belongsToMany(User::class, 'user_booking_links');
     }
 

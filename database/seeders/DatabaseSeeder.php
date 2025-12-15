@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             BookingSeeder::class,
             ReportSeeder::class,
+            WalletSeeder::class
         ]);
     }
 }
