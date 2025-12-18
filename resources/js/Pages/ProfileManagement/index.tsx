@@ -140,24 +140,12 @@ function ProfileItem({ icon, label, value, children, clickable = false, onClick 
               {value}
             </Typography>
             {clickable && !isVerified && (
-              <Typography variant="caption" sx={{ 
-                color: '#0ea5e9', 
-                fontSize: '0.7rem',
-                backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                padding: '2px 6px',
-                borderRadius: '4px',
-              }}>
+              <Typography variant="caption" sx={styles.verifyBtnText}>
                 Click to verify
               </Typography>
             )}
             {isVerified && (
-              <Typography variant="caption" sx={{ 
-                color: '#10b981', 
-                fontSize: '0.7rem',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                padding: '2px 6px',
-                borderRadius: '4px',
-              }}>
+              <Typography variant="caption" sx={styles.isVerifiedBtnText}>
                 ✓ Verified
               </Typography>
             )}
@@ -177,13 +165,7 @@ function FundsProgressCircle() {
   const remaining = insufficientFunds - availableFunds;
   
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      flexDirection: 'column',
-      padding: 3,
-    }}>
+    <Box sx={styles.mainContainer}>
       {/* Circular Progress */}
       <Box sx={{ position: 'relative', display: 'inline-flex' }}>
         <CircularProgress 
@@ -198,16 +180,7 @@ function FundsProgressCircle() {
                    '#ef4444',
           }}
         />
-        <Box sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+        <Box sx={styles.percentageBox}>
           <Typography
             variant="h5"
             component="div"
@@ -222,26 +195,12 @@ function FundsProgressCircle() {
       </Box>
       
       {/* Status Text */}
-      <Typography variant="body1" sx={{ 
-        fontWeight: 'bold',
-        color: '#f1f5f9',
-        marginTop: 2,
-        textAlign: 'center',
-      }}>
+      <Typography variant="body1" sx={styles.statusText}>
         {percentage >= 100 ? 'Fully Funded! ✈️' : 'Flight Fund Progress'}
       </Typography>
       
       {/* Breakdown */}
-      <Box sx={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        gap: 1,
-        marginTop: 2,
-        padding: 2,
-        backgroundColor: 'rgba(30, 41, 59, 0.5)',
-        borderRadius: '8px',
-        width: '100%',
-      }}>
+      <Box sx={styles.breakdownBox}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="body2" sx={{ color: '#94a3b8' }}>
             Available:
@@ -447,14 +406,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
       fullWidth
       TransitionComponent={Grow}
       transitionDuration={300}
-      PaperProps={{
-        sx: {
-          backgroundColor: '#1e293b',
-          border: '1px solid #334155',
-          borderRadius: '12px',
-          overflow: 'hidden',
-        }
-      }}
+      PaperProps={styles.verificationDialog}
     >
       <DialogTitle sx={styles.dialogTitle}>
         Verify Your Account
@@ -466,7 +418,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
             <Fade in={verificationStatus === 'pending'} timeout={500}>
               <Box>
                 <CircularProgress size={60} sx={{ color: '#0ea5e9', mb: 2 }} />
-                <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 1 }}>
+                <Typography variant="h6" sx={{ color: '#1662afff', mb: 1 }}>
                   Verifying...
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#94a3b8' }}>
@@ -478,7 +430,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
             <Fade in={verificationStatus === 'verified'} timeout={500}>
               <Box>
                 <CheckCircleOutlinedIcon sx={{ fontSize: 60, color: '#10b981', mb: 2 }} />
-                <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 1 }}>
+                <Typography variant="h6" sx={{ color: '#166dc5ff', mb: 1 }}>
                   Verified! 🎉
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#94a3b8' }}>
@@ -489,22 +441,13 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
           ) : (
             <Fade in={verificationStatus === 'unverified'} timeout={500}>
               <Box>
-                <Box sx={{ 
-                  backgroundColor: 'rgba(14, 165, 233, 0.1)', 
-                  borderRadius: '50%',
-                  width: 80,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 20px',
-                }}>
+                <Box sx={styles.accountVerifBox}>
                   <VerifiedUser sx={{ fontSize: 40, color: '#0ea5e9' }} />
                 </Box>
-                <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
+                <Typography variant="h6" sx={{ color: '#2064a8ff', mb: 2 }}>
                   Account Verification
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#94a3b8', mb: 3 }}>
+                <Typography variant="body2" sx={{ color: '#1d58a9ff', mb: 3 }}>
                   Click the button below to verify your account. 
                   This will update your verification status to "verified".
                 </Typography>
@@ -513,15 +456,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
                   variant="contained"
                   fullWidth
                   onClick={handleVerifySubmit}
-                  sx={{
-                    background: 'linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%)',
-                    color: 'white',
-                    padding: '10px',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #0284c7 0%, #7c3aed 100%)',
-                    },
-                  }}
+                  sx={styles.verifyAccountBtn}
                 >
                   Verify Account
                 </Button>
@@ -796,37 +731,14 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
                     { icon: <VerifiedUser sx={{ fontSize: 30, color: '#a7e90eff' }} />, title: "Privacy First", description: "We protect your data with enterprise-grade security and privacy measures." },
                   ].map((feature, index) => (
                     <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{
-                        backgroundColor: '#1e293b',
-                        borderRadius: '12px',
-                        border: '1px solid #334155',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                        transition: 'all 0.3s ease',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-                          borderColor: '#0ea5e9',
-                        }
-                      }}>
+                      <Card sx={styles.featureCard}>
                         <Box sx={{
                           display: 'flex',
                           justifyContent: 'center',
                           paddingTop: 3,
                           paddingBottom: 2,
                         }}>
-                          <Box sx={{
-                            width: 70,
-                            height: 70,
-                            borderRadius: '50%',
-                            backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            border: '2px solid rgba(14, 165, 233, 0.2)',
-                          }}>
+                          <Box sx={styles.featureIconBox}>
                             {feature.icon}
                           </Box>
                         </Box>

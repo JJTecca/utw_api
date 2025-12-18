@@ -260,5 +260,113 @@ export const styles = {
     marginBottom: 3,
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+
+  verifyBtnText: {
+    color: '#0ea5e9', 
+    fontSize: '0.7rem',
+    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+    padding: '2px 6px',
+    borderRadius: '4px',
+  },
+
+  isVerifiedBtnText: {
+    color: '#08714eff', 
+    fontSize: '0.7rem',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    padding: '2px 6px',
+    borderRadius: '4px',
+  },
+
+  mainContainer: {
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    flexDirection: 'column',
+    padding: 3,
+  },
+
+  percentageBox: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  statusText: {
+    fontWeight: 'bold',
+    color: '#f1f5f9',
+    marginTop: 2,
+    textAlign: 'center',
+  },
+
+  breakdownBox: {
+    display: 'flex', 
+    flexDirection: 'column',
+    gap: 1,
+    marginTop: 2,
+    padding: 2,
+    backgroundColor: 'rgba(30, 41, 59, 0.5)',
+    borderRadius: '8px',
+    width: '100%',
+  },
+
+  verificationDialog: {
+    backgroundColor: '#1e293b',
+    border: '1px solid #334155',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+
+  accountVerifBox: {
+    backgroundColor: 'rgba(14, 165, 233, 0.1)', 
+    borderRadius: '50%',
+    width: 80,
+    height: 80,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto 20px',
+  },
+
+  verifyAccountBtn: {
+    background: 'linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%)',
+    color: 'white',
+    padding: '10px',
+    fontWeight: 'bold',
+    '&:hover': {
+      background: 'linear-gradient(135deg, #0284c7 0%, #7c3aed 100%)',
+    },
+  },
+
+  featureCard: {
+    backgroundColor: '#1e293b',
+    borderRadius: '12px',
+    border: '1px solid #334155',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+    transition: 'all 0.3s ease',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    '&:hover': {
+      transform: 'translateY(-4px)',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+      borderColor: '#0ea5e9',
+    }
+  },
+
+  featureIconBox: {
+    width: 70,
+    height: 70,
+    borderRadius: '50%',
+    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '2px solid rgba(14, 165, 233, 0.2)',
   }
 };
