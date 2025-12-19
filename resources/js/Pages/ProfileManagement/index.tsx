@@ -1,6 +1,7 @@
 /*************************************************
  * @format Profile Menu (The new one)
- * @author Maior Cristian
+ * @author Maior Cristian, Niculescu Cristian
+ * @description The main profile management layout for the aviation app
  * ********************************************* */ 
 /****************************************************************************************************
  * 1. Import only necessary modules, in the correct logical order.
