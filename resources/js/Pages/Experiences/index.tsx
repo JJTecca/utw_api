@@ -227,10 +227,6 @@ const FlightExperienceApp: React.FC = () => {
           {selectedTab === 0 && (
             <Fade in={selectedTab === 0} timeout={300}>
               <Box>
-                <Typography variant="h5" gutterBottom sx={styles.aboutDialog.content.selectionBox.firstClass.typography}>
-                  First Class Excellence
-                </Typography>
-                
                 <Typography variant="h6" sx={styles.aboutDialog.content.selectionBox.firstClass.typography2}>
                   Exclusive Features:
                 </Typography>
