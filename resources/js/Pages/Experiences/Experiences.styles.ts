@@ -74,7 +74,7 @@ export const styles = {
                 },
                 typography2:
                 {
-                  color: 'white', 
+                  color: '#a7e90e', 
                   mb: 2
                 },
                 card:
