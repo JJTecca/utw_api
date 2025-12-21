@@ -73,7 +73,6 @@ import businessClassExperience from '../../../../public/Images/experience-busine
 import economyClassExperience from '../../../../public/Images/experience-economy-class.jpg';
 import { styles } from './Experiences.styles';
 import { Star } from '@mui/icons-material';
-import { s } from 'framer-motion/client';
 
 const navItems = [ 
   { label: 'About', icon: <InfoCircleOutlined />, path: '/about' } 
@@ -84,7 +83,6 @@ const FlightExperienceApp: React.FC = () => {
   const theme = useTheme();
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const classesData = [
     {
