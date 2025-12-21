@@ -241,8 +241,8 @@ export const styles = {
   // Experience Box
   experienceBox: {
     position: 'absolute', 
-    left: '15%', 
-    top:'5%',
+    left: '5%', 
+    top:'15%',
     zIndex: 5,
     background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(20px)',
@@ -272,8 +272,8 @@ export const styles = {
   // Flight Status Box
   flightStatusBox: {
     position: 'absolute', 
-    left: '13%', 
-    top:'50%',
+    left: '25%', 
+    top:'15%',
     zIndex: 5,
     background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(20px)',
