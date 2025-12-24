@@ -1,3 +1,26 @@
+/*************************************************
+ * @format Tour Screen 
+ * @author Maior Cristian
+ * ********************************************* */ 
+/****************************************************************************************************
+ * 1. Import only necessary modules, in the correct logical order.
+ * 2. Import screen components from their correct paths. 
+ *    - If there's an error, try saving the file (Ctrl+S) or retyping with autocomplete.
+ * 3. Import any react-native or gluestack themed necessarry UI 
+ * 4. Define props (if any) using camelCase — similar to C's `typedef struct` style.
+ * 5. Declare const variables.
+ * 6. Add any extra/helper functions.
+ * 7. Export the main component function.
+ * 8. EVERY index.tsx FILE MUST HAVE A .ts FILE 
+ * 9. Every style that has more than 2 props, put it in the .ts file , otherwise let it be here
+ * 10. This shall be the ONLY home screen we have, as we need further improvements
+ * 11. This file is #1 prior and needs the most frontend attention
+ ****************************************************************************************************/
+/****************************************************************************************************
+ * 1. Displays the user header information fetched with backend data (not yet implemented)
+ * 2. Shows featured destionations for the user to scroll down and get a view, also popular destinations
+ * 3. Provides a booking system using his wallet details (not yet implemented)
+ ****************************************************************************************************/
 import React, { useState } from 'react';
 import {
   Box,
