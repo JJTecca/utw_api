@@ -16,7 +16,7 @@ return new class extends Migration
          * 2. Check with php artisan migrate:refresh + php artisan migrate 
          * 3. Ensure ALL the ERD functions are here
          * 4. Use string as much instead of text
-         * 5. Each modell shall start with id and end with timestamps
+         * 5. Each model shall start with id and end with timestamps
          ***********************************************/
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
