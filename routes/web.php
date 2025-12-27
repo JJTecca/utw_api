@@ -49,10 +49,8 @@ Route::middleware('auth')->group(function () {
         ]);
     });
     
-    {/* This is the old profile view */}
-    //Route::get('/profileMenu', [ProfileController::class, 'profileMenu'])->name('profile');
-
-    Route::get('/profileMenu', [ProfileController::class, 'profileManagement'])->name('profile');
+    {/* New route */}
+    Route::get('/profileMenu', [ProfileController::class, 'index'])->name('profile');
 
     Route::post('/dashboard/bookings', [BookingController::class, 'storeBooking'])->name('dashboard.bookings');
 

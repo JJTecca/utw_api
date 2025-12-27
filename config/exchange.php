@@ -2,73 +2,32 @@
 
 return [
 
-    /*
+    /************************************************************************
     |--------------------------------------------------------------------------
     | Base Currency
     |--------------------------------------------------------------------------
-    |
     | All exchange rates are calculated relative to this currency.
-    |
-    */
-
-    'base_currency' => env('EXCHANGE_BASE_CURRENCY', 'USD'),
-
-    /*
-    |--------------------------------------------------------------------------
+    |-------------------------------------------------------------------------
     | Supported Currencies
     |--------------------------------------------------------------------------
-    |
     | List of all supported currency codes.
-    |
-    */
-
-    'currencies' => [
-        'RON',
-        'GBP',
-        'USD',
-        'JPY',
-        'EUR',
-        'CNY',
-        'CHF',
-        'AUD',
-        'CAD',
-        'HKD',
-        'SGD',
-        'INR',
-        'KRW',
-        'SEK',
-        'MXN',
-        'NZD',
-        'NOK',
-        'TWD',
-        'BRL',
-        'ZAR',
-        'PLN',
-        'DKK',
-        'IDR',
-        'TRY',
-        'THB',
-        'ILS',
-        'HUF',
-        'CZK',
-        'CLP',
-        'PHP',
-        'COP',
-        'MYR',
-        'AED',
-        'SAR',
-        'PEN',
-    ],
-
-    /*
+    |------------------------------------------------------------------------
     |--------------------------------------------------------------------------
     | Default Exchange Rates
     |--------------------------------------------------------------------------
-    |
     | Rates relative to the base currency (USD by default).
     | Replace with real-time values from an API if needed.
-    |
-    */
+    *************************************************************************/
+
+    'base_currency' => 'USD',
+
+    'currencies' => [
+        'RON','GBP','USD','JPY','EUR','CNY','CHF','AUD',
+        'CAD','HKD','SGD','INR','KRW','SEK','MXN','NZD',
+        'NOK','TWD','BRL','ZAR','PLN','DKK','IDR','TRY',
+        'THB','ILS','HUF','CZK','CLP','PHP','COP','MYR',
+        'AED','SAR','PEN',
+    ],
 
     'rates' => [
         'RON' => 4.60,
