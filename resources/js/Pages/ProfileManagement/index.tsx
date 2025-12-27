@@ -425,7 +425,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
           />
         ))}
         <Typography variant="body2" sx={styles.accountId}>
-          Account ID: <span style={{ color: '#f1f5f9' }}>737579</span>
+          Account ID: <span style={{ color: '#f1f5f9' }}>{users.id}</span>
         </Typography>
       </Box>
     </Box>

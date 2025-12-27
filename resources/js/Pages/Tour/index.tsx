@@ -21,7 +21,7 @@
  * 2. Shows featured destionations for the user to scroll down and get a view, also popular destinations
  * 3. Provides a booking system using his wallet details (not yet implemented)
  ****************************************************************************************************/
-import React, { useState } from 'react';
+import React, { useState , PropsWithChildren } from 'react';
 import {
   Box,
   Typography,
@@ -54,6 +54,26 @@ import PragueCastle from '../../../../public/Images/PragueCastle.png';
 import PhuketThaiDestination from '../../../../public/Images/PhuketThailandDestination.png';
 
 /* TODO : Replace with destination information from backend */
+
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    gender: string;
+}
+
+
+interface BaseCurrency {
+  currency: string
+}
+
+interface TourProps {
+  user : User;
+  total_usd : number;
+  base_currency : BaseCurrency;
+}
 
 const featuredDestinations = [
   {
@@ -425,7 +445,7 @@ const userData = {
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
 };
 
-export default function TravelHomepage() {
+export default function TravelHomepage({children, user, total_usd, base_currency} : PropsWithChildren<TourProps>) {
   const [favorites, setFavorites] = useState<number[]>([]);
 
   const toggleFavorite = (id: number) => {
@@ -621,7 +641,7 @@ export default function TravelHomepage() {
                 }}>
                     <img 
                     src={userData.avatar} 
-                    alt={userData.name}
+                    alt={user.lastName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                 </Box>
@@ -645,7 +665,7 @@ export default function TravelHomepage() {
                     fontSize: '1.4rem',
                     marginBottom: '0.25rem'
                 }}>
-                    Welcome, {userData.name}!
+                    Welcome, {user.lastName}!
                 </Typography>
                 <Typography sx={{ 
                     color: 'rgba(255,255,255,0.8)', 
@@ -716,7 +736,7 @@ export default function TravelHomepage() {
                     fontWeight: 700,
                     fontSize: '1.5rem'
                     }}>
-                    {userData.points.toLocaleString()}
+                    {total_usd.toLocaleString()}
                     </Typography>
                 </Box>
                 <Typography sx={{ 
