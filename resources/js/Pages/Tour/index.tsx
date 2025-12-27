@@ -763,6 +763,7 @@ export default function TravelHomepage() {
             
             {/* Profile Button */}
             <Button
+              href={route('profile')}
               variant="contained"
               startIcon={<FlightIcon />}
               sx={{
