@@ -18,12 +18,17 @@ return new class extends Migration
          * 4. Use string as much instead of text
          * 5. Each model shall start with id and end with timestamps
          ***********************************************/
-        Schema::create('user_booking_links', function (Blueprint $table) {
+        Schema::create('destinations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('booking_id')->nullable();
-            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
+            $table->string('title')->unique();
+            $table->string('subtitle')->nullable()->default('');
+            $table->string('description');
+            $table->string('image'); //this could be a path
+            $table->float('rating')->default(0.0);
+            $table->unsignedInteger('reviews')->default(0);
+            $table->unsignedInteger('price')->default(0); // This stays as int , easier for us, then we convert to $x.xxx
+            $table->boolean('is_featured')->default(true);
+            $table-> string('category')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_booking_links');
+        Schema::dropIfExists('destinations');
     }
 };

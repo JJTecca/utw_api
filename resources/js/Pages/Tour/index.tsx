@@ -21,7 +21,7 @@
  * 2. Shows featured destionations for the user to scroll down and get a view, also popular destinations
  * 3. Provides a booking system using his wallet details (not yet implemented)
  ****************************************************************************************************/
-import React, { useState } from 'react';
+import React, { useState , PropsWithChildren } from 'react';
 import {
   Box,
   Typography,
@@ -48,9 +48,32 @@ import {
   EmojiEvents as TrophyIcon,
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
+/* Some of them have invalid URL and have to be saved locally */
 import GreeceDestination from '../../../../public/Images/Greece.png';
 import PragueCastle from '../../../../public/Images/PragueCastle.png';
 import PhuketThaiDestination from '../../../../public/Images/PhuketThailandDestination.png';
+
+/* TODO : Replace with destination information from backend */
+
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    gender: string;
+}
+
+
+interface BaseCurrency {
+  currency: string
+}
+
+interface TourProps {
+  user : User;
+  total_usd : number;
+  base_currency : BaseCurrency;
+}
 
 const featuredDestinations = [
   {
@@ -405,7 +428,7 @@ const popularDestinations = [
   },
 ];
 
-// Stats data
+// Stats data : Hardcoded data
 const stats = [
   { number: '50K+', label: 'Happy Travelers', icon: <GroupsIcon /> },
   { number: '150+', label: 'Destinations', icon: <ExploreIcon /> },
@@ -422,7 +445,7 @@ const userData = {
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
 };
 
-export default function TravelHomepage() {
+export default function TravelHomepage({children, user, total_usd, base_currency} : PropsWithChildren<TourProps>) {
   const [favorites, setFavorites] = useState<number[]>([]);
 
   const toggleFavorite = (id: number) => {
@@ -562,203 +585,259 @@ export default function TravelHomepage() {
   return (
     <Box sx={styles.containerStyles}>
 
+      {/* Hero Section */}
+      <Box sx={styles.heroStyles}>
+        <Typography sx={styles.heroTitleStyles}>
+          Discover Your Next Adventure With Our Airlines Company
+        </Typography>
+        <Typography sx={styles.heroSubtitleStyles}>
+          What we recommend for your : great journeys with beautiful places
+        </Typography>
+        <Button sx={styles.ctaButtonStyles}>
+          Start Your Journey
+          <ArrowForwardIcon />
+        </Button>
+      </Box>
+
       <Box sx={{
-      maxWidth: '1400px',
-      margin: '0 auto 2rem',
-      padding: '0 2rem',
-      position: 'relative',
-      zIndex: 20,
-    }}>
-      {/* Glassmorphism Card */}
-      <Box sx={{
-        background: 'rgba(255, 255, 255, 0.08)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: '24px',
-        padding: '1.5rem 2rem',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
-        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+        maxWidth: '1400px',
+        margin: '0 auto 2rem',
+        padding: '0 2rem',
         position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '4px',
-          background: 'linear-gradient(90deg, #667eea, #764ba2, #667eea)',
-        }
+        zIndex: 20,
       }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {/* Left Side - User Info */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            {/* Avatar with Status Indicator */}
-            <Box sx={{ position: 'relative' }}>
-              <Box sx={{
-                width: 70,
-                height: 70,
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '3px solid rgba(255, 255, 255, 0.3)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-              }}>
-                <img 
-                  src={userData.avatar} 
-                  alt={userData.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </Box>
-              <Box sx={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-                width: 20,
-                height: 20,
-                background: '#10b981',
-                borderRadius: '50%',
-                border: '3px solid #1e293b',
-              }} />
+      {/* Glassmorphism Card */}
+        <Box sx={{
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '24px',
+            padding: '1.5rem 2rem',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'linear-gradient(90deg, #667eea, #764ba2, #667eea)',
+            }
+        }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* Left Side - User Info */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                {/* Avatar with Status Indicator */}
+                <Box sx={{ position: 'relative' }}>
+                <Box sx={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: '3px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                }}>
+                    <img 
+                    src={userData.avatar} 
+                    alt={user.lastName}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                </Box>
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: 20,
+                    height: 20,
+                    background: '#10b981',
+                    borderRadius: '50%',
+                    border: '3px solid #1e293b',
+                }} />
+                </Box>
+                
+                {/* User Details */}
+                <Box>
+                <Typography sx={{ 
+                    color: 'white', 
+                    fontWeight: 700, 
+                    fontSize: '1.4rem',
+                    marginBottom: '0.25rem'
+                }}>
+                    Welcome, {user.lastName}!
+                </Typography>
+                <Typography sx={{ 
+                    color: 'rgba(255,255,255,0.8)', 
+                    fontSize: '0.95rem',
+                    marginBottom: '0.5rem'
+                }}>
+                    Ready for your next adventure
+                </Typography>
+                
+                {/* Level Badge */}
+                <Box sx={{ 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem',
+                    background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1))',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(251, 191, 36, 0.3)',
+                }}>
+                    <Box sx={{
+                    width: 8,
+                    height: 8,
+                    background: '#fbbf24',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s infinite'
+                    }} />
+                    <Typography sx={{ 
+                    color: '#fbbf24', 
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px'
+                    }}>
+                    {userData.status}
+                    </Typography>
+                </Box>
+                </Box>
             </Box>
             
-            {/* User Details */}
-            <Box>
-              <Typography sx={{ 
-                color: 'white', 
-                fontWeight: 700, 
-                fontSize: '1.4rem',
-                marginBottom: '0.25rem'
-              }}>
-                Welcome, {userData.name}!
-              </Typography>
-              <Typography sx={{ 
-                color: 'rgba(255,255,255,0.8)', 
-                fontSize: '0.95rem',
-                marginBottom: '0.5rem'
-              }}>
-                Ready for your next adventure
-              </Typography>
-              
-              {/* Level Badge */}
-              <Box sx={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '0.5rem',
-                background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1))',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '20px',
-                border: '1px solid rgba(251, 191, 36, 0.3)',
-              }}>
-                <Box sx={{
-                  width: 8,
-                  height: 8,
-                  background: '#fbbf24',
-                  borderRadius: '50%',
-                  animation: 'pulse 2s infinite'
-                }} />
-                <Typography sx={{ 
-                  color: '#fbbf24', 
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.5px'
+            {/* Right Side - Stats & Actions */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                {/* Points Display */}
+                <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '0.75rem 1.5rem',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 }}>
-                  {userData.status}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-          
-          {/* Right Side - Stats & Actions */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-            {/* Points Display */}
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'center',
-              padding: '0.75rem 1.5rem',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Box sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #16266fff, #ece8efff)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                }}>
-                  💵
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Box sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #16266fff, #ece8efff)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    }}>
+                    💵
+                    </Box>
+                    <Typography sx={{ 
+                    color: 'white', 
+                    fontWeight: 700,
+                    fontSize: '1.5rem'
+                    }}>
+                    {total_usd.toLocaleString()}
+                    </Typography>
                 </Box>
                 <Typography sx={{ 
-                  color: 'white', 
-                  fontWeight: 700,
-                  fontSize: '1.5rem'
+                    color: 'rgba(255,255,255,0.6)', 
+                    fontSize: '0.8rem',
+                    marginTop: '0.25rem'
                 }}>
-                  {userData.points.toLocaleString()}
+                    Wallet Money
                 </Typography>
-              </Box>
-              <Typography sx={{ 
-                color: 'rgba(255,255,255,0.6)', 
-                fontSize: '0.8rem',
-                marginTop: '0.25rem'
-              }}>
-                Wallet Money
-              </Typography>
-            </Box>
-        
+                </Box>
             
-            {/* Quick Stats */}
-            <Box sx={{ display: 'flex', gap: '1.5rem' }}>
-              <Box sx={{ textAlign: 'center' }}>
+                
+                {/* Quick Stats */}
+                <Box sx={{ display: 'flex', gap: '1.5rem' }}>
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography sx={{ 
+                    color: 'white', 
+                    fontWeight: 700,
+                    fontSize: '1.25rem'
+                    }}>
+                    {favorites.length}
+                    </Typography>
+                    <Typography sx={{ 
+                    color: 'rgba(255,255,255,0.6)', 
+                    fontSize: '0.8rem'
+                    }}>
+                    Saved
+                    </Typography>
+                </Box>
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography sx={{ 
+                    color: 'white', 
+                    fontWeight: 700,
+                    fontSize: '1.25rem'
+                    }}>
+                    12
+                    </Typography>
+                    <Typography sx={{ 
+                    color: 'rgba(255,255,255,0.6)', 
+                    fontSize: '0.8rem'
+                    }}>
+                    Trips
+                    </Typography>
+                </Box>
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography sx={{ 
+                    color: 'white', 
+                    fontWeight: 700,
+                    fontSize: '1.25rem'
+                    }}>
+                    5
+                    </Typography>
+                    <Typography sx={{ 
+                    color: 'rgba(255,255,255,0.6)', 
+                    fontSize: '0.8rem'
+                    }}>
+                    Countries
+                    </Typography>
+                </Box>
+                </Box>
+                
+                {/* Profile Button */}
+                <Button
+                variant="contained"
+                startIcon={<FlightIcon />}
+                sx={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    borderRadius: '16px',
+                    padding: '0.75rem 1.5rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    boxShadow: '0 8px 16px rgba(102, 126, 234, 0.3)',
+                    transition: 'all 0.3s ease',
+                }}
+                >
+                View Profile
+                </Button>
+            </Box>
+            </Box>
+            
+            {/* Progress Bar for Next Level */}
+            <Box sx={{ marginTop: '1.5rem' }}>
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                marginBottom: '0.5rem' 
+            }}>
                 <Typography sx={{ 
-                  color: 'white', 
-                  fontWeight: 700,
-                  fontSize: '1.25rem'
+                color: 'rgba(255,255,255,0.8)', 
+                fontSize: '0.9rem' 
                 }}>
-                  {favorites.length}
+                Wallet Spendings
                 </Typography>
                 <Typography sx={{ 
-                  color: 'rgba(255,255,255,0.6)', 
-                  fontSize: '0.8rem'
+                color: 'white', 
+                fontWeight: 600,
+                fontSize: '0.9rem' 
                 }}>
-                  Saved
+                65%
                 </Typography>
-              </Box>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography sx={{ 
-                  color: 'white', 
-                  fontWeight: 700,
-                  fontSize: '1.25rem'
-                }}>
-                  12
-                </Typography>
-                <Typography sx={{ 
-                  color: 'rgba(255,255,255,0.6)', 
-                  fontSize: '0.8rem'
-                }}>
-                  Trips
-                </Typography>
-              </Box>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography sx={{ 
-                  color: 'white', 
-                  fontWeight: 700,
-                  fontSize: '1.25rem'
-                }}>
-                  5
-                </Typography>
-                <Typography sx={{ 
-                  color: 'rgba(255,255,255,0.6)', 
-                  fontSize: '0.8rem'
-                }}>
-                  Countries
-                </Typography>
-              </Box>
             </Box>
             
             {/* Profile Button */}
@@ -810,30 +889,21 @@ export default function TravelHomepage() {
             overflow: 'hidden',
           }}>
             <Box sx={{ 
-              height: '100%',
-              width: '65%',
-              background: 'linear-gradient(90deg, #667eea, #764ba2)',
-              borderRadius: '3px',
-            }} />
-          </Box>
+                height: 6,
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '3px',
+                overflow: 'hidden',
+            }}>
+                <Box sx={{ 
+                height: '100%',
+                width: '65%',
+                background: 'linear-gradient(90deg, #667eea, #764ba2)',
+                borderRadius: '3px',
+                }} />
+            </Box>
         </Box>
       </Box>
     </Box>
-
-
-      {/* Hero Section */}
-      <Box sx={styles.heroStyles}>
-        <Typography sx={styles.heroTitleStyles}>
-          Discover Your Next Adventure With Our Airlines Company
-        </Typography>
-        <Typography sx={styles.heroSubtitleStyles}>
-          What we recommend for your : great journeys with beautiful places
-        </Typography>
-        <Button sx={styles.ctaButtonStyles}>
-          Start Your Journey
-          <ArrowForwardIcon />
-        </Button>
-      </Box>
 
       {/* Featured Destinations */}
       <Container maxWidth="lg">

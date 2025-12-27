@@ -79,6 +79,7 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import { useState } from 'react';
 import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
+import { base } from 'framer-motion/client';
 
 interface ProfileItemProps {
   icon: ReactNode;
@@ -87,6 +88,36 @@ interface ProfileItemProps {
   children?: ReactNode;
   clickable?: boolean;
   onClick?: () => void;
+}
+interface Wallet {
+    id: number;
+    user_id: number;
+    currency: string;
+    value: number;
+}
+
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    gender: string;
+}
+
+interface TotalUsd {
+  usd_value: number
+}
+
+interface BaseCurrency {
+  currency: string
+}
+
+interface ProfileManagementProps {
+    users : User;
+    wallets : Wallet[];
+    total_usd: TotalUsd;
+    base_currency: BaseCurrency;
 }
 
 const handleSelectedFiles = async(files:File[]) => {
@@ -158,8 +189,8 @@ function ProfileItem({ icon, label, value, children, clickable = false, onClick 
   );
 }
 
-function FundsProgressCircle() {
-  const availableFunds = 1800; // €
+function FundsProgressCircle({wallets, users, total_usd, base_currency} : ProfileManagementProps ) {
+  const availableFunds = wallets.reduce((total, wallet) => total + wallet.value, 0);
   const insufficientFunds = 2500; // Target or required funds
   
   const percentage = Math.min(Math.round((availableFunds / insufficientFunds) * 100), 100);
@@ -272,7 +303,7 @@ function FundCard({ title, amount, color = 'primary' }: FundCardProps) {
   );
 }
 
-function ProfileManLayoutContent({ children }: PropsWithChildren) {
+function ProfileManLayoutContent({ children, users, wallets, total_usd, base_currency }: PropsWithChildren<ProfileManagementProps>) {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [verificationOpen, setVerificationOpen] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState("unverified");
@@ -351,8 +382,9 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
     const drawer = (
         <Box sx={styles.sidebarContainer}>
         <Box sx={styles.sidebarHeader}>
+            {/* users?. means optional */}
             <Typography variant="h4" sx={styles.userName}>
-                Maior Cristian
+                {users?.firstName} {users?.lastName}
             </Typography>
             <Chip
                 label="AVIATION PRO"
@@ -393,7 +425,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
           />
         ))}
         <Typography variant="body2" sx={styles.accountId}>
-          Account ID: <span style={{ color: '#f1f5f9' }}>737579</span>
+          Account ID: <span style={{ color: '#f1f5f9' }}>{users.id}</span>
         </Typography>
       </Box>
     </Box>
@@ -519,7 +551,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap sx={{ color: '#cbb615ff' }}>
-              Maior Cristian
+              {users?.firstName} {users?.lastName}
             </Typography>
           </Box>
         </AppBar>
@@ -572,14 +604,23 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
                     Flight Funds
                   </Typography>
                   <Stack spacing={2}>
-                    {fundItems.map((item, index) => (
+                    {wallets.map((wallet, index) => (
                       <FundCard
-                        key={item.title}
-                        title={item.title}
-                        amount={item.amount}
+                        key={wallet.id}
+                        title={`${wallet.currency} Wallet`}
+                        amount={`${wallet.value.toFixed(2)} ${wallet.currency}`}
                         color={index === 0 ? 'primary' : 'secondary'}
                       />
                     ))}
+                    
+                    {/* This does the math : adds the numbers and TODO : converts it to EUR / $ */}
+                    {wallets.length > 0 && (
+                      <FundCard
+                        title="Total Available"
+                        amount={`${total_usd} $`}
+                        color="primary"
+                      />
+                    )}
                   </Stack>
                 </CardContent>
               </Card>
@@ -587,7 +628,7 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
 
             <Grid item xs={12} md={6}>
                 <Card sx={styles.card}>
-                    <FundsProgressCircle />
+                    <FundsProgressCircle wallets={wallets} users={users} total_usd={total_usd} base_currency={base_currency} />
                 </Card>
             </Grid>
 
@@ -783,6 +824,10 @@ function ProfileManLayoutContent({ children }: PropsWithChildren) {
 }
 
 // // Main export
-export default function ProfileManLayout({ children }: PropsWithChildren) {
-  return <ProfileManLayoutContent children={children} />;
+export default function ProfileManLayout({ children, users, wallets, total_usd, base_currency  }: PropsWithChildren<ProfileManagementProps>) {
+  return (
+    <ProfileManLayoutContent users={users} wallets={wallets} total_usd={total_usd} base_currency={base_currency}>
+      {children}
+    </ProfileManLayoutContent>
+  );
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,25 +20,64 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
 
-    public function profileMenu() {  
-        $reports = DB::table('reports')
-                ->join('bookings', 'reports.booking_id', '=', 'bookings.id')
-                ->join('user_booking_links', 'bookings.id', '=', 'user_booking_links.booking_id')
-                ->where('user_booking_links.user_id', Auth::user()->id)
-                ->select('reports.*')
-                ->first();
-        return Inertia::render('ProfileMenu/index',[
-            'report' => $reports
-        ]); 
-
-    }
-
     /*************************************
      *   NEW Profile Management Profile view
-     *  TODO : Remove the old one when done
      **************************************/
-    public function profileManagement() {
-        return Inertia::render('ProfileManagement/index');
+    public function index() { 
+        // Join table wallets with users
+        // Approach with Laravel : $wallets = Wallet::where('user_id', Auth::id())->get();
+        $wallets = DB::table('wallets')
+            ->join('users', 'wallets.user_id', '=', 'users.id')
+            ->where('wallets.user_id', Auth::id())
+            ->select('wallets.*')
+            ->get();
+
+        //Get Auth User
+        $user = User::where('id',Auth::id())->first();
+        //Get the exchange rates from config file
+        $exchangeRates = config('exchange.rates');
+        $baseCurrency = 'USD';
+        $preparedWallets = [];
+        $totalInUsd = 0;
+
+
+        /********Testing************
+           dd($wallets);
+           dd($preparedWallets);
+        if(!$users || $wallets) { 
+             return response()->json(['message' => 'No data found',],500);
+        }
+        ***************************/
+
+        foreach ($wallets as $wallet) {
+            $originalCurrency = $wallet->currency;
+            $originalValue = $wallet->value;
+            $convertedValue = $originalValue;
+            
+            // Convert to USD if not already in USD
+            if ($originalCurrency !== $baseCurrency && isset($exchangeRates[$originalCurrency])) {
+                $convertedValue = $originalValue / $exchangeRates[$originalCurrency];
+            }
+            
+            $preparedWallets[] = [
+                'id' => $wallet->id,
+                'user_id' => $wallet->user_id,
+                'currency' => $originalCurrency,
+                'value' => $originalValue,
+                'converted_value' => round($convertedValue, 2), // Rounded to 2 decimals
+                'converted_currency' => $baseCurrency,
+                'exchange_rate' => $exchangeRates[$originalCurrency] ?? 1
+            ];
+        
+            $totalInUsd += $convertedValue;
+        }
+        
+        return Inertia::render('ProfileManagement/index', [
+            'wallets' => $preparedWallets,
+            'users' => $user ? $user->toArray() : null,
+            'total_usd' => round($totalInUsd, 2),
+            'base_currency' => $baseCurrency
+        ]);
     }
 
 

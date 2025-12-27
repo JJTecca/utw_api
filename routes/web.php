@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,9 +39,8 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard/index');
     })->name('dashboard');
 
-    Route::get('/dashboard/worldtour', function () {
-        return Inertia::render('Tour/index');
-    })->name('dashboard.worldtour');
+
+    Route::get('/dashboard/worldtour', [DestinationController::class, 'index'])->name('tour.view');
 
     Route::get('/get-encrypted-user-id', function (Request $request) {
         return response()->json([
@@ -49,10 +48,8 @@ Route::middleware('auth')->group(function () {
         ]);
     });
     
-    {/* This is the old profile view */}
-    //Route::get('/profileMenu', [ProfileController::class, 'profileMenu'])->name('profile');
-
-    Route::get('/profileMenu', [ProfileController::class, 'profileManagement'])->name('profile');
+    {/* New route */}
+    Route::get('/profileMenu', [ProfileController::class, 'index'])->name('profile');
 
     Route::post('/dashboard/bookings', [BookingController::class, 'storeBooking'])->name('dashboard.bookings');
 

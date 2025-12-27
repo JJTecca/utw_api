@@ -61,7 +61,7 @@ interface Report {
     crew_reports: string;
     safety_reports: string;
 }
-interface ProfileMenuProps { //a doua interfata ca altfel da eroare
+interface ProfileMenuProps {
     report: Report; 
 }
 
