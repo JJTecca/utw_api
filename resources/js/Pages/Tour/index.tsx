@@ -839,6 +839,55 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                 65%
                 </Typography>
             </Box>
+            
+            {/* Profile Button */}
+            <Button
+              href={route('profile')}
+              variant="contained"
+              startIcon={<FlightIcon />}
+              sx={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                borderRadius: '16px',
+                padding: '0.75rem 1.5rem',
+                fontWeight: 600,
+                textTransform: 'none',
+                boxShadow: '0 8px 16px rgba(102, 126, 234, 0.3)',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              View Profile
+            </Button>
+          </Box>
+        </Box>
+        
+        {/* Progress Bar for Next Level */}
+        <Box sx={{ marginTop: '1.5rem' }}>
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            marginBottom: '0.5rem' 
+          }}>
+            <Typography sx={{ 
+              color: 'rgba(255,255,255,0.8)', 
+              fontSize: '0.9rem' 
+            }}>
+              Wallet Spendings
+            </Typography>
+            <Typography sx={{ 
+              color: 'white', 
+              fontWeight: 600,
+              fontSize: '0.9rem' 
+            }}>
+              65%
+            </Typography>
+          </Box>
+          <Box sx={{ 
+            height: 6,
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '3px',
+            overflow: 'hidden',
+          }}>
             <Box sx={{ 
                 height: 6,
                 background: 'rgba(255, 255, 255, 0.1)',
