@@ -101,6 +101,13 @@ import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
 import {investmentOpportunities, quickDepositOptions, currencySymbols, supportedCurrencies, currencyNames} from './constants';
 
+/**************************************************************************
+ *                          INTERFACES
+ * 1. ProfileItemProps
+ * 2. Wallet 
+ * 3. User
+ * 4. ProfileManagementProps -> used to pass all the data into 1 interface
+ **************************************************************************/
 interface ProfileItemProps {
   icon: ReactNode;
   label: string;
@@ -371,18 +378,7 @@ function FundCard({ title, amount, color = 'primary' }: FundCardProps) {
 // Investment Opportunity Card Component
 function InvestmentOpportunityCard({ opportunity }: { opportunity: any }) {
   return (
-    <Card sx={{
-      padding: 2,
-      borderRadius: 2,
-      border: '1px solid #334155',
-      backgroundColor: '#1e293b',
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        borderColor: '#0ea5e9',
-      }
-    }}>
+    <Card sx={styles.investmentCard}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Typography variant="h6" sx={{ color: '#f1f5f9', fontWeight: 600 }}>
           {opportunity.name}
@@ -450,15 +446,15 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     setVerificationStatus('pending');
     
     setTimeout(() => {
-            setVerificationStatus('verified');
-            setShowSuccess(true);
-            
-            // Close dialog after 1.5 seconds
-            setTimeout(() => {
-            setVerificationOpen(false);
-            setVerificationStatus('verified'); // Keep it as verified after closing
-            }, 1500);
-        }, 2000);
+        setVerificationStatus('verified');
+        setShowSuccess(true);
+          
+        // Close dialog after 1.5 seconds
+        setTimeout(() => {
+          setVerificationOpen(false);
+          setVerificationStatus('verified'); // Keep it as verified after closing
+        }, 1500);
+      }, 2000);
     };
 
     const handleCloseVerification = () => {

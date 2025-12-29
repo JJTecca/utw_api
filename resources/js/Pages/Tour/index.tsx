@@ -48,13 +48,21 @@ import {
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
 
+/**************************************************************************
+ *                          INTERFACES
+ * 1. User
+ * 2. BaseCurrency 
+ * 3. Destination
+ * 4. TourProps -> used to pass all the data into 1 interface
+ **************************************************************************/
+
 interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    country: string;
-    gender: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  country: string;
+  gender: string;
 }
 
 interface BaseCurrency {

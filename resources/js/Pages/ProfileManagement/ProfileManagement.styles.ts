@@ -368,5 +368,18 @@ export const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     border: '2px solid rgba(14, 165, 233, 0.2)',
+  },
+
+  investmentCard: {
+    padding: 2,
+    borderRadius: 2,
+    border: '1px solid #334155',
+    backgroundColor: '#1e293b',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+      borderColor: '#0ea5e9',
+    }
   }
 };
