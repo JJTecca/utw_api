@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\WalletRequest;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -59,5 +60,54 @@ class WalletController extends Controller
             'new_balance' => $newValue,
             'new_currency' => $newCurrency
         ]);
+    }
+
+    // PHP follows PSR standards, especially PSR-1 / PSR-12.
+    public function payment(PaymentRequest $request)
+    {
+        // Get validated data
+        $validatedData = $request->validated();
+        // Get authenticated user (more secure than trusting user_id from request)
+        $authUser = Auth::user();
+            
+        if (!$authUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+            
+        // Find the wallet for this user and currency
+        $wallet = Wallet::where('user_id', $validatedData['user_id'])
+                        ->where('currency', $validatedData['currency'])
+                        ->first();
+        
+        if (!$wallet) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Wallet not found. Please create a wallet first.',
+                'user_id' => $validatedData['user_id'],
+                'currency' => $validatedData['currency'],
+            ], 404);
+        }
+            
+        // Calculate new balance
+        $oldBalance = $wallet->value;
+        $wallet->value += $validatedData['value'];
+        $wallet->save();
+            
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment processed successfully! Funds added to wallet.',
+            'data' => [
+                'wallet_id' => $wallet->id,
+                'user_id' => $wallet->user_id,
+                'currency' => $wallet->currency,
+                'old_balance' => $oldBalance,
+                'added_amount' => $validatedData['value'],
+                'new_balance' => $wallet->value,
+                'updated_at' => $wallet->updated_at->format('Y-m-d H:i:s'),
+            ]
+        ], 200);
     }
 }

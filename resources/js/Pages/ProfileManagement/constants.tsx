@@ -1,0 +1,106 @@
+// Investment opportunities data
+export const investmentOpportunities = [
+  { id: 1, name: 'Netflix, Inc.', symbol: 'NFLX', category: 'Streaming', return: '+3.5%', description: 'Blue-chip tech stock' },
+  { id: 2, name: 'Tesla, Inc.', symbol: 'TSLA', category: 'Automotive', return: '+5.3%', description: 'EV industry leader' },
+  { id: 3, name: 'Ozon Holdings', symbol: 'OZON', category: 'E-commerce', return: '+2.8%', description: 'Online marketplace' },
+  { id: 4, name: 'Volkswagen AG', symbol: 'VOW3', category: 'Automotive', return: '+1.9%', description: 'German auto giant' },
+  { id: 5, name: 'Twitter, Inc.', symbol: 'TWTR', category: 'Social Media', return: '+3.1%', description: 'Social platform' },
+];
+
+// Quick deposit options
+export const quickDepositOptions = [
+  { amount: 50, label: '$50' },
+  { amount: 100, label: '$100' },
+  { amount: 250, label: '$250' },
+  { amount: 500, label: '$500' },
+  { amount: 1000, label: '$1,000' },
+  { amount: 5000, label: '$5,000' },
+];
+
+
+// Currency symbols mapping
+export const currencySymbols: Record<string, string> = {
+  'USD': '$',
+  'EUR': '€',
+  'GBP': '£',
+  'JPY': '¥',
+  'CNY': '¥',
+  'RON': 'lei',
+  'CHF': 'CHF',
+  'AUD': 'A$',
+  'CAD': 'C$',
+  'HKD': 'HK$',
+  'SGD': 'S$',
+  'INR': '₹',
+  'KRW': '₩',
+  'SEK': 'kr',
+  'MXN': '$',
+  'NZD': 'NZ$',
+  'NOK': 'kr',
+  'TWD': 'NT$',
+  'BRL': 'R$',
+  'ZAR': 'R',
+  'PLN': 'zł',
+  'DKK': 'kr',
+  'IDR': 'Rp',
+  'TRY': '₺',
+  'THB': '฿',
+  'ILS': '₪',
+  'HUF': 'Ft',
+  'CZK': 'Kč',
+  'CLP': '$',
+  'PHP': '₱',
+  'COP': '$',
+  'MYR': 'RM',
+  'AED': 'د.إ',
+  'SAR': 'ر.س',
+  'PEN': 'S/',
+};
+
+// Currency names for better display
+export const currencyNames: Record<string, string> = {
+  'USD': 'US Dollar',
+  'EUR': 'Euro',
+  'GBP': 'British Pound',
+  'JPY': 'Japanese Yen',
+  'CNY': 'Chinese Yuan',
+  'RON': 'Romanian Leu',
+  'CHF': 'Swiss Franc',
+  'AUD': 'Australian Dollar',
+  'CAD': 'Canadian Dollar',
+  'HKD': 'Hong Kong Dollar',
+  'SGD': 'Singapore Dollar',
+  'INR': 'Indian Rupee',
+  'KRW': 'South Korean Won',
+  'SEK': 'Swedish Krona',
+  'MXN': 'Mexican Peso',
+  'NZD': 'New Zealand Dollar',
+  'NOK': 'Norwegian Krone',
+  'TWD': 'New Taiwan Dollar',
+  'BRL': 'Brazilian Real',
+  'ZAR': 'South African Rand',
+  'PLN': 'Polish Złoty',
+  'DKK': 'Danish Krone',
+  'IDR': 'Indonesian Rupiah',
+  'TRY': 'Turkish Lira',
+  'THB': 'Thai Baht',
+  'ILS': 'Israeli Shekel',
+  'HUF': 'Hungarian Forint',
+  'CZK': 'Czech Koruna',
+  'CLP': 'Chilean Peso',
+  'PHP': 'Philippine Peso',
+  'COP': 'Colombian Peso',
+  'MYR': 'Malaysian Ringgit',
+  'AED': 'UAE Dirham',
+  'SAR': 'Saudi Riyal',
+  'PEN': 'Peruvian Sol',
+};
+
+// All supported currencies from exchange.php
+export const supportedCurrencies = [
+  'RON','GBP','USD','JPY','EUR','CNY','CHF','AUD',
+  'CAD','HKD','SGD','INR','KRW','SEK','MXN','NZD',
+  'NOK','TWD','BRL','ZAR','PLN','DKK','IDR','TRY',
+  'THB','ILS','HUF','CZK','CLP','PHP','COP','MYR',
+  'AED','SAR','PEN',
+];

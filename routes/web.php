@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,8 +40,9 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard/index');
     })->name('dashboard');
 
-
     Route::get('/dashboard/worldtour', [DestinationController::class, 'index'])->name('tour.view');
+
+    Route::patch('/dashboard/worldtour/payment-process', [WalletController::class, 'payment'])->name('tour.payment');
 
     Route::get('/get-encrypted-user-id', function (Request $request) {
         return response()->json([

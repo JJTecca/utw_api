@@ -58,6 +58,17 @@ import {
   Fade,
   Grow,
   CircularProgress,
+  TextField,
+  Tabs,
+  Tab,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Divider,
 } from '@mui/material';
 import {
   AccountBalanceWallet,
@@ -69,6 +80,15 @@ import {
   Menu as MenuIcon,
   Share,
   VerifiedUser,
+  Add as AddIcon,
+  TrendingUp,
+  AccountBalance,
+  Payment,
+  CreditCard,
+  AttachMoney,
+  ArrowUpward,
+  History,
+  AccountBalanceOutlined,
 } from '@mui/icons-material';
 import GppBadOutlinedIcon from '@mui/icons-material/GppBadOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
@@ -79,7 +99,7 @@ import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import { useState } from 'react';
 import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
-import { base } from 'framer-motion/client';
+import {investmentOpportunities, quickDepositOptions, currencySymbols, supportedCurrencies, currencyNames} from './constants';
 
 interface ProfileItemProps {
   icon: ReactNode;
@@ -89,11 +109,15 @@ interface ProfileItemProps {
   clickable?: boolean;
   onClick?: () => void;
 }
+
 interface Wallet {
     id: number;
     user_id: number;
     currency: string;
     value: number;
+    converted_value?: number;
+    converted_currency?: string;
+    exchange_rate?: number;
 }
 
 interface User {
@@ -105,19 +129,11 @@ interface User {
     gender: string;
 }
 
-interface TotalUsd {
-  usd_value: number
-}
-
-interface BaseCurrency {
-  currency: string
-}
-
 interface ProfileManagementProps {
-    users : User;
-    wallets : Wallet[];
-    total_usd: TotalUsd;
-    base_currency: BaseCurrency;
+    users: User;
+    wallets: Wallet[];
+    total_usd: number;
+    base_currency: string;
 }
 
 const handleSelectedFiles = async(files:File[]) => {
@@ -131,9 +147,58 @@ const handleSelectedFiles = async(files:File[]) => {
   }
 
   return response.json();
-	
 };
 
+const handlePayment = async (wallet: Wallet, amount: number, currency: string) => {
+    try {
+        // Create form data or JSON payload
+        const payload = {
+            user_id: wallet.user_id,
+            currency: currency,
+            value: parseFloat(amount.toString()),
+            converted_value: wallet.converted_value,
+            converted_currency: wallet.converted_currency,
+            exchange_rate: wallet.exchange_rate
+        };
+
+        // Using fetch with PATCH
+        const response = await fetch('/dashboard/worldtour/payment-process', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                // Include CSRF token for Laravel
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include' // Important for cookies/sessions
+        });
+        
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        }
+        alert('Payment processed successfully!');
+        
+        // Optionally refresh wallet data or update UI
+        return response;
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        alert(`Payment failed: ${errorMessage}`);
+        throw error;
+    }
+};
+
+// Payment methods
+const paymentMethods = [
+  { id: 'credit_card', label: 'Credit Card', icon: <CreditCard /> },
+  { id: 'bank_transfer', label: 'Bank Transfer', icon: <AccountBalance /> },
+  { id: 'paypal', label: 'PayPal', icon: <Payment /> },
+  { id: 'crypto', label: 'Crypto Wallet', icon: <TrendingUp /> },
+];
 
 function ProfileItem({ icon, label, value, children, clickable = false, onClick }: ProfileItemProps) {
   const isVerified = value === 'verified';
@@ -190,7 +255,7 @@ function ProfileItem({ icon, label, value, children, clickable = false, onClick 
 }
 
 function FundsProgressCircle({wallets, users, total_usd, base_currency} : ProfileManagementProps ) {
-  const availableFunds = wallets.reduce((total, wallet) => total + wallet.value, 0);
+  const availableFunds = wallets.reduce((total, wallet) => total + (wallet.converted_value || wallet.value), 0);
   const insufficientFunds = 2500; // Target or required funds
   
   const percentage = Math.min(Math.round((availableFunds / insufficientFunds) * 100), 100);
@@ -238,7 +303,7 @@ function FundsProgressCircle({wallets, users, total_usd, base_currency} : Profil
             Available:
           </Typography>
           <Typography variant="body2" sx={{ color: '#10b981', fontWeight: '500' }}>
-            {availableFunds.toLocaleString()} €
+            {availableFunds.toLocaleString()} {currencySymbols[base_currency] || base_currency}
           </Typography>
         </Box>
         
@@ -247,7 +312,7 @@ function FundsProgressCircle({wallets, users, total_usd, base_currency} : Profil
             Required:
           </Typography>
           <Typography variant="body2" sx={{ color: '#f1f5f9', fontWeight: '500' }}>
-            {insufficientFunds.toLocaleString()} €
+            {insufficientFunds.toLocaleString()} {currencySymbols[base_currency] || base_currency}
           </Typography>
         </Box>
         
@@ -265,7 +330,7 @@ function FundsProgressCircle({wallets, users, total_usd, base_currency} : Profil
               color: remaining > 500 ? '#ef4444' : '#f59e0b', 
               fontWeight: '500' 
             }}>
-              {remaining.toLocaleString()} €
+              {remaining.toLocaleString()} {currencySymbols[base_currency] || base_currency}
             </Typography>
           </Box>
         )}
@@ -303,12 +368,78 @@ function FundCard({ title, amount, color = 'primary' }: FundCardProps) {
   );
 }
 
+// Investment Opportunity Card Component
+function InvestmentOpportunityCard({ opportunity }: { opportunity: any }) {
+  return (
+    <Card sx={{
+      padding: 2,
+      borderRadius: 2,
+      border: '1px solid #334155',
+      backgroundColor: '#1e293b',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        borderColor: '#0ea5e9',
+      }
+    }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+        <Typography variant="h6" sx={{ color: '#f1f5f9', fontWeight: 600 }}>
+          {opportunity.name}
+        </Typography>
+        <Chip 
+          label={opportunity.return} 
+          size="small" 
+          sx={{ 
+            backgroundColor: opportunity.return.includes('+') ? '#10b98120' : '#ef444420',
+            color: opportunity.return.includes('+') ? '#10b981' : '#ef4444',
+            fontWeight: 600
+          }}
+        />
+      </Box>
+      <Typography variant="body2" sx={{ color: '#94a3b8', mb: 1 }}>
+        {opportunity.symbol} • {opportunity.category}
+      </Typography>
+      <Typography variant="body2" sx={{ color: '#cbd5e1', fontSize: '0.9rem' }}>
+        {opportunity.description}
+      </Typography>
+      <Button
+        fullWidth
+        variant="outlined"
+        size="small"
+        sx={{ 
+          mt: 2,
+          borderColor: '#0ea5e9',
+          color: '#0ea5e9',
+          '&:hover': {
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(14, 165, 233, 0.1)'
+          }
+        }}
+      >
+        Invest Now
+      </Button>
+    </Card>
+  );
+}
+
 function ProfileManLayoutContent({ children, users, wallets, total_usd, base_currency }: PropsWithChildren<ProfileManagementProps>) {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [verificationOpen, setVerificationOpen] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState("unverified");
     const [showSuccess, setShowSuccess] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    
+    // Wallet funding states
+    const [fundingOpen, setFundingOpen] = useState(false);
+    const [fundingTab, setFundingTab] = useState(0);
+    const [amount, setAmount] = useState('');
+    const [selectedCurrency, setSelectedCurrency] = useState(base_currency || 'USD');
+    const [selectedPayment, setSelectedPayment] = useState('credit_card');
+    const [showFundingSuccess, setShowFundingSuccess] = useState(false);
+    const [isFunding, setIsFunding] = useState(false);
+    const [userWallets, setUserWallets] = useState<Wallet[]>(wallets);
+    const [totalAmount, setTotalAmount] = useState(total_usd);
 
     const handleVerification = () => {
         setVerificationOpen(true);
@@ -342,11 +473,114 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
         setMobileOpen(!mobileOpen);
     };
 
+    // Wallet funding handlers
+    const handleOpenFunding = () => {
+        setFundingOpen(true);
+        if (isMobile) {
+            setMobileOpen(false); // Close mobile drawer when opening popup
+        }
+    };
+
+    const handleCloseFunding = () => {
+        setFundingOpen(false);
+        setAmount('');
+        setIsFunding(false);
+    };
+
+    const handleFundSubmit = async () => {
+      if (!amount || parseFloat(amount) <= 0) {
+          alert('Please enter a valid amount');
+          return;
+      }
+      
+      setIsFunding(true);
+      
+      try {
+          // Find the wallet matching the selected currency
+          const targetWallet = wallets.find(wallet => wallet.currency === selectedCurrency);
+          
+          if (!targetWallet) {
+              throw new Error(`No wallet found for currency: ${selectedCurrency}`);
+          }
+
+          //Quick Refresh using useState
+          const result = await handlePayment(
+            targetWallet,
+            parseFloat(amount),
+            selectedCurrency
+          );
+
+          // Calculate conversion rate for total USD update
+          const conversionRate = targetWallet.exchange_rate || 1;
+          const amountInUSD = parseFloat(amount) * conversionRate;
+
+          // Update wallets with the new amount
+          const updatedWallets = userWallets.map(wallet => 
+            wallet.id === targetWallet.id 
+              ? { 
+                  ...wallet, 
+                  value: wallet.value + parseFloat(amount)
+                } 
+              : wallet
+          );
+
+          // Calculate new total amount
+          const newTotalAmount = updatedWallets.reduce((total, wallet) => {
+            // Convert each wallet's value to USD for total calculation
+            const walletValueInUSD = wallet.value * (wallet.exchange_rate || 1);
+            return total + walletValueInUSD;
+          }, 0);
+
+          // Update both states
+          setUserWallets(updatedWallets);
+          setTotalAmount(newTotalAmount);
+          
+          setIsFunding(false);
+          setShowFundingSuccess(true);
+          setFundingOpen(false);
+          setAmount('');
+          
+          console.log('Payment result:', result);
+          
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+              setShowFundingSuccess(false);
+          }, 3000);
+          
+      } catch (error) {
+          console.error('Payment failed:', error);
+          setIsFunding(false);
+          
+          // Show error to user
+          alert(`Payment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+  };
+
+    const handleQuickDeposit = (quickAmount: number) => {
+        setAmount(quickAmount.toString());
+    };
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setFundingTab(newValue);
+    };
+
     const navigationItems = [
-        { text: 'MY FLIGHTS', icon: <Analytics /> },
-        { text: 'WALLET', icon: <AccountBalanceWallet /> },
-        { text: 'HELP', icon: <Help /> },
-    ];
+      { 
+          text: 'MY FLIGHTS', 
+          icon: <Analytics />,
+          onClick: () => console.log('My Flights clicked')
+      },
+      { 
+          text: 'WALLET', 
+          icon: <AccountBalanceWallet />,
+          onClick: handleOpenFunding
+      },
+      { 
+          text: 'HELP', 
+          icon: <Help />,
+          onClick: () => console.log('Help clicked')
+      },
+  ];
 
     const detailItems = [
         { 
@@ -363,13 +597,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
             clickable: false,
         },
     ];
-    const fundItems = [
-        { title: 'Available funds', amount: '1.800,00 €' },
-        { title: 'Invested funds', amount: '2.100,30 €' },
-    ];
 
     const actionItems = [
-        { text: 'Add funds', icon: <AccountBalanceWallet /> },
+        { text: 'Add funds', icon: <AccountBalanceWallet />, onClick: handleOpenFunding },
         { text: 'Create Additionals', icon: <Assignment /> },
     ];
 
@@ -396,7 +626,10 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
       <List sx={styles.navList}>
         {navigationItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={styles.navListItem}>
-            <ListItemButton sx={styles.navListItemButton}>
+            <ListItemButton 
+              sx={styles.navListItemButton}
+              onClick={item.onClick}
+            >
               <ListItemIcon sx={styles.navListItemIcon}>{item.icon}</ListItemIcon>
               <ListItemText
                 primary={item.text}
@@ -425,7 +658,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
           />
         ))}
         <Typography variant="body2" sx={styles.accountId}>
-          Account ID: <span style={{ color: '#f1f5f9' }}>{users.id}</span>
+          Account ID: <span style={{ color: '#f1f5f9' }}>{users?.id}</span>
         </Typography>
       </Box>
     </Box>
@@ -512,7 +745,441 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     </Dialog>
   );
 
-  // Success notification
+  // Wallet Funding Dialog
+  const walletFundingDialog = (
+    <Dialog
+      open={fundingOpen}
+      onClose={handleCloseFunding}
+      maxWidth="md"
+      fullWidth
+      TransitionComponent={Grow}
+      transitionDuration={300}
+      PaperProps={{
+        sx: {
+          backgroundColor: '#1e293b',
+          color: '#f1f5f9',
+          borderRadius: 3,
+          border: '1px solid #334155',
+          maxWidth: '800px',
+          maxHeight: '90vh',
+        }
+      }}
+    >
+      <DialogTitle sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        borderBottom: '1px solid #334155',
+        padding: 3
+      }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
+          ✈️ Fund Your Wallet
+        </Typography>
+        <IconButton onClick={handleCloseFunding} sx={{ color: '#94a3b8' }}>
+          <AddIcon sx={{ transform: 'rotate(45deg)' }} />
+        </IconButton>
+      </DialogTitle>
+      
+      <DialogContent sx={{ padding: 0 }}>
+        <Tabs 
+          value={fundingTab} 
+          onChange={handleTabChange}
+          sx={{ 
+            borderBottom: 1, 
+            borderColor: 'divider',
+            '& .MuiTab-root': {
+              color: '#94a3b8',
+              textTransform: 'none',
+              fontSize: '1rem',
+              fontWeight: 500,
+            },
+            '& .Mui-selected': {
+              color: '#0ea5e9',
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#0ea5e9',
+            }
+          }}
+        >
+          <Tab label="Quick Deposit" icon={<AttachMoney />} iconPosition="start" />
+          <Tab label="Investment Tools" icon={<TrendingUp />} iconPosition="start" />
+          <Tab label="Payment History" icon={<History />} iconPosition="start" />
+        </Tabs>
+        
+        {fundingTab === 0 && (
+          <Box sx={{ padding: 3 }}>
+            {/* Current Balance */}
+            <Box sx={{ 
+              backgroundColor: 'rgba(14, 165, 233, 0.1)', 
+              borderRadius: 2, 
+              padding: 2,
+              marginBottom: 3,
+              border: '1px solid rgba(14, 165, 233, 0.3)'
+            }}>
+              <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                Current Wallet Balance
+              </Typography>
+              <Typography variant="h4" sx={{ color: '#0ea5e9', fontWeight: 700 }}>
+                {currencySymbols[base_currency] || base_currency}{totalAmount.toLocaleString()}
+              </Typography>
+            </Box>
+            
+            {/* Quick Deposit Options */}
+            <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
+              Quick Deposit Amounts
+            </Typography>
+            <Grid container spacing={1} sx={{ mb: 3 }}>
+              {quickDepositOptions.map((option) => (
+                <Grid item xs={4} sm={2} key={option.amount}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => handleQuickDeposit(option.amount)}
+                    sx={{
+                      borderColor: amount === option.amount.toString() ? '#0ea5e9' : '#334155',
+                      color: amount === option.amount.toString() ? '#0ea5e9' : '#94a3b8',
+                      '&:hover': {
+                        borderColor: '#0ea5e9',
+                        backgroundColor: 'rgba(14, 165, 233, 0.1)'
+                      }
+                    }}
+                  >
+                    {currencySymbols[base_currency] || '$'}{option.amount}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
+            
+            {/* Custom Amount */}
+            <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
+              Or Enter Custom Amount
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+              <TextField
+                fullWidth
+                label="Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                type="number"
+                InputProps={{
+                  startAdornment: (
+                    <Box sx={{ mr: 1, color: '#94a3b8' }}>
+                      {currencySymbols[selectedCurrency] || selectedCurrency}
+                    </Box>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#f1f5f9',
+                    '& fieldset': {
+                      borderColor: '#334155',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0ea5e9',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0ea5e9',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#94a3b8',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#0ea5e9',
+                  },
+                }}
+              />
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel sx={{ color: '#94a3b8' }}>Currency</InputLabel>
+                <Select
+                  value={selectedCurrency}
+                  onChange={(e) => setSelectedCurrency(e.target.value)}
+                  label="Currency"
+                  sx={{
+                    color: '#f1f5f9',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#334155',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#0ea5e9',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#0ea5e9',
+                    },
+                  }}
+                >
+                  {supportedCurrencies.map((currency) => (
+                    <MenuItem key={currency} value={currency}>
+                      {currencySymbols[currency] || currency} {currency} - {currencyNames[currency] || currency}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            
+            {/* Payment Method */}
+            <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
+              Payment Method
+            </Typography>
+            <FormControl component="fieldset" fullWidth>
+              <RadioGroup
+                value={selectedPayment}
+                onChange={(e) => setSelectedPayment(e.target.value)}
+              >
+                <Grid container spacing={2}>
+                  {paymentMethods.map((method) => (
+                    <Grid item xs={6} key={method.id}>
+                      <Paper
+                        sx={{
+                          padding: 2,
+                          backgroundColor: selectedPayment === method.id ? 'rgba(14, 165, 233, 0.1)' : '#1e293b',
+                          border: `1px solid ${selectedPayment === method.id ? '#0ea5e9' : '#334155'}`,
+                          borderRadius: 2,
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            borderColor: '#0ea5e9',
+                          }
+                        }}
+                        onClick={() => setSelectedPayment(method.id)}
+                      >
+                        <FormControlLabel
+                          value={method.id}
+                          control={
+                            <Radio 
+                              sx={{ 
+                                color: '#334155',
+                                '&.Mui-checked': {
+                                  color: '#0ea5e9',
+                                },
+                              }}
+                            />
+                          }
+                          label={
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              {method.icon}
+                              <Typography sx={{ color: '#f1f5f9' }}>
+                                {method.label}
+                              </Typography>
+                            </Box>
+                          }
+                          sx={{ margin: 0 }}
+                        />
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              </RadioGroup>
+            </FormControl>
+            
+            {/* Currency Market Info */}
+            <Box sx={{ 
+              mt: 3, 
+              p: 2, 
+              backgroundColor: 'rgba(20, 184, 166, 0.1)', 
+              borderRadius: 2,
+              border: '1px solid rgba(20, 184, 166, 0.3)'
+            }}>
+              <Typography variant="subtitle2" sx={{ color: '#14b8a6', mb: 1 }}>
+                💱 Currency Market (USD Base)
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                    USD/EUR
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: '#f1f5f9' }}>
+                    0.92
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                    USD/GBP
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: '#f1f5f9' }}>
+                    0.78
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                    USD/RON
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: '#f1f5f9' }}>
+                    4.60
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                    USD/JPY
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: '#f1f5f9' }}>
+                    145.00
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        )}
+        
+        {fundingTab === 1 && (
+          <Box sx={{ padding: 3 }}>
+            <Typography variant="h5" sx={{ color: '#f1f5f9', mb: 3 }}>
+              Investment Opportunities
+            </Typography>
+            
+            {/* Investment Grid */}
+            <Grid container spacing={2} sx={{ mb: 3 }}>
+              {investmentOpportunities.map((opportunity) => (
+                <Grid item xs={12} sm={6} key={opportunity.id}>
+                  <InvestmentOpportunityCard opportunity={opportunity} />
+                </Grid>
+              ))}
+            </Grid>
+            
+            {/* Investment Chart Placeholder */}
+            <Box sx={{ 
+              backgroundColor: 'rgba(30, 41, 59, 0.5)', 
+              borderRadius: 2, 
+              padding: 3,
+              border: '1px solid #334155'
+            }}>
+              <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
+                Return on Investment
+              </Typography>
+              <Box sx={{ 
+                height: 200, 
+                backgroundColor: 'rgba(15, 23, 42, 0.5)', 
+                borderRadius: 1,
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: 1,
+                padding: 2
+              }}>
+                {[30, 45, 60, 75, 80, 95].map((height, index) => (
+                  <Box 
+                    key={index}
+                    sx={{ 
+                      flex: 1,
+                      height: `${height}%`,
+                      backgroundColor: '#0ea5e9',
+                      borderRadius: '4px 4px 0 0',
+                      position: 'relative'
+                    }}
+                  >
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        position: 'absolute',
+                        bottom: -20,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        color: '#94a3b8',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][index]}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+            
+            <Typography variant="body2" sx={{ color: '#94a3b8', mt: 3, textAlign: 'center' }}>
+              Past performance does not guarantee future results. Invest wisely.
+            </Typography>
+          </Box>
+        )}
+        
+        {fundingTab === 2 && (
+          <Box sx={{ padding: 3 }}>
+            <Typography variant="h5" sx={{ color: '#f1f5f9', mb: 3 }}>
+              Payment History
+            </Typography>
+            
+            <Box sx={{ 
+              backgroundColor: 'rgba(30, 41, 59, 0.5)', 
+              borderRadius: 2, 
+              padding: 2,
+              border: '1px solid #334155'
+            }}>
+              {[
+                { id: 1, date: 'Dec 15, 2025', description: 'Flight Booking - Paris', amount: '+$1,200.00', status: 'Completed' },
+                { id: 2, date: 'Dec 10, 2025', description: 'Wallet Top-up', amount: '+$500.00', status: 'Completed' },
+                { id: 3, date: 'Dec 05, 2025', description: 'Investment - Tesla', amount: '+$2,500.00', status: 'Pending' },
+                { id: 4, date: 'Nov 28, 2025', description: 'Flight Upgrade', amount: '+$300.00', status: 'Completed' },
+                { id: 5, date: 'Nov 20, 2025', description: 'Wallet Top-up', amount: '+$1,000.00', status: 'Completed' },
+              ].map((transaction) => (
+                <Box key={transaction.id} sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  padding: 1.5,
+                  borderBottom: '1px solid #334155',
+                  '&:last-child': { borderBottom: 'none' }
+                }}>
+                  <Box>
+                    <Typography variant="body1" sx={{ color: '#f1f5f9' }}>
+                      {transaction.description}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#94a3b8' }}>
+                      {transaction.date}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ textAlign: 'right' }}>
+                    <Typography variant="body1" sx={{ 
+                      color: transaction.amount.startsWith('+') ? '#10b981' : '#ef4444',
+                      fontWeight: 600
+                    }}>
+                      {currencySymbols[base_currency] || '$'}{transaction.amount.replace('$', '')}
+                    </Typography>
+                    <Chip 
+                      label={transaction.status} 
+                      size="small" 
+                      sx={{ 
+                        backgroundColor: transaction.status === 'Completed' ? '#10b98120' : '#f59e0b20',
+                        color: transaction.status === 'Completed' ? '#10b981' : '#f59e0b',
+                        height: 20,
+                        fontSize: '0.7rem'
+                      }}
+                    />
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+      </DialogContent>
+      
+      {fundingTab === 0 && (
+        <DialogActions sx={{ padding: 3, borderTop: '1px solid #334155' }}>
+          <Button 
+            onClick={handleCloseFunding}
+            sx={{ color: '#94a3b8' }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleFundSubmit}
+            disabled={!amount || parseFloat(amount) <= 0 || isFunding}
+            startIcon={isFunding ? <CircularProgress size={20} /> : <ArrowUpward />}
+            sx={{
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)',
+              color: 'white',
+              '&:disabled': {
+                background: '#334155',
+                color: '#64748b'
+              }
+            }}
+          >
+            {isFunding ? 'Processing...' : `Deposit ${currencySymbols[selectedCurrency] || selectedCurrency}${amount || '0'}`}
+          </Button>
+        </DialogActions>
+      )}
+    </Dialog>
+  );
+
+  // Success notifications
   const successNotification = (
     <Snackbar
       open={showSuccess}
@@ -528,6 +1195,25 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
         icon={<CheckCircleOutlinedIcon fontSize="inherit" />}
       >
         Account verified successfully!
+      </Alert>
+    </Snackbar>
+  );
+
+  const fundingSuccessNotification = (
+    <Snackbar
+      open={showFundingSuccess}
+      autoHideDuration={3000}
+      onClose={() => setShowFundingSuccess(false)}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      TransitionComponent={Fade}
+    >
+      <Alert 
+        onClose={() => setShowFundingSuccess(false)} 
+        severity="success"
+        sx={{ backgroundColor: '#0ea5e9', color: 'white' }}
+        icon={<AccountBalanceWallet fontSize="inherit" />}
+      >
+        Successfully deposited {currencySymbols[selectedCurrency] || selectedCurrency}{amount} to your wallet!
       </Alert>
     </Snackbar>
   );
@@ -604,20 +1290,20 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                     Flight Funds
                   </Typography>
                   <Stack spacing={2}>
-                    {wallets.map((wallet, index) => (
+                    {userWallets.map((wallet, index) => (
                       <FundCard
                         key={wallet.id}
                         title={`${wallet.currency} Wallet`}
-                        amount={`${wallet.value.toFixed(2)} ${wallet.currency}`}
+                        amount={`${wallet.value.toFixed(2)} ${currencySymbols[wallet.currency] || wallet.currency}`}
                         color={index === 0 ? 'primary' : 'secondary'}
                       />
                     ))}
                     
-                    {/* This does the math : adds the numbers and TODO : converts it to EUR / $ */}
+                    {/* Total Available */}
                     {wallets.length > 0 && (
                       <FundCard
                         title="Total Available"
-                        amount={`${total_usd} $`}
+                        amount={`${totalAmount.toLocaleString()} ${currencySymbols[base_currency] || base_currency}`}
                         color="primary"
                       />
                     )}
@@ -628,7 +1314,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
             <Grid item xs={12} md={6}>
                 <Card sx={styles.card}>
-                    <FundsProgressCircle wallets={wallets} users={users} total_usd={total_usd} base_currency={base_currency} />
+                    <FundsProgressCircle wallets={userWallets} users={users} total_usd={total_usd} base_currency={base_currency} />
                 </Card>
             </Grid>
 
@@ -750,8 +1436,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                           ...styles.outlinedButton,
                           justifyContent: 'flex-start',
                         }}
+                        onClick={item.onClick}
                       >
-                        {item.text === 'Add funds' ? 'Book Flight' : 'Create Flight Plan'}
+                        {item.text === 'Add funds' ? 'Fund Wallet' : 'Create Flight Plan'}
                       </Button>
                     ))}
                   </Stack>
@@ -816,15 +1503,17 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
         </Container>
       </Box>
 
-      {/* Pop Up Items are left here at the beginning as "static" functions*/}
+      {/* Pop Up Items */}
       {verificationDialog}
+      {walletFundingDialog}
       {successNotification}
+      {fundingSuccessNotification}
     </Box>
   );
 }
 
-// // Main export
-export default function ProfileManLayout({ children, users, wallets, total_usd, base_currency  }: PropsWithChildren<ProfileManagementProps>) {
+// Main export
+export default function ProfileManLayout({ children, users, wallets, total_usd, base_currency }: PropsWithChildren<ProfileManagementProps>) {
   return (
     <ProfileManLayoutContent users={users} wallets={wallets} total_usd={total_usd} base_currency={base_currency}>
       {children}

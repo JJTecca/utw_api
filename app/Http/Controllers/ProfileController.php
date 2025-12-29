@@ -76,7 +76,7 @@ class ProfileController extends Controller
             'wallets' => $preparedWallets,
             'users' => $user ? $user->toArray() : null,
             'total_usd' => round($totalInUsd, 2),
-            'base_currency' => $baseCurrency
+            'base_currency' => $baseCurrency,
         ]);
     }
 
