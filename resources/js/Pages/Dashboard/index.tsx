@@ -279,7 +279,7 @@ export default function Dashboard() {
             </Button>
             <Button
               sx={styles.navButton}
-              href={route('dashboard.worldtour')}
+              href={route('tour.view')}
             >
               <PublicIcon style={{ fontSize: '1.25rem' }} />
               WORLD TOUR

@@ -27,7 +27,6 @@ import {
   Typography,
   Button,
   Container,
-  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -48,12 +47,6 @@ import {
   EmojiEvents as TrophyIcon,
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
-/* Some of them have invalid URL and have to be saved locally */
-import GreeceDestination from '../../../../public/Images/Greece.png';
-import PragueCastle from '../../../../public/Images/PragueCastle.png';
-import PhuketThaiDestination from '../../../../public/Images/PhuketThailandDestination.png';
-
-/* TODO : Replace with destination information from backend */
 
 interface User {
     id: number;
@@ -64,369 +57,29 @@ interface User {
     gender: string;
 }
 
-
 interface BaseCurrency {
   currency: string
+}
+
+interface Destination {
+  id: number,
+  title: string,
+  subtitle?: string,
+  description: string,
+  image: string,
+  rating: number,
+  reviews: number,
+  price: number,
+  is_featured: boolean,
+  category?: string
 }
 
 interface TourProps {
   user : User;
   total_usd : number;
   base_currency : BaseCurrency;
+  destinations : Destination[];
 }
-
-const featuredDestinations = [
-  {
-    id: 1,
-    title: 'Santorini, Greece',
-    subtitle: 'Cyclades Islands',
-    description: 'Famous for its dramatic views, stunning sunsets, and white-washed houses with blue domes.',
-    image: GreeceDestination,
-    rating: 4.9,
-    reviews: 1243,
-    price: '$2,499',
-    isFeatured: true,
-    category: 'Island',
-  },
-  {
-    id: 2,
-    title: 'Amalfi Coast, Italy',
-    subtitle: 'Campania Region',
-    description: 'A stunning stretch of coastline with colorful cliffside villages overlooking the Tyrrhenian Sea.',
-    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 987,
-    price: '$3,199',
-    isFeatured: true,
-    category: 'Coastal',
-  },
-  {
-    id: 3,
-    title: 'Kyoto, Japan',
-    subtitle: 'Kansai Region',
-    description: 'Ancient temples, traditional tea houses, and beautiful cherry blossoms in this cultural capital.',
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 1892,
-    price: '$2,899',
-    isFeatured: true,
-    category: 'Cultural',
-  },
-  {
-    id: 4,
-    title: 'Bali, Indonesia',
-    subtitle: 'Lesser Sunda Islands',
-    description: 'Spiritual retreats, lush rice terraces, and beautiful beaches in this tropical paradise.',
-    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 2789,
-    price: '$1,799',
-    isFeatured: true,
-    category: 'Tropical',
-  },
-  {
-    id: 5,
-    title: 'Swiss Alps',
-    subtitle: 'Switzerland',
-    description: 'Majestic mountains, crystal clear lakes, and charming alpine villages await in this winter wonderland.',
-    image: 'https://images.unsplash.com/photo-1523633589114-88eaf4b4f1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 1456,
-    price: '$3,499',
-    isFeatured: true,
-    category: 'Mountain',
-  },
-  {
-    id: 6,
-    title: 'Maldives',
-    subtitle: 'Indian Ocean',
-    description: 'Overwater bungalows, crystal clear turquoise waters, and pristine white sand beaches.',
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 2345,
-    price: '$4,199',
-    isFeatured: true,
-    category: 'Luxury',
-  },
-  {
-    id: 7,
-    title: 'Paris, France',
-    subtitle: 'Île-de-France',
-    description: 'The City of Light with iconic landmarks, world-class cuisine, and romantic atmosphere.',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 4123,
-    price: '$2,199',
-    category: 'Urban',
-  },
-  {
-    id: 8,
-    title: 'Prague, Czech Republic',
-    subtitle: 'Bohemia',
-    description: 'Medieval architecture, charming old town, and rich European history.',
-    image: PragueCastle,
-    rating: 4.8,
-    reviews: 2345,
-    price: '$1,999',
-    category: 'Historical',
-  },
-];
-
-const popularDestinations = [
-  {
-    id: 7,
-    title: 'Paris, France',
-    subtitle: 'Île-de-France',
-    description: 'The City of Light with iconic landmarks, world-class cuisine, and romantic atmosphere.',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 4123,
-    price: '$2,199',
-    category: 'Urban',
-  },
-  {
-    id: 8,
-    title: 'New York City',
-    subtitle: 'New York, USA',
-    description: 'The city that never sleeps with iconic skyscrapers, Broadway shows, and diverse culture.',
-    image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 4567,
-    price: '$2,499',
-    category: 'Urban',
-  },
-  {
-    id: 9,
-    title: 'Sydney, Australia',
-    subtitle: 'New South Wales',
-    description: 'Iconic Opera House, beautiful harbor, and stunning beaches in this vibrant coastal city.',
-    image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 2890,
-    price: '$3,299',
-    category: 'Coastal',
-  },
-  {
-    id: 10,
-    title: 'Dubai, UAE',
-    subtitle: 'United Arab Emirates',
-    description: 'Futuristic skyscrapers, luxury shopping, and desert adventures in this modern metropolis.',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.6,
-    reviews: 3123,
-    price: '$2,899',
-    category: 'Luxury',
-  },
-  {
-    id: 11,
-    title: 'Rome, Italy',
-    subtitle: 'Lazio Region',
-    description: 'Ancient history, stunning architecture, and delicious cuisine in the Eternal City.',
-    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 3789,
-    price: '$2,399',
-    category: 'Historical',
-  },
-  {
-    id: 12,
-    title: 'Barcelona, Spain',
-    subtitle: 'Catalonia',
-    description: 'Gaudi architecture, vibrant culture, and beautiful Mediterranean beaches.',
-    image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 2987,
-    price: '$2,199',
-    category: 'Cultural',
-  },
-  {
-    id: 13,
-    title: 'Tokyo, Japan',
-    subtitle: 'Kanto Region',
-    description: 'A perfect blend of traditional culture and futuristic innovation in this vibrant metropolis.',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 3456,
-    price: '$3,099',
-    category: 'Urban',
-  },
-  {
-    id: 14,
-    title: 'Cape Town, South Africa',
-    subtitle: 'Western Cape',
-    description: 'Table Mountain, beautiful coastlines, and rich cultural diversity in this stunning city.',
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 1890,
-    price: '$2,599',
-    category: 'Adventure',
-  },
-  {
-    id: 15,
-    title: 'Rio de Janeiro',
-    subtitle: 'Brazil',
-    description: 'Christ the Redeemer, Copacabana beach, and vibrant carnival celebrations.',
-    image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.6,
-    reviews: 2345,
-    price: '$2,199',
-    category: 'Urban',
-  },
-  {
-    id: 16,
-    title: 'London, UK',
-    subtitle: 'England',
-    description: 'Historic landmarks, world-class museums, and vibrant multicultural atmosphere.',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 5123,
-    price: '$2,399',
-    category: 'Historical',
-  },
-  {
-    id: 17,
-    title: 'Iceland',
-    subtitle: 'Nordic Island',
-    description: 'Northern Lights, geothermal lagoons, waterfalls, and stunning volcanic landscapes.',
-    image: 'https://images.unsplash.com/photo-1504898770365-14faca6a7320?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 1678,
-    price: '$3,599',
-    category: 'Adventure',
-  },
-  {
-    id: 18,
-    title: 'Phuket, Thailand',
-    subtitle: 'Andaman Sea',
-    description: 'Beautiful beaches, vibrant nightlife, and rich Thai culture in this tropical paradise.',
-    image: PhuketThaiDestination,
-    rating: 4.7,
-    reviews: 2987,
-    price: '$1,699',
-    category: 'Tropical',
-  },
-  {
-    id: 19,
-    title: 'Venice, Italy',
-    subtitle: 'Veneto Region',
-    description: 'Romantic canals, historic architecture, and charming gondola rides.',
-    image: 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 2678,
-    price: '$2,899',
-    category: 'Romantic',
-  },
-  {
-    id: 20,
-    title: 'Marrakech, Morocco',
-    subtitle: 'Marrakech-Safi',
-    description: 'Vibrant souks, stunning palaces, and rich cultural heritage in this exotic destination.',
-    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.6,
-    reviews: 1890,
-    price: '$1,999',
-    category: 'Cultural',
-  },
-  {
-    id: 21,
-    title: 'Queenstown, New Zealand',
-    subtitle: 'South Island',
-    description: 'Adventure capital with stunning landscapes, skiing, and outdoor activities.',
-    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 1456,
-    price: '$3,299',
-    category: 'Adventure',
-  },
-  {
-    id: 22,
-    title: 'Cancún, Mexico',
-    subtitle: 'Quintana Roo',
-    description: 'Beautiful Caribbean beaches, ancient Mayan ruins, and vibrant nightlife.',
-    image: 'https://images.unsplash.com/photo-1510097467424-192d713fd8b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 2678,
-    price: '$1,899',
-    category: 'Beach',
-  },
-  {
-    id: 23,
-    title: 'Prague, Czech Republic',
-    subtitle: 'Bohemia',
-    description: 'Medieval architecture, charming old town, and rich European history.',
-    image: PragueCastle,
-    rating: 4.8,
-    reviews: 2345,
-    price: '$1,999',
-    category: 'Historical',
-  },
-  {
-    id: 24,
-    title: 'Singapore',
-    subtitle: 'Southeast Asia',
-    description: 'Modern metropolis with diverse cultures, amazing food, and stunning gardens.',
-    image: 'https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 3123,
-    price: '$2,599',
-    category: 'Urban',
-  },
-  {
-    id: 25,
-    title: 'Edinburgh, Scotland',
-    subtitle: 'Scotland',
-    description: 'Historic castle, medieval architecture, and rich cultural heritage.',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    reviews: 1789,
-    price: '$2,199',
-    category: 'Historical',
-  },
-  {
-    id: 26,
-    title: 'Hawaii, USA',
-    subtitle: 'Pacific Islands',
-    description: 'Volcanoes, beautiful beaches, and rich Polynesian culture in this tropical paradise.',
-    image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.8,
-    reviews: 3456,
-    price: '$3,199',
-    category: 'Tropical',
-  },
-  {
-    id: 27,
-    title: 'Budapest, Hungary',
-    subtitle: 'Central Europe',
-    description: 'Thermal baths, stunning architecture, and vibrant nightlife along the Danube.',
-    image: 'https://images.unsplash.com/photo-1551867633-194f125bddfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.6,
-    reviews: 1678,
-    price: '$1,799',
-    category: 'Cultural',
-  },
-  {
-    id: 28,
-    title: 'Los Angeles, USA',
-    subtitle: 'California',
-    description: 'Hollywood, beautiful beaches, and vibrant entertainment scene.',
-    image: 'https://images.unsplash.com/photo-1515896769750-31548aa180ed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.6,
-    reviews: 3123,
-    price: '$2,499',
-    category: 'Urban',
-  },
-  {
-    id: 29,
-    title: 'Maui, Hawaii',
-    subtitle: 'Hawaiian Islands',
-    description: 'Stunning beaches, volcanic landscapes, and world-class snorkeling.',
-    image: 'https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.9,
-    reviews: 2345,
-    price: '$3,399',
-    category: 'Beach',
-  },
-];
 
 // Stats data : Hardcoded data
 const stats = [
@@ -445,7 +98,7 @@ const userData = {
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
 };
 
-export default function TravelHomepage({children, user, total_usd, base_currency} : PropsWithChildren<TourProps>) {
+export default function TravelHomepage({children, user, total_usd, base_currency, destinations} : PropsWithChildren<TourProps>) {
   const [favorites, setFavorites] = useState<number[]>([]);
 
   const toggleFavorite = (id: number) => {
@@ -454,7 +107,17 @@ export default function TravelHomepage({children, user, total_usd, base_currency
     );
   };
 
-  const DestinationCard = ({ destination }: { destination: any }) => (
+  // Filter destinations for featured and popular sections
+  const featuredDestinations = destinations.filter(dest => dest.is_featured);
+  
+  // For popular destinations, you can use a different logic (e.g., based on rating, reviews, or other backend field)
+  // For now, let's assume popular destinations are those with rating >= 4.7 and reviews > 1000
+  // You might want to adjust this logic based on your actual backend data structure
+  const popularDestinations = destinations.filter(dest => 
+    dest.rating >= 4.7 && dest.reviews > 1000
+  ).slice(0, 10); // Limit to 10 popular destinations
+
+  const DestinationCard = ({ destination }: { destination: Destination }) => (
     <Card sx={styles.destinationCardStyles}>
       <Box sx={styles.cardImageStyles}>
         <CardMedia
@@ -487,7 +150,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
           )}
         </IconButton>
         <Chip
-          label={destination.category}
+          label={destination.category || 'Destination'}
           sx={{
             position: 'absolute',
             bottom: 15,
@@ -501,7 +164,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         <Box>
           <Typography sx={styles.cardSubtitleStyles}>
             <LocationIcon fontSize="small" sx={{ marginRight: 0.5 }} />
-            {destination.subtitle}
+            {destination.subtitle || 'Beautiful Destination'}
           </Typography>
           <Typography sx={styles.cardTitleStyles}>{destination.title}</Typography>
           <Typography sx={styles.cardDescriptionStyles}>{destination.description}</Typography>
@@ -513,13 +176,13 @@ export default function TravelHomepage({children, user, total_usd, base_currency
               ({destination.reviews})
             </Typography>
           </Box>
-          <Typography sx={styles.priceStyles}>{destination.price}</Typography>
+          <Typography sx={styles.priceStyles}>${destination.price}</Typography>
         </Box>
       </CardContent>
     </Card>
   );
 
-  const FeaturedDestinationCard = ({ destination }: { destination: any }) => (
+  const FeaturedDestinationCard = ({ destination }: { destination: Destination }) => (
     <Card sx={styles.featuredCardStyles}>
       <Box sx={{ height: '300px', position: 'relative' }}>
         <CardMedia
@@ -553,7 +216,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
             {destination.title}
           </Typography>
           <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
-            {destination.subtitle}
+            {destination.subtitle || 'Exclusive Destination'}
           </Typography>
         </Box>
       </Box>
@@ -800,9 +463,10 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                 
                 {/* Profile Button */}
                 <Button
-                variant="contained"
-                startIcon={<FlightIcon />}
-                sx={{
+                  href={route('profile')}
+                  variant="contained"
+                  startIcon={<FlightIcon />}
+                  sx={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     color: 'white',
                     borderRadius: '16px',
@@ -811,9 +475,9 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                     textTransform: 'none',
                     boxShadow: '0 8px 16px rgba(102, 126, 234, 0.3)',
                     transition: 'all 0.3s ease',
-                }}
+                  }}
                 >
-                View Profile
+                  View Profile
                 </Button>
             </Box>
             </Box>
@@ -825,39 +489,9 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                 justifyContent: 'space-between', 
                 marginBottom: '0.5rem' 
             }}>
-                <Typography sx={{ 
-                color: 'rgba(255,255,255,0.8)', 
-                fontSize: '0.9rem' 
-                }}>
-                Wallet Spendings
-                </Typography>
-                <Typography sx={{ 
-                color: 'white', 
-                fontWeight: 600,
-                fontSize: '0.9rem' 
-                }}>
-                65%
-                </Typography>
             </Box>
             
-            {/* Profile Button */}
-            <Button
-              href={route('profile')}
-              variant="contained"
-              startIcon={<FlightIcon />}
-              sx={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                borderRadius: '16px',
-                padding: '0.75rem 1.5rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                boxShadow: '0 8px 16px rgba(102, 126, 234, 0.3)',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              View Profile
-            </Button>
+            
           </Box>
         </Box>
         
@@ -910,11 +544,17 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         <Typography sx={styles.sectionTitleStyles}>
           Featured Destinations
         </Typography>
-        <Box sx={styles.featuredGridStyles}>
-          {featuredDestinations.map(destination => (
-            <FeaturedDestinationCard key={destination.id} destination={destination} />
-          ))}
-        </Box>
+        {featuredDestinations.length > 0 ? (
+          <Box sx={styles.featuredGridStyles}>
+            {featuredDestinations.map(destination => (
+              <FeaturedDestinationCard key={destination.id} destination={destination} />
+            ))}
+          </Box>
+        ) : (
+          <Typography sx={{ color: 'white', textAlign: 'center', py: 4 }}>
+            No featured destinations available at the moment.
+          </Typography>
+        )}
 
         {/* Stats Section */}
         <Box sx={styles.statsSectionStyles}>
@@ -930,11 +570,17 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         <Typography sx={styles.sectionTitleStyles}>
           Popular Destinations
         </Typography>
-        <Box sx={styles.gridContainerStyles}>
-          {popularDestinations.map(destination => (
-            <DestinationCard key={destination.id} destination={destination} />
-          ))}
-        </Box>
+        {popularDestinations.length > 0 ? (
+          <Box sx={styles.gridContainerStyles}>
+            {popularDestinations.map(destination => (
+              <DestinationCard key={destination.id} destination={destination} />
+            ))}
+          </Box>
+        ) : (
+          <Typography sx={{ color: 'white', textAlign: 'center', py: 4 }}>
+            No popular destinations available at the moment.
+          </Typography>
+        )}
 
         {/* CTA Section */}
         <Box sx={{ textAlign: 'center', marginTop: '6rem' }}>

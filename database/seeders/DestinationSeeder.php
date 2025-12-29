@@ -21,7 +21,7 @@ class DestinationSeeder extends Seeder
                 'title' => 'Santorini, Greece',
                 'subtitle' => 'Cyclades Islands',
                 'description' => 'Famous for its dramatic views, stunning sunsets, and white-washed houses with blue domes.',
-                'image' => '../../../../public/Images/Greece.png',
+                'image' => 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 'rating' => 4.9,
                 'reviews' => 1243,
                 'price' => 2499,
@@ -91,7 +91,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.7,
                 'reviews' => 4123,
                 'price' => 2199,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Urban',
             ],
             [
@@ -102,7 +102,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.7,
                 'reviews' => 4567,
                 'price' => 2499,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Urban',
             ],
             [
@@ -113,7 +113,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 2890,
                 'price' => 3299,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Coastal',
             ],
             [
@@ -124,7 +124,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.6,
                 'reviews' => 3123,
                 'price' => 2899,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Luxury',
             ],
             [
@@ -135,7 +135,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 3789,
                 'price' => 2399,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Historical',
             ],
             [
@@ -146,7 +146,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.7,
                 'reviews' => 2987,
                 'price' => 2199,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Cultural',
             ],
             [
@@ -168,7 +168,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 1890,
                 'price' => 2599,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Adventure',
             ],
             [
@@ -179,7 +179,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.6,
                 'reviews' => 2345,
                 'price' => 2199,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Urban',
             ],
             [
@@ -208,11 +208,11 @@ class DestinationSeeder extends Seeder
                 'title' => 'Phuket, Thailand',
                 'subtitle' => 'Andaman Sea',
                 'description' => 'Beautiful beaches, vibrant nightlife, and rich Thai culture in this tropical paradise.',
-                'image' => '../../../../public/Images/PhuketThailandDestination.png',
+                'image' => 'https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 'rating' => 4.7,
                 'reviews' => 2987,
                 'price' => 1699,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Tropical',
             ],
             [
@@ -223,7 +223,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 2678,
                 'price' => 2899,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Romantic',
             ],
             [
@@ -234,7 +234,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.6,
                 'reviews' => 1890,
                 'price' => 1999,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Cultural',
             ],
             [
@@ -263,11 +263,11 @@ class DestinationSeeder extends Seeder
                 'title' => 'Prague, Czech Republic',
                 'subtitle' => 'Bohemia',
                 'description' => 'Medieval architecture, charming old town, and rich European history.',
-                'image' => '../../../../public/Images/PragueCastle.png',
+                'image' => 'https://images.unsplash.com/photo-1592906209472-a36b1f3782ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 'rating' => 4.8,
                 'reviews' => 2345,
                 'price' => 1999,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Historical',
             ],
             [
@@ -278,7 +278,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 3123,
                 'price' => 2599,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Urban',
             ],
             [
@@ -289,7 +289,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.7,
                 'reviews' => 1789,
                 'price' => 2199,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Historical',
             ],
             [
@@ -300,7 +300,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.8,
                 'reviews' => 3456,
                 'price' => 3199,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Tropical',
             ],
             [
@@ -311,7 +311,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.6,
                 'reviews' => 1678,
                 'price' => 1799,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Cultural',
             ],
             [
@@ -322,7 +322,7 @@ class DestinationSeeder extends Seeder
                 'rating' => 4.6,
                 'reviews' => 3123,
                 'price' => 2499,
-                'is_featured' => false,
+                'is_featured' => true,
                 'category' => 'Urban',
             ],
             [
