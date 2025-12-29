@@ -28,7 +28,7 @@ return new class extends Migration
             $table->unsignedInteger('reviews')->default(0);
             $table->unsignedInteger('price')->default(0); // This stays as int , easier for us, then we convert to $x.xxx
             $table->boolean('is_featured')->default(true);
-            $table-> string('category')->nullable();
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }

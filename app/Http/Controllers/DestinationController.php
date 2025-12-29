@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Destination;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -29,11 +30,12 @@ class DestinationController extends Controller
 
         //Get Auth User
         $user = User::where('id',Auth::id())->first();
+        //Get all the Destinations
+        $destination = Destination::all();
         //Get the exchange rates from config file
         $exchangeRates = config('exchange.rates');
         $baseCurrency = 'USD';
         $totalInUsd = 0;
-
 
         /********Testing************
            dd($wallets);
@@ -58,7 +60,8 @@ class DestinationController extends Controller
         return Inertia::render('Tour/index', [
             'user' => $user ? $user->toArray() : null,
             'total_usd' => round($totalInUsd, 2),
-            'base_currency' => $baseCurrency
+            'base_currency' => $baseCurrency,
+            'destinations' => $destination
         ]);
     }
 }
