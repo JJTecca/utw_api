@@ -17,9 +17,9 @@
  * 11. This file is #1 prior and needs the most frontend attention
  ****************************************************************************************************/
 /****************************************************************************************************
- * 1. Displays the user header information fetched with backend data (not yet implemented)
+ * 1. Displays the user header information fetched with backend data
  * 2. Shows featured destionations for the user to scroll down and get a view, also popular destinations
- * 3. Provides a booking system using his wallet details (not yet implemented)
+ * 3. Provides a booking system using his wallet details
  ****************************************************************************************************/
 import React, { useState , PropsWithChildren } from 'react';
 import {
@@ -48,13 +48,21 @@ import {
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
 
+/**************************************************************************
+ *                          INTERFACES
+ * 1. User
+ * 2. BaseCurrency 
+ * 3. Destination
+ * 4. TourProps -> used to pass all the data into 1 interface
+ **************************************************************************/
+
 interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    country: string;
-    gender: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  country: string;
+  gender: string;
 }
 
 interface BaseCurrency {
