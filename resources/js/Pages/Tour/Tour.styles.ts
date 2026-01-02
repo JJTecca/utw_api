@@ -265,6 +265,48 @@ export const styles = {
     textAlign: 'center',
     color: 'white',
   },
+
+  profileCard : {
+    background: 'rgba(255, 255, 255, 0.08)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '24px',
+    padding: '1.5rem 2rem',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+    position: 'relative',
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '4px',
+      background: 'linear-gradient(90deg, #667eea, #764ba2, #667eea)',
+    }
+  },
+
+  avatarBox: {
+    width: 70,
+    height: 70,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    border: '3px solid rgba(255, 255, 255, 0.3)',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+  },
+
+  moneySpendingBox: {
+    width: 32,
+    height: 32,
+    borderRadius: '50%',
+    background: 'linear-gradient(135deg, #16266fff, #ece8efff)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontWeight: 700,
+    fontSize: '0.9rem',
+  }
 };
 
 export default styles;

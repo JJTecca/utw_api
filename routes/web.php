@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WalletController;
+use App\Models\Wallet;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,13 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    {/********************************Tour Routes******************************** */}
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard/index');
     })->name('dashboard');
 
     Route::get('/dashboard/worldtour', [DestinationController::class, 'index'])->name('tour.view');
 
-    Route::patch('/dashboard/worldtour/payment-process', [WalletController::class, 'payment'])->name('tour.payment');
+    Route::patch('/dashboard/worldtour/booking-payment', [DestinationController::class, 'bookDestination'])->name('destination.book');
+    {/**************************************************************************** */}
 
     Route::get('/get-encrypted-user-id', function (Request $request) {
         return response()->json([
@@ -50,9 +53,13 @@ Route::middleware('auth')->group(function () {
         ]);
     });
     
-    {/* New route */}
+    {/********************************Profile Routes****************************** */}
     Route::get('/profileMenu', [ProfileController::class, 'index'])->name('profile');
 
+    Route::patch('/profileMenu/payment-process', [WalletController::class, 'payment'])->name('profile.payment');
+    {/**************************************************************************** */}
+
+    {/********************************Dashboard Routes****************************** */}
     Route::post('/dashboard/bookings', [BookingController::class, 'storeBooking'])->name('dashboard.bookings');
 
     Route::get('/dashboard/view-bookings/destination', [BookingController::class, 'index'])->name('dashboard.view');
@@ -62,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');
     })->name('dashboard.experiences');
+    {/*************************************************************************** */}
 
 });
 
