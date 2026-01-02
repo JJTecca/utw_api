@@ -33,6 +33,24 @@ import {
   Chip,
   IconButton,
   Rating,
+  Modal,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Alert,
+  CircularProgress,
+  Avatar,
+  Grid,
+  Divider,
 } from '@mui/material';
 import {
   Flight as FlightIcon,
@@ -45,6 +63,9 @@ import {
   TrendingUp as TrendingUpIcon,
   Groups as GroupsIcon,
   EmojiEvents as TrophyIcon,
+  CreditCard as CreditCardIcon,
+  AccountBalanceWallet as WalletIcon,
+  CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
 
@@ -82,11 +103,29 @@ interface Destination {
   category?: string
 }
 
+interface Wallet {
+  id: number;
+  user_id: number,
+  currency: string,
+  value: number,
+  created_at?: string,
+  updated_at?: string
+}
+
+interface BookingFormData {
+  id: number;
+  destination_title: string;
+  price: number;
+  selected_wallet_id: number | null;
+  notes?: string;
+}
+
 interface TourProps {
   user : User;
   total_usd : number;
   base_currency : BaseCurrency;
   destinations : Destination[];
+  wallets : Wallet[];
 }
 
 // Stats data : Hardcoded data
@@ -106,13 +145,127 @@ const userData = {
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
 };
 
-export default function TravelHomepage({children, user, total_usd, base_currency, destinations} : PropsWithChildren<TourProps>) {
+export default function TravelHomepage({children, user, total_usd, base_currency, destinations, wallets} : PropsWithChildren<TourProps>) {
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [bookingForm, setBookingForm] = useState<BookingFormData>({
+    id: 0,
+    destination_title: '',
+    price: 0,
+    selected_wallet_id: null,
+    notes: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev =>
       prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
     );
+  };
+
+  const handleOpenBookingModal = (destination: Destination) => {
+    setSelectedDestination(destination);
+    setBookingForm({
+      id: destination.id,
+      destination_title: destination.title,
+      price: destination.price,
+      selected_wallet_id: wallets.length > 0 ? wallets[0].id : null,
+      notes: ''
+    });
+    setBookingModalOpen(true);
+    setError(null);
+    setBookingSuccess(false);
+  };
+
+  const handleCloseBookingModal = () => {
+    setBookingModalOpen(false);
+    setSelectedDestination(null);
+    setBookingForm({
+      id: 0,
+      destination_title: '',
+      price: 0,
+      selected_wallet_id: null,
+      notes: ''
+    });
+    setError(null);
+    setBookingSuccess(false);
+  };
+
+  const handleFormChange = (field: keyof BookingFormData, value: any) => {
+    setBookingForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Update the handleBookingSubmit function with these changes:
+  const handleBookingSubmit = async () => {
+    if (!selectedDestination || !bookingForm.selected_wallet_id) {
+      setError('Please select a wallet to proceed with payment.');
+      return;
+    }
+
+    const selectedWallet = wallets.find(w => w.id === bookingForm.selected_wallet_id);
+    if (!selectedWallet) {
+      setError('Selected wallet not found.');
+      return;
+    }
+
+    if (selectedWallet.value < selectedDestination.price) {
+      setError(`Insufficient funds in selected wallet. You need $${selectedDestination.price - selectedWallet.value} more.`);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const payload = {
+        destination_id: selectedDestination.id,
+        wallet_id: selectedWallet.id,
+        value: selectedDestination.price,
+        currency: selectedWallet.currency,
+        notes: bookingForm.notes || ''
+      };
+
+      console.log('Sending payload:', payload); // For debugging
+
+      const response = await fetch('/dashboard/worldtour/booking-payment', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify(payload),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || `Booking failed with status: ${response.status}`);
+      }
+
+      // Booking successful
+      setBookingSuccess(true);
+      
+      setTimeout(() => {
+        handleCloseBookingModal();
+        window.location.reload();
+      }, 2000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Booking failed. Please try again.';
+      setError(errorMessage);
+      console.error('Booking error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Filter destinations for featured and popular sections
@@ -125,7 +278,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
     dest.rating >= 4.7 && dest.reviews > 1000
   ).slice(0, 10); // Limit to 10 popular destinations
 
-  const DestinationCard = ({ destination }: { destination: Destination }) => (
+  const DestinationCard = ({ destination, wallet }: { destination: Destination, wallet: Wallet }) => (
     <Card sx={styles.destinationCardStyles}>
       <Box sx={styles.cardImageStyles}>
         <CardMedia
@@ -186,6 +339,21 @@ export default function TravelHomepage({children, user, total_usd, base_currency
           </Box>
           <Typography sx={styles.priceStyles}>${destination.price}</Typography>
         </Box>
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={() => handleOpenBookingModal(destination)}
+          sx={{
+            marginTop: 2,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+            }
+          }}
+        >
+          <CreditCardIcon sx={{ mr: 1 }} />
+          Book Now
+        </Button>
       </CardContent>
     </Card>
   );
@@ -239,11 +407,15 @@ export default function TravelHomepage({children, user, total_usd, base_currency
           </Box>
           <Button
             variant="contained"
-            endIcon={<ArrowForwardIcon />}
+            endIcon={<CreditCardIcon />}
+            onClick={() => handleOpenBookingModal(destination)}
             sx={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               borderRadius: '50px',
               padding: '0.5rem 1.5rem',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+              }
             }}
           >
             Book Now
@@ -253,8 +425,320 @@ export default function TravelHomepage({children, user, total_usd, base_currency
     </Card>
   );
 
+  // Booking Modal Component
+  const BookingModal = () => (
+    <Dialog
+      open={bookingModalOpen}
+      onClose={handleCloseBookingModal}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          background: 'linear-gradient(135deg, #1a1f37 0%, #0f1329 100%)',
+          color: 'white',
+          borderRadius: '24px',
+          overflow: 'hidden'
+        }
+      }}
+    >
+      {bookingSuccess ? (
+        <>
+          <DialogTitle sx={{ textAlign: 'center', py: 4 }}>
+            <CheckCircleIcon sx={{ fontSize: 80, color: '#4ade80', mb: 2 }} />
+            <Typography variant="h4" fontWeight={700}>
+              Booking Successful!
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 1, opacity: 0.8 }}>
+              Your trip to {selectedDestination?.title} has been confirmed.
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ textAlign: 'center', py: 2 }}>
+              <CircularProgress sx={{ color: '#4ade80' }} />
+              <Typography variant="body2" sx={{ mt: 2, opacity: 0.7 }}>
+                Redirecting you back...
+              </Typography>
+            </Box>
+          </DialogContent>
+        </>
+      ) : (
+        <>
+          <DialogTitle sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)', pb: 3 }}>
+            <Typography variant="h4" fontWeight={700}>
+              <FlightIcon sx={{ mr: 2, verticalAlign: 'middle' }} />
+              Book Your Adventure
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 1, opacity: 0.8 }}>
+              Complete your booking for {selectedDestination?.title}
+            </Typography>
+          </DialogTitle>
+
+          <DialogContent sx={{ py: 4 }}>
+            {error && (
+              <Alert severity="error" sx={{ mb: 3, borderRadius: '12px' }}>
+                {error}
+              </Alert>
+            )}
+
+            {/* Destination Summary */}
+            <Card sx={{ 
+              background: 'rgba(21, 131, 194, 0.05)', 
+              border: '1px solid rgba(25, 211, 133, 0.1)',
+              mb: 4,
+              borderRadius: '16px'
+            }}>
+              <CardContent>
+                <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12} md={3}>
+                    <Box sx={{ 
+                      height: '150px', 
+                      borderRadius: '12px',
+                      overflow: 'hidden'
+                    }}>
+                      <img 
+                        src={selectedDestination?.image} 
+                        alt={selectedDestination?.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={9}>
+                    <Typography variant="h5" fontWeight={700} sx={{color:'#30bc0cff' }}>
+                      {selectedDestination?.title}
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ opacity: 0.8, mb: 1, color:'#1dbaccff'  }}>
+                      <LocationIcon fontSize="small" sx={{ mr: 0.5, color:'#1dbaccff'  }} />
+                      {selectedDestination?.subtitle}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2, opacity: 0.9, color:'#1dbaccff' }}>
+                      {selectedDestination?.description}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <StarIcon sx={{ color: '#fbbf24', mr: 0.5 }} />
+                        <Typography variant="body2" sx={{color:'#30bc0cff' }}>
+                          {selectedDestination?.rating} ({selectedDestination?.reviews} reviews)
+                        </Typography>
+                      </Box>
+                      <Chip 
+                        label={selectedDestination?.category} 
+                        size="small"
+                        sx={{ background: 'rgba(102, 126, 234, 0.2)', color: '#667eea' }}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+
+            {/* Price Display */}
+            <Box sx={{ 
+              background: 'rgba(102, 126, 234, 0.1)', 
+              borderRadius: '16px',
+              p: 3,
+              mb: 4,
+              border: '1px solid rgba(102, 126, 234, 0.3)'
+            }}>
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+                Payment Details
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box>
+                  <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                    Trip Price
+                  </Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.7 }}>
+                    All taxes and fees included
+                  </Typography>
+                </Box>
+                <Typography variant="h3" fontWeight={700} color="#667eea">
+                  ${selectedDestination?.price}
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Wallet Selection */}
+            <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
+              <WalletIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+              Select Payment Wallet
+            </Typography>
+            
+            {wallets.length === 0 ? (
+              <Alert severity="warning" sx={{ mb: 3, borderRadius: '12px' }}>
+                No wallets available. Please add funds to your wallet first.
+              </Alert>
+            ) : (
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <RadioGroup
+                  value={bookingForm.selected_wallet_id}
+                  onChange={(e) => handleFormChange('selected_wallet_id', parseInt(e.target.value))}
+                >
+                  {wallets.map((wallet) => (
+                    <Card 
+                      key={wallet.id}
+                      sx={{ 
+                        mb: 2,
+                        background: bookingForm.selected_wallet_id === wallet.id 
+                          ? 'rgba(102, 126, 234, 0.2)' 
+                          : 'rgba(255,255,255,0.05)',
+                        border: bookingForm.selected_wallet_id === wallet.id 
+                          ? '2px solid #667eea' 
+                          : '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '12px',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          background: 'rgba(255,255,255,0.08)',
+                          borderColor: 'rgba(102, 126, 234, 0.5)'
+                        }
+                      }}
+                      onClick={() => handleFormChange('selected_wallet_id', wallet.id)}
+                    >
+                      <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Radio 
+                            value={wallet.id} 
+                            checked={bookingForm.selected_wallet_id === wallet.id}
+                            sx={{ mr: 2 }}
+                          />
+                          <Box>
+                            <Typography variant="body1" fontWeight={600}>
+                              {wallet.currency} Wallet
+                            </Typography>
+                            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                              Available: {wallet.value.toLocaleString()} {wallet.currency}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ textAlign: 'right' }}>
+                          <Typography variant="h6" fontWeight={700}>
+                            {wallet.value.toLocaleString()} {wallet.currency}
+                          </Typography>
+                          <Typography 
+                            variant="caption" 
+                            sx={{ 
+                              color: wallet.value >= (selectedDestination?.price || 0) 
+                                ? '#4ade80' 
+                                : '#ef4444',
+                              fontWeight: 600
+                            }}
+                          >
+                            {wallet.value >= (selectedDestination?.price || 0) 
+                              ? 'Sufficient funds' 
+                              : `Need ${(selectedDestination?.price || 0) - wallet.value} more`}
+                          </Typography>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            )}
+
+            {/* Additional Notes */}
+            <TextField
+              fullWidth
+              label="Special Requests or Notes (Optional)"
+              multiline
+              rows={3}
+              value={bookingForm.notes}
+              onChange={(e) => handleFormChange('notes', e.target.value)}
+              sx={{
+                mb: 3,
+                '& .MuiOutlinedInput-root': {
+                  background: 'rgba(255,255,255,0.05)',
+                  borderRadius: '12px',
+                  '& fieldset': {
+                    borderColor: 'rgba(255,255,255,0.2)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'rgba(102, 126, 234, 0.5)',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#667eea',
+                  },
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'rgba(255,255,255,0.7)',
+                },
+                '& .MuiInputBase-input': {
+                  color: 'white',
+                }
+              }}
+            />
+
+            {/* Terms and Conditions */}
+            <Box sx={{ 
+              background: 'rgba(255,255,255,0.03)', 
+              borderRadius: '12px',
+              p: 2,
+              mb: 3
+            }}>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                By proceeding with this booking, you agree to our Terms & Conditions and Privacy Policy. 
+                Your payment will be securely processed through your selected wallet.
+              </Typography>
+            </Box>
+          </DialogContent>
+
+          <DialogActions sx={{ 
+            borderTop: '1px solid rgba(255,255,255,0.1)', 
+            py: 3,
+            px: 4
+          }}>
+            <Button
+              onClick={handleCloseBookingModal}
+              disabled={loading}
+              sx={{
+                color: 'rgba(255,255,255,0.8)',
+                '&:hover': {
+                  color: 'white',
+                  background: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleBookingSubmit}
+              disabled={loading || !bookingForm.selected_wallet_id || wallets.length === 0}
+              sx={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                borderRadius: '12px',
+                px: 4,
+                py: 1,
+                fontWeight: 600,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                },
+                '&:disabled': {
+                  background: 'rgba(255,255,255,0.1)',
+                  color: 'rgba(255,255,255,0.4)'
+                }
+              }}
+            >
+              {loading ? (
+                <>
+                  <CircularProgress size={20} sx={{ color: 'white', mr: 1 }} />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCardIcon sx={{ mr: 1 }} />
+                  Process Payment (${selectedDestination?.price})
+                </>
+              )}
+            </Button>
+          </DialogActions>
+        </>
+      )}
+    </Dialog>
+  );
+
   return (
     <Box sx={styles.containerStyles}>
+      <BookingModal />
 
       {/* Hero Section */}
       <Box sx={styles.heroStyles}>
@@ -278,38 +762,13 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         zIndex: 20,
       }}>
       {/* Glassmorphism Card */}
-        <Box sx={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '24px',
-            padding: '1.5rem 2rem',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '4px',
-            background: 'linear-gradient(90deg, #667eea, #764ba2, #667eea)',
-            }
-        }}>
+        <Box sx={styles.profileCard}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Left Side - User Info */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 {/* Avatar with Status Indicator */}
                 <Box sx={{ position: 'relative' }}>
-                <Box sx={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    border: '3px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-                }}>
+                <Box sx={styles.avatarBox}>
                     <img 
                     src={userData.avatar} 
                     alt={user.lastName}
@@ -357,18 +816,17 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                     border: '1px solid rgba(251, 191, 36, 0.3)',
                 }}>
                     <Box sx={{
-                    width: 8,
-                    height: 8,
-                    background: '#fbbf24',
-                    borderRadius: '50%',
-                    animation: 'pulse 2s infinite'
+                      width: 8,
+                      height: 8,
+                      background: '#fbbf24',
+                      borderRadius: '50%',
                     }} />
                     <Typography sx={{ 
-                    color: '#fbbf24', 
-                    fontSize: '0.85rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.5px'
-                    }}>
+                      color: '#fbbf24', 
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.5px'
+                      }}>
                     {userData.status}
                     </Typography>
                 </Box>
@@ -388,20 +846,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Box sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #16266fff, #ece8efff)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 700,
-                    fontSize: '0.9rem',
-                    }}>
-                    💵
-                    </Box>
+                    <Box sx={styles.moneySpendingBox}>💵</Box>
                     <Typography sx={{ 
                     color: 'white', 
                     fontWeight: 700,
@@ -581,7 +1026,7 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         {popularDestinations.length > 0 ? (
           <Box sx={styles.gridContainerStyles}>
             {popularDestinations.map(destination => (
-              <DestinationCard key={destination.id} destination={destination} />
+              <DestinationCard key={destination.id} destination={destination} wallet={wallets[0]}/>
             ))}
           </Box>
         ) : (

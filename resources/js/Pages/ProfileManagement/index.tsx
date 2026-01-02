@@ -169,7 +169,7 @@ const handlePayment = async (wallet: Wallet, amount: number, currency: string) =
         };
 
         // Using fetch with PATCH
-        const response = await fetch('/dashboard/worldtour/payment-process', {
+        const response = await fetch('/profileMenu/payment-process', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
