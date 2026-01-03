@@ -136,7 +136,6 @@ const stats = [
   { number: '10+', label: 'Awards Won', icon: <TrophyIcon /> },
 ];
 
-/* TODO : Replace with wallet information from backend */
 /* Use Instead of Points the wallet money */
 const userData = {
     name: 'John Traveler',
