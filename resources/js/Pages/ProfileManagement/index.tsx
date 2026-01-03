@@ -100,6 +100,9 @@ import { useState } from 'react';
 import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
 import {investmentOpportunities, quickDepositOptions, currencySymbols, supportedCurrencies, currencyNames} from './constants';
+import { text } from 'stream/consumers';
+import { InfoModal } from '@/Components/InfoModal/MyModal';
+import Modal from '@/Components/Modal';
 
 /**************************************************************************
  *                          INTERFACES
@@ -425,6 +428,8 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     const [verificationStatus, setVerificationStatus] = useState("unverified");
     const [showSuccess, setShowSuccess] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    const [modalOpen, setModalOpen] = useState(false);
     
     // Wallet funding states
     const [fundingOpen, setFundingOpen] = useState(false);
@@ -475,6 +480,10 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
         if (isMobile) {
             setMobileOpen(false); // Close mobile drawer when opening popup
         }
+    };
+
+    const handleOpenInfo = () => {
+        setModalOpen(!modalOpen);
     };
 
     const handleCloseFunding = () => {
@@ -576,7 +585,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
           icon: <Help />,
           onClick: () => console.log('Help clicked')
       },
-  ];
+    ];
 
     const detailItems = [
         { 
@@ -600,9 +609,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     ];
 
     const settingItems = [
-        { text: 'Support requests', icon: <Help /> },
-        { text: 'Referral program', icon: <Share /> },
-        { text: 'Flight documents', icon: <Assignment /> },
+        { text: 'Support requests', icon: <Help />, onClick: () => handleOpenInfo()},
+        { text: 'Referral program', icon: <Share />, onClick: () => console.log('Pilot Referral clicked')},
+        { text: 'Flight documents', icon: <Assignment />, onClick: () => console.log('Flight Documents clicked')},
     ];
 
     const drawer = (
@@ -619,7 +628,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
             />
         </Box>
 
-      <List sx={styles.navList}>
+        <List sx={styles.navList}>
         {navigationItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={styles.navListItem}>
             <ListItemButton 
@@ -1215,8 +1224,10 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
   );
 
   return (
+    
     <Box sx={styles.rootContainer}>
       <CssBaseline />
+      {modalOpen && <InfoModal onClose={()=>setModalOpen(false)}/>}
       
       {/* App Bar for Mobile */}
       {isMobile && (
@@ -1261,6 +1272,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
           marginTop: isMobile ? '56px' : 0,
         }}
       >
+        
         <Container maxWidth="lg">
           <Grid container spacing={3}>
             {/* Header */}
@@ -1375,7 +1387,8 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                   <List disablePadding>
                     {settingItems.map((item) => (
                       <ListItem key={item.text} disablePadding sx={{ marginBottom: 0.5 }}>
-                        <ListItemButton sx={styles.listItemButton}>
+                        <ListItemButton sx={styles.listItemButton}
+                          onClick={item.onClick}>
                           <ListItemIcon sx={styles.navListItemIcon}>
                             {item.icon}
                           </ListItemIcon>
