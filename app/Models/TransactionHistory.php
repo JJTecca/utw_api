@@ -20,4 +20,11 @@ class TransactionHistory extends Model
     protected $casts = [
         'amount' => 'decimal:2',
     ];
+
+    /*****************************************************************************
+     * Laravel convention : Singular function name, plural is highly discouraged
+     /*****************************************************************************/
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

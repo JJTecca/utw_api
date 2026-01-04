@@ -15,9 +15,9 @@ return new class extends Migration
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->string('description'); // e.g., "Flight Booking - Paris"
-        $table->decimal('amount', 10, 2); // e.g., 1200.00
+        $table->unsignedBigInteger('amount')->default(0);
         $table->string('status')->default('Completed'); 
-        $table->timestamps(); // Handles 'date' automatically via created_at
+        $table->timestamps();
     });
 }
 
