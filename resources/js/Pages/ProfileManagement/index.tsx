@@ -104,6 +104,7 @@ import { text } from 'stream/consumers';
 import { InfoModal } from '@/Components/InfoModal/MyModal';
 import Modal from '@/Components/Modal';
 
+
 /**************************************************************************
  *                          INTERFACES
  * 1. ProfileItemProps
@@ -1223,6 +1224,19 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     </Snackbar>
   );
 
+  const goFB=() => {
+    window.open("https://www.facebook.com/share/17kdweS1hD/", "_blank");
+  }
+
+  const goIG=() => {
+    window.open("https://www.instagram.com/utw2026?igsh=Y3o5emJ6bXQ5ODRk", "_blank");
+  }
+
+  const goTT=() => {
+    window.open("https://www.tiktok.com/@utw042?is_from_webapp=1&sender_device=pc", "_blank");
+  }
+  
+
   return (
     
     <Box sx={styles.rootContainer}>
@@ -1335,6 +1349,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                       Share Flight Experience
                     </Typography>
                     <Button
+                      onClick={goFB}
                       variant="contained"
                       startIcon={<Facebook />}
                       fullWidth
@@ -1346,6 +1361,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                       Share on Facebook
                     </Button>
                     <Button
+                      onClick={goIG}
                       variant="contained"
                       startIcon={< InstagramOutlined />}
                       fullWidth
@@ -1357,6 +1373,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                       Share on Instagram
                     </Button>
                     <Button
+                      onClick={goTT}
                       variant="contained"
                       startIcon={<TikTokOutlined />}
                       fullWidth
