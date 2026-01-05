@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionHistoryController;
 use App\Http\Controllers\WalletController;
 use App\Models\Wallet;
 use Illuminate\Http\Client\Request;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/worldtour', [DestinationController::class, 'index'])->name('tour.view');
 
     Route::patch('/dashboard/worldtour/booking-payment', [DestinationController::class, 'bookDestination'])->name('destination.book');
+
+    Route::post('/dashboard/worldtour/transaction-histories', [TransactionHistoryController::class, 'store'])->name('transaction.store');
     {/**************************************************************************** */}
 
     Route::get('/get-encrypted-user-id', function (Request $request) {

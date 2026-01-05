@@ -222,7 +222,8 @@ export default function TravelHomepage({children, user, total_usd, base_currency
     setError(null);
 
     try {
-      const payload = {
+      // First, process the booking payment
+      const bookingPayload = {
         destination_id: selectedDestination.id,
         wallet_id: selectedWallet.id,
         value: selectedDestination.price,
@@ -230,9 +231,9 @@ export default function TravelHomepage({children, user, total_usd, base_currency
         notes: bookingForm.notes || ''
       };
 
-      console.log('Sending payload:', payload); // For debugging
+      console.log('Sending booking payload:', bookingPayload);
 
-      const response = await fetch('/dashboard/worldtour/booking-payment', {
+      const bookingResponse = await fetch('/dashboard/worldtour/booking-payment', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -240,17 +241,58 @@ export default function TravelHomepage({children, user, total_usd, base_currency
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(bookingPayload),
         credentials: 'include'
       });
 
-      const data = await response.json();
+      const bookingData = await bookingResponse.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || `Booking failed with status: ${response.status}`);
+      if (!bookingResponse.ok) {
+        throw new Error(bookingData.message || `Booking failed with status: ${bookingResponse.status}`);
       }
 
-      // Booking successful
+      // If booking is successful, create transaction history
+      try {
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null;
+        
+        if (!csrfMeta || !csrfMeta.content) {
+          console.warn("CSRF token meta tag missing or empty");
+          // Continue with booking success even if transaction history fails
+        } else {
+          const transactionPayload = {
+            user_id: user.id,
+            description: `Booking payment for ${selectedDestination.title}`,
+            amount: selectedDestination.price,
+            status: 'Approved',
+            destination_name: selectedDestination.title,
+            wallet_currency: selectedWallet.currency
+          };
+
+          console.log('Sending transaction payload:', transactionPayload);
+
+          const transactionResponse = await fetch('/dashboard/worldtour/transaction-histories', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': csrfMeta.content
+            },
+            body: JSON.stringify(transactionPayload),
+            credentials: 'include'
+          });
+
+          if (!transactionResponse.ok) {
+            console.warn('Transaction history creation failed, but booking was successful');
+          } else {
+            const transactionData = await transactionResponse.json();
+            console.log('Transaction history created:', transactionData);
+          }
+        }
+      } catch (transactionError) {
+        console.warn('Error creating transaction history:', transactionError);
+      }
+
+      //Booking successful
       setBookingSuccess(true);
       
       setTimeout(() => {
