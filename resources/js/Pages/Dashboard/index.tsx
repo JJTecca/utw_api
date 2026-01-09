@@ -81,7 +81,6 @@ export default function Dashboard() {
   const [passengers, setPassengers] = useState(1);
 
   {/*We have to add as much diverse images we can */}
-  {/* TODO: Find stretched */}
   const heroImages = [
     '/Images/turkish-menu.jpg',
     '/Images/edit-profile.jpg',
@@ -288,7 +287,6 @@ export default function Dashboard() {
              * Avatar Role : Open the Menu with an "accordion" UI
              * All the options shall be listed in the Menu UI 
              * It shall list the profile of the User with user-options
-             * TODO : Functionalities will be implemented 
              ***************************************************/ }
             <Button
               sx={styles.accountButton}
@@ -351,7 +349,6 @@ export default function Dashboard() {
         <Box sx={{ position: 'relative', width: '100%', height: '100%', minHeight: '400px' }}>
           <AnimatePresence mode="wait" custom={activeIndex}>
             {/* Animated Sections Container */}
-            {/* TODO: Place this in styling files */}
             {activeIndex === 0 && (
               <motion.div
                 key="flight-search"

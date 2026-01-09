@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\TransactionHistory;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -40,6 +41,8 @@ class ProfileController extends Controller
         $preparedWallets = [];
         $totalInUsd = 0;
 
+        // Retrieve the transaction of the current user
+        $transaction_history = TransactionHistory::where('user_id',Auth::id())->get();
 
         /********Testing************
            dd($wallets);
@@ -77,6 +80,7 @@ class ProfileController extends Controller
             'users' => $user ? $user->toArray() : null,
             'total_usd' => round($totalInUsd, 2),
             'base_currency' => $baseCurrency,
+            'transaction_history' => $transaction_history ? $transaction_history->toArray() : []
         ]);
     }
 

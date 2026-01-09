@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         /***********************************************
-         * 1. ONLY CAMEL CASE USAGE
+         * 1. ONLY SNAKE CASE USAGE
          * 2. Check with php artisan migrate:refresh + php artisan migrate 
          * 3. Ensure ALL the ERD functions are here
          * 4. Use string as much instead of text

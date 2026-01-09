@@ -100,10 +100,10 @@ import { useState } from 'react';
 import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
 import {investmentOpportunities, quickDepositOptions, currencySymbols, supportedCurrencies, currencyNames} from './constants';
-import { text } from 'stream/consumers';
 import { InfoModal } from '@/Components/InfoModal/MyModal';
 import Modal from '@/Components/Modal';
 import { DocumentsModal } from '@/Components/FlightDocuments/DocumentsModal';
+
 
 /**************************************************************************
  *                          INTERFACES
@@ -131,6 +131,13 @@ interface Wallet {
     exchange_rate?: number;
 }
 
+interface TransactionHistory {
+  id: number,
+  description: string,
+  amount: number,
+  status: string
+}
+
 interface User {
     id: number;
     firstName: string;
@@ -145,6 +152,7 @@ interface ProfileManagementProps {
     wallets: Wallet[];
     total_usd: number;
     base_currency: string;
+    transaction_history: TransactionHistory[];
 }
 
 const handleSelectedFiles = async(files:File[]) => {
@@ -173,7 +181,7 @@ const handlePayment = async (wallet: Wallet, amount: number, currency: string) =
         };
 
         // Using fetch with PATCH
-        const response = await fetch('/dashboard/worldtour/payment-process', {
+        const response = await fetch('/profileMenu/payment-process', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -423,7 +431,7 @@ function InvestmentOpportunityCard({ opportunity }: { opportunity: any }) {
   );
 }
 
-function ProfileManLayoutContent({ children, users, wallets, total_usd, base_currency }: PropsWithChildren<ProfileManagementProps>) {
+function ProfileManLayoutContent({ children, users, wallets, total_usd, base_currency, transaction_history }: PropsWithChildren<ProfileManagementProps>) {
     const isMobile = useMediaQuery('(max-width: 899px)');
     const [verificationOpen, setVerificationOpen] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState("unverified");
@@ -1101,64 +1109,83 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
           </Box>
         )}
         
-        {fundingTab === 2 && (
-          <Box sx={{ padding: 3 }}>
-            <Typography variant="h5" sx={{ color: '#f1f5f9', mb: 3 }}>
-              Payment History
-            </Typography>
-            
-            <Box sx={{ 
-              backgroundColor: 'rgba(30, 41, 59, 0.5)', 
-              borderRadius: 2, 
-              padding: 2,
-              border: '1px solid #334155'
-            }}>
-              {[
-                { id: 1, date: 'Dec 15, 2025', description: 'Flight Booking - Paris', amount: '+$1,200.00', status: 'Completed' },
-                { id: 2, date: 'Dec 10, 2025', description: 'Wallet Top-up', amount: '+$500.00', status: 'Completed' },
-                { id: 3, date: 'Dec 05, 2025', description: 'Investment - Tesla', amount: '+$2,500.00', status: 'Pending' },
-                { id: 4, date: 'Nov 28, 2025', description: 'Flight Upgrade', amount: '+$300.00', status: 'Completed' },
-                { id: 5, date: 'Nov 20, 2025', description: 'Wallet Top-up', amount: '+$1,000.00', status: 'Completed' },
-              ].map((transaction) => (
-                <Box key={transaction.id} sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  padding: 1.5,
-                  borderBottom: '1px solid #334155',
-                  '&:last-child': { borderBottom: 'none' }
-                }}>
-                  <Box>
-                    <Typography variant="body1" sx={{ color: '#f1f5f9' }}>
-                      {transaction.description}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: '#94a3b8' }}>
-                      {transaction.date}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ textAlign: 'right' }}>
-                    <Typography variant="body1" sx={{ 
-                      color: transaction.amount.startsWith('+') ? '#10b981' : '#ef4444',
-                      fontWeight: 600
+      {fundingTab === 2 && (
+        <Box sx={{ padding: 3 }}>
+          <Typography variant="h5" sx={{ color: '#f1f5f9', mb: 3 }}>
+            Payment History
+          </Typography>
+
+          <Box sx={{ 
+            backgroundColor: 'rgba(30, 41, 59, 0.5)', 
+            borderRadius: 2, 
+            padding: 2,
+            border: '1px solid #334155'
+          }}>
+            {transaction_history && transaction_history.length > 0 ? (
+              <Box>
+                {transaction_history.map((transaction: TransactionHistory) => {
+                  // Determine if it's a positive or negative amount
+                  const isPositive = transaction.amount >= 0;
+                  const amountDisplay = `${isPositive ? '+' : '-'}${currencySymbols[base_currency] || '$'}${Math.abs(transaction.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                  
+                  return (
+                    <Box key={transaction.id} sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      padding: 1.5,
+                      borderBottom: '1px solid #334155',
+                      '&:last-child': { borderBottom: 'none' }
                     }}>
-                      {currencySymbols[base_currency] || '$'}{transaction.amount.replace('$', '')}
-                    </Typography>
-                    <Chip 
-                      label={transaction.status} 
-                      size="small" 
-                      sx={{ 
-                        backgroundColor: transaction.status === 'Completed' ? '#10b98120' : '#f59e0b20',
-                        color: transaction.status === 'Completed' ? '#10b981' : '#f59e0b',
-                        height: 20,
-                        fontSize: '0.7rem'
-                      }}
-                    />
-                  </Box>
-                </Box>
-              ))}
-            </Box>
+                      <Box>
+                        <Typography variant="body1" sx={{ color: '#f1f5f9' }}>
+                          {transaction.description}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        <Typography variant="body1" sx={{ 
+                          color: isPositive ? '#10b981' : '#ef4444',
+                          fontWeight: 600
+                        }}>
+                          {amountDisplay}
+                        </Typography>
+                        <Chip 
+                          label={transaction.status} 
+                          size="small" 
+                          sx={{ 
+                            backgroundColor: transaction.status === 'Approved' || transaction.status === 'Completed' 
+                              ? '#10b98120' 
+                              : transaction.status === 'Pending' 
+                              ? '#f59e0b20' 
+                              : '#ef444420',
+                            color: transaction.status === 'Approved' || transaction.status === 'Completed'
+                              ? '#10b981'
+                              : transaction.status === 'Pending'
+                              ? '#f59e0b'
+                              : '#ef4444',
+                            height: 20,
+                            fontSize: '0.7rem'
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            ) : (
+              <Box sx={{ 
+                textAlign: 'center', 
+                padding: 3,
+                color: '#94a3b8'
+              }}>
+                <History sx={{ fontSize: 40, opacity: 0.5, mb: 1 }} />
+                <Typography>No transaction history available</Typography>
+              </Box>
+            )}
           </Box>
-        )}
+        </Box>
+      )}  
+      
       </DialogContent>
       
       {fundingTab === 0 && (
@@ -1342,7 +1369,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
             <Grid item xs={12} md={6}>
                 <Card sx={styles.card}>
-                    <FundsProgressCircle wallets={userWallets} users={users} total_usd={total_usd} base_currency={base_currency} />
+                    <FundsProgressCircle wallets={userWallets} users={users} total_usd={total_usd} base_currency={base_currency} transaction_history={transaction_history} />
                 </Card>
             </Grid>
 
@@ -1545,9 +1572,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 }
 
 // Main export
-export default function ProfileManLayout({ children, users, wallets, total_usd, base_currency }: PropsWithChildren<ProfileManagementProps>) {
+export default function ProfileManLayout({ children, users, wallets, total_usd, base_currency, transaction_history }: PropsWithChildren<ProfileManagementProps>) {
   return (
-    <ProfileManLayoutContent users={users} wallets={wallets} total_usd={total_usd} base_currency={base_currency}>
+    <ProfileManLayoutContent users={users} wallets={wallets} total_usd={total_usd} base_currency={base_currency} transaction_history={transaction_history}>
       {children}
     </ProfileManLayoutContent>
   );

@@ -16,7 +16,6 @@ export const styles = {
     textAlign: 'center',  
   },
 
-  //TODO: Refactor styles for aboutDialog content
   aboutDialog: {
     Paper: {
       backgroundColor: '#1e293b',

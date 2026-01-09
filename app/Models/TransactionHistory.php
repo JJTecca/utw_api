@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TransactionHistory extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'description',
+        'amount',
+        'status',
+    ];
+
+    // Cast created_at to a readable format if needed directly
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
+    /*****************************************************************************
+     * Laravel convention : Singular function name, plural is highly discouraged
+     /*****************************************************************************/
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+}
