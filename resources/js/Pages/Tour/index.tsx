@@ -309,12 +309,8 @@ export default function TravelHomepage({children, user, total_usd, base_currency
     }
   };
 
-  // Filter destinations for featured and popular sections
   const featuredDestinations = destinations.filter(dest => dest.is_featured);
   
-  // For popular destinations, you can use a different logic (e.g., based on rating, reviews, or other backend field)
-  // For now, let's assume popular destinations are those with rating >= 4.7 and reviews > 1000
-  // You might want to adjust this logic based on your actual backend data structure
   const popularDestinations = destinations.filter(dest => 
     dest.rating >= 4.7 && dest.reviews > 1000
   ).slice(0, 10); // Limit to 10 popular destinations
