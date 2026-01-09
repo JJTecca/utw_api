@@ -29,7 +29,7 @@ return new class extends Migration
             $table->unsignedInteger('flight_number')->nullable(); 
             $table->dateTime('departure_day_date')->nullable();
             $table->dateTime('arrival_day_date')->nullable();
-            $table->text('description');
+            $table->text('description')->nullable()->default("");
             $table->timestamps();
         });
     }

@@ -71,9 +71,9 @@ class ProfileController extends Controller
                 'converted_currency' => $baseCurrency,
                 'exchange_rate' => $exchangeRates[$originalCurrency] ?? 1
             ];
-        
             $totalInUsd += $convertedValue;
         }
+        // dd($wallets);
         
         return Inertia::render('ProfileManagement/index', [
             'wallets' => $preparedWallets,
