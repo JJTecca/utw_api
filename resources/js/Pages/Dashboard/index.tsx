@@ -2,38 +2,9 @@
  * @format Dashboard Screen (The new one)
  * @author Maior Cristian
  * ********************************************* */ 
-/****************************************************************************************************
- * 1. Import only necessary modules, in the correct logical order.
- * 2. Import screen components from their correct paths. 
- *    - If there's an error, try saving the file (Ctrl+S) or retyping with autocomplete.
- * 3. Import any react-native or gluestack themed necessarry UI 
- * 4. Define props (if any) using camelCase — similar to C's `typedef struct` style.
- * 5. Declare const variables.
- * 6. Add any extra/helper functions.
- * 7. Export the main component function.
- * 8. EVERY index.tsx FILE MUST HAVE A .ts FILE 
- * 9. Every style that has more than 2 props, put it in the .ts file , otherwise let it be here
- * 10. This shall be the ONLY home screen we have, as we need further improvements
- * 11. This file is #1 prior and needs the most frontend attention
- ****************************************************************************************************/
-/****************************************************************************************************
- * 1. Provides an interactive airline dashboard where users can search, select, and book flights.
-* 2. Integrates dynamic UI sections that cycle between flight search, experience selection, and flight status.
- * 3. Connects with backend routes to securely handle bookings, account management, and user authentication.
- ****************************************************************************************************/
-{/**************************************************************************************************
-              File Structure Convention:
-        1. Imports
-        2. React Hooks (useState, useEffect, etc.)
-        3. Type Definitions (Interfaces/Types)
-        4. Static/Constant Data
-        5. Helper/Utility Functions
-        6. Component Return Statement
-        7. Export the main function / import the layout </div>
-    **************************************************************************************************/}
 import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import {
   AppBar,
   Toolbar,
@@ -49,6 +20,10 @@ import {
   Collapse,
   MenuItem,
   Select,
+  Dialog,
+  DialogContent,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
@@ -63,11 +38,35 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from '@inertiajs/inertia-react';
 import { styles } from './Dashboard.styles'; 
 import { motion, AnimatePresence } from "framer-motion";
 
+// Define the props interface for the Dashboard component
+interface DashboardProps {
+  availableCities: string[];
+  departureCities: string[];
+  arrivalCities: string[];
+  bookings: Array<{
+    id: number;
+    destination_city_name: string;
+    destination_airport_id: string;
+    arrival_city_name: string;
+    arrival_airport_id: string;
+    experience_type: string;
+    flight_number: number;
+    departure_day_date: string;
+    arrival_day_date: string;
+    description: string;
+  }>;
+}
+
 export default function Dashboard() {
+  // Get data from backend via Inertia
+  const { props } = usePage();
+  const dashboardProps = props as unknown as DashboardProps;
+  
   const [openFlightStatus, setOpenFlightStatus] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [departureCity, setDepartureCity] = useState('');
@@ -79,8 +78,21 @@ export default function Dashboard() {
   const [currentImage, setCurrentImage] = useState(0);
   const [tripType, setTripType] = useState('round');
   const [passengers, setPassengers] = useState(1);
+  const [availableExperienceTypes, setAvailableExperienceTypes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchProgress, setSearchProgress] = useState(0);
+  const [searchMessage, setSearchMessage] = useState('Searching for flights...');
 
-  {/*We have to add as much diverse images we can */}
+  // Get unique experience types from bookings
+  useEffect(() => {
+    if (dashboardProps.bookings) {
+      const experiences = Array.from(
+        new Set(dashboardProps.bookings.map(booking => booking.experience_type))
+      );
+      setAvailableExperienceTypes(experiences);
+    }
+  }, [dashboardProps.bookings]);
+
   const heroImages = [
     '/Images/turkish-menu.jpg',
     '/Images/edit-profile.jpg',
@@ -95,7 +107,7 @@ export default function Dashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % heroImages.length);
-    }, 5000); // Change image every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -107,17 +119,7 @@ export default function Dashboard() {
   });
 
   /*************************************
-  *   Event Handlers of Dashboard/index.tsx 
-  * -> useState() update UI component State
-  * -> purpose: Use Interaction handle with proper calls
-  * -> Keep handlers focused on single responsibilities
-  * 1. handleFlightStatusClick
-  * 2. handleMenuClose
-  * 3. handleAccountManagement
-  * 4. handleNext
-  * 5. handleSwapCities
-  * 6. handleBooking
-  * 7. handleLogout
+  *   Event Handlers
   *************************************/
   const form = useForm();
 
@@ -130,14 +132,13 @@ export default function Dashboard() {
   };
 
   const handleAccountManagement = async () => {
-    handleMenuClose(); // Close the menu
+    handleMenuClose();
     window.location.href = '/profileMenu';
   };
 
-  {/* When step is reaching MAX Slides it resets by %*/}
   const handleNext = (step: number) => {
     if (!(activeIndex === 0 && step === -1))
-            setActiveIndex((prevIndex) => (prevIndex + step) % 2); 
+      setActiveIndex((prevIndex) => (prevIndex + step) % 2); 
   }
 
   const handleSwapCities = () => {
@@ -148,12 +149,47 @@ export default function Dashboard() {
 
   const handleBooking = async () => {
     try {
+      // Validate required fields
+      if (!departureCity || !arrivalCity || !experienceType) {
+        alert("Please select departure city, arrival city, and experience type");
+        return;
+      }
+
+      // Start loading
+      setLoading(true);
+      setSearchProgress(0);
+      setSearchMessage('Searching for flights...');
+
+      // Simulate search progress
+      const progressInterval = setInterval(() => {
+        setSearchProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(progressInterval);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
+      // Update messages during search
+      const messageTimeout = setTimeout(() => {
+        setSearchMessage('Checking availability...');
+      }, 1000);
+
+      const messageTimeout2 = setTimeout(() => {
+        setSearchMessage('Finalizing search results...');
+      }, 2000);
+
+      // Get CSRF token
       const csrfMeta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null;
       
       if (!csrfMeta || !csrfMeta.content) {
         throw new Error("CSRF token meta tag missing or empty. Please reload the page.");
-      } //trb verificat daca e NULL sau nu , nu inteleg dc nu merge fara if
-  
+      }
+
+      // Simulate API delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 2500));
+
       const response = await fetch('/dashboard/bookings', {
         method: 'POST',
         headers: {
@@ -164,35 +200,70 @@ export default function Dashboard() {
         body: JSON.stringify({
           destination_city_name: departureCity,
           arrival_city_name: arrivalCity,
-          experience_type: experienceType,       
+          experience_type: experienceType,
+          departure_date: departureDate,
+          return_date: tripType === 'round' ? arrivalDate : null,
+          passengers: passengers
         })
       });
 
-      if(!response) {
-        alert("Problems with the response");
-      } else {
-        window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${departureCity}&arrival_city_name=${arrivalCity}&experience_type=${experienceType}`;
+      // Clear intervals and timeouts
+      clearInterval(progressInterval);
+      clearTimeout(messageTimeout);
+      clearTimeout(messageTimeout2);
 
-        //trb luate bookingurile care deja erau in db
+      if (!response.ok) {
+        const errorData = await response.json();
+        setLoading(false);
+        alert(errorData.message || "Booking failed");
+        return;
       }
+
+      // Complete progress
+      setSearchProgress(100);
+      setSearchMessage('Found flights! Redirecting...');
+
+      // Wait a moment to show completion
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Stop loading
+      setLoading(false);
+
+      // Redirect to bookings page with search parameters
+      window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${encodeURIComponent(departureCity)}&arrival_city_name=${encodeURIComponent(arrivalCity)}&experience_type=${encodeURIComponent(experienceType)}`;
 
     } catch (error) {
       console.error("Booking error:", error);
+      setLoading(false);
+      alert("An error occurred while processing your booking");
     }
   };
-  
 
   const handleLogout = () => {
     handleMenuClose();
     form.post('/logout');
   };
 
-  {/*****************************************
-      FRAMER MOTION ANIMATION VARIANTS
-      - Section transitions for hero content
-      - Grid animations for feature cards
-      - All animations are non-blocking for interactions
-  *******************************************/}
+  const getAvailableArrivalCities = () => {
+    if (!departureCity) return dashboardProps.availableCities || [];
+    
+    if (dashboardProps.arrivalCities) {
+      return dashboardProps.arrivalCities;
+    }
+    
+    return (dashboardProps.availableCities || []).filter(city => city !== departureCity);
+  };
+
+  const getAvailableDepartureCities = () => {
+    if (!arrivalCity) return dashboardProps.availableCities || [];
+
+    if (dashboardProps.departureCities) {
+      return dashboardProps.departureCities;
+    }
+    
+    return (dashboardProps.availableCities || []).filter(city => city !== arrivalCity);
+  };
+
   const sectionVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 300 : -300,
@@ -219,14 +290,6 @@ export default function Dashboard() {
     }
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
   const gridItemVariants = {
     hidden: { y: 30, opacity: 0 },
     visible: {
@@ -242,11 +305,8 @@ export default function Dashboard() {
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
-      {/******************************************
-       * Nav bar which contains all the user options
-       * Clickable, each section NEEDS to be implemented
-       * Each Box, Button shall be implemented
-       * ********************************************/}
+      
+      {/* Navigation Bar */}
       <AppBar position="static" sx={styles.appBar}>
         <Toolbar sx={styles.toolbar}>
           <Box sx={styles.logoContainer}>
@@ -283,11 +343,7 @@ export default function Dashboard() {
               <PublicIcon style={{ fontSize: '1.25rem' }} />
               WORLD TOUR
             </Button>
-            {/***************************************************
-             * Avatar Role : Open the Menu with an "accordion" UI
-             * All the options shall be listed in the Menu UI 
-             * It shall list the profile of the User with user-options
-             ***************************************************/ }
+            
             <Button
               sx={styles.accountButton}
               onClick={(event) => setAnchorEl(event.currentTarget)} 
@@ -321,6 +377,7 @@ export default function Dashboard() {
       <Box
         sx={{ ...styles.heroSection,
               backgroundImage: `url(${heroImages[currentImage]})`,}} >
+        
         {/* Navigation Buttons */}
         <Button
           variant="contained"
@@ -340,15 +397,11 @@ export default function Dashboard() {
           Next
         </Button>
 
-        {/************************************************************************
-            *    Flight Search Section 
-            *  1. Apply the motion.div styling for smooth animation
-            *  2. Use Extra Props if it's not clickable because the animation
-            *  3. "Big" Box includes : Search options, City Selection, Swap Feature etc.
-            ********************************************************************/}
+        {/* Main Content Container */}
         <Box sx={{ position: 'relative', width: '100%', height: '100%', minHeight: '400px' }}>
           <AnimatePresence mode="wait" custom={activeIndex}>
-            {/* Animated Sections Container */}
+            
+            {/* Flight Search Section */}
             {activeIndex === 0 && (
               <motion.div
                 key="flight-search"
@@ -377,13 +430,7 @@ export default function Dashboard() {
                     ✈️ Where Will You Fly Today?
                   </Typography>
 
-                  {/************************************************************************
-                  *   Trip Type Selector 
-                  * Here we have to chose all the type of trips the client wants
-                  * 1. One Way Trip (It shall eliminate the destination option)
-                  * 2. Round trip (It shall enable both destination and arrival labels)
-                  * 3. TODO: Multi City feature 
-                  ************************************************************************/}
+                  {/* Trip Type Selector */}
                   <Box sx={styles.tripTypeContainer}>
                     {['round', 'oneway'].map((type) => (
                       <Box 
@@ -413,36 +460,32 @@ export default function Dashboard() {
                       </Typography>
                       <Select
                         fullWidth
-                        size='small' // ← THIS MAKES THE SELECT SMALLER
+                        size='small'
                         value={departureCity}
-                        onChange={(e) => setDepartureCity(e.target.value)}
+                        onChange={(e) => {
+                          setDepartureCity(e.target.value);
+                          // Clear arrival if it's the same as departure
+                          if (e.target.value === arrivalCity) {
+                            setArrivalCity('');
+                          }
+                        }}
                         displayEmpty
                         sx={styles.citySelect}
                       >
                         <MenuItem value="" disabled sx={styles.placeholderText}>
-                            <Typography variant="h6" sx={styles.citySelectText}>
-                              🛫 Departure City
-                            </Typography>
+                          <Typography variant="h6" sx={styles.citySelectText}>
+                            🛫 Departure City
+                          </Typography>
                         </MenuItem>
-                        {/* Reduced padding */}
-                        <MenuItem value="New York" sx={{ py: 0.35 }}>🗽New York</MenuItem>
-                        <MenuItem value="London" sx={{ py: 0.35 }}>🇬🇧 London</MenuItem>
-                        <MenuItem value="Tokyo" sx={{ py: 0.35 }}>🗼Tokyo</MenuItem>
-                        <MenuItem value="Paris" sx={{ py: 0.35 }}>🥐Paris</MenuItem>
-                        <MenuItem value="Lisbon" sx={{ py: 0.35 }}>🌊Lisbon</MenuItem>
-                        <MenuItem value="Berlin" sx={{ py: 0.35 }}>🏛️Berlin</MenuItem>
-                        <MenuItem value="Rome" sx={{ py: 0.35 }}>🏟️Rome</MenuItem>
-                        <MenuItem value="Madrid" sx={{ py: 0.35 }}>💃Madrid</MenuItem>
-                        <MenuItem value="Barcelona" sx={{ py: 0.35 }}>🏖️Barcelona</MenuItem>
-                        <MenuItem value="Amsterdam" sx={{ py: 0.35 }}>🚲Amsterdam</MenuItem>
-                        <MenuItem value="Viena" sx={{ py: 0.35 }}>🎻Vienna</MenuItem>
-                        <MenuItem value="Prague" sx={{ py: 0.35 }}>🏰Prague</MenuItem>
+                        {(getAvailableDepartureCities() || []).map((city) => (
+                          <MenuItem key={city} value={city} sx={{ py: 0.35 }}>
+                            {getCityEmoji(city)} {city}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </Box>
 
-                    {/***********************************************
-                     * Swap Button -> Desintation City = Arrival City
-                    ************************************************/}
+                    {/* Swap Button */}
                     <IconButton 
                       sx={styles.swapButton}
                       onClick={handleSwapCities}
@@ -457,40 +500,33 @@ export default function Dashboard() {
                       </Typography>
                       <Select
                         fullWidth
-                        size="small" // ← THIS MAKES THE SELECT SMALLER
+                        size="small"
                         value={arrivalCity}
-                        onChange={(e) => setArrivalCity(e.target.value)}
+                        onChange={(e) => {
+                          setArrivalCity(e.target.value);
+                          // Clear departure if it's the same as arrival
+                          if (e.target.value === departureCity) {
+                            setDepartureCity('');
+                          }
+                        }}
                         displayEmpty
                         sx={styles.citySelect}
                       >
                         <MenuItem value="" disabled sx={styles.placeholderText}>
-                            <Typography variant="h6" sx={styles.citySelectText}>
-                              🛫 Arrival City
-                            </Typography>
+                          <Typography variant="h6" sx={styles.citySelectText}>
+                            🛬 Arrival City
+                          </Typography>
                         </MenuItem>
-                        <MenuItem value="New York" sx={{ py: 0.35 }}>🗽New York</MenuItem>
-                        <MenuItem value="London" sx={{ py: 0.35 }}>🇬🇧 London</MenuItem>
-                        <MenuItem value="Tokyo" sx={{ py: 0.35 }}>🗼Tokyo</MenuItem>
-                        <MenuItem value="Paris" sx={{ py: 0.35 }}>🥐Paris</MenuItem>
-                        <MenuItem value="Lisbon" sx={{ py: 0.35 }}>🌊Lisbon</MenuItem>
-                        <MenuItem value="Berlin" sx={{ py: 0.35 }}>🏛️Berlin</MenuItem>
-                        <MenuItem value="Rome" sx={{ py: 0.35 }}>🏟️Rome</MenuItem>
-                        <MenuItem value="Madrid" sx={{ py: 0.35 }}>💃Madrid</MenuItem>
-                        <MenuItem value="Barcelona" sx={{ py: 0.35 }}>🏖️Barcelona</MenuItem>
-                        <MenuItem value="Amsterdam" sx={{ py: 0.35 }}>🚲Amsterdam</MenuItem>
-                        <MenuItem value="Viena" sx={{ py: 0.35 }}>🎻Vienna</MenuItem>
-                        <MenuItem value="Prague" sx={{ py: 0.35 }}>🏰Prague</MenuItem>
+                        {(getAvailableArrivalCities() || []).map((city) => (
+                          <MenuItem key={city} value={city} sx={{ py: 0.35 }}>
+                            {getCityEmoji(city)} {city}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </Box>
                   </Box>
 
-                  {/*******************************************************************************
-                   *    Dates and Passengers
-                   *  1. Box for DEPARTURE DATE
-                   *  2. Box for ARRIVAL DATE
-                   *  3. BOX FOR PASSENGER COUNT
-                   * NOTE: When User Select One Way type of trip , the arrival date will disappear
-                  **********************************************************************************/}
+                  {/* Dates and Passengers */}
                   <Box sx={styles.datesPassengersContainer}>
                     <Box sx={styles.dateContainer}>
                       <Typography variant="body2" sx={{ ...styles.inputLabel, fontSize: '0.8rem', mb: 0.5 }}>
@@ -592,7 +628,7 @@ export default function Dashboard() {
                   </Typography>
                   <Select
                     fullWidth
-                    size="small" // Added small size
+                    size="small"
                     value={experienceType}
                     onChange={(e) => setExperienceType(e.target.value)}
                     displayEmpty
@@ -607,18 +643,25 @@ export default function Dashboard() {
                     <MenuItem value="" disabled sx={{ ...styles.placeholderText, fontSize: '0.875rem' }}>
                       Select Your Travel Style
                     </MenuItem>
-                    <MenuItem value="Exotic" sx={{ ...styles.menuItem, py: 1, fontSize: '0.875rem' }}>🏝️ Exotic Getaway</MenuItem>
-                    <MenuItem value="Casual" sx={{ ...styles.menuItem, py: 1, fontSize: '0.875rem' }}>😎 Casual Vacation</MenuItem>
-                    <MenuItem value="Across Country" sx={{ ...styles.menuItem, py: 1, fontSize: '0.875rem' }}>🗺️ Across Country</MenuItem>
-                    <MenuItem value="Business" sx={{ ...styles.menuItem, py: 1, fontSize: '0.875rem' }}>💼 Business Class</MenuItem>
+                    {availableExperienceTypes.map((expType) => (
+                      <MenuItem 
+                        key={expType} 
+                        value={expType} 
+                        sx={{ ...styles.menuItem, py: 1, fontSize: '0.875rem' }}
+                      >
+                        {getExperienceIcon(expType)} {expType}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <Button
                     fullWidth
                     variant="contained"
-                    size="small" // Added small size
+                    size="small"
                     onClick={handleBooking}
-                    sx={styles.experienceBookButton}>
-                    Continue to Book
+                    sx={styles.experienceBookButton}
+                    disabled={!departureCity || !arrivalCity || !experienceType || loading}
+                  >
+                    {loading ? 'Searching...' : 'Continue to Book'}
                   </Button>
                 </Box>
               </motion.div>
@@ -655,7 +698,7 @@ export default function Dashboard() {
                   <Button
                     fullWidth
                     variant="contained"
-                    size="small" // Added small size
+                    size="small"
                     startIcon={<FlightTakeoffIcon />}
                     onClick={handleFlightStatusClick}
                     sx={styles.flightStatusButton}
@@ -701,15 +744,16 @@ export default function Dashboard() {
             startIcon={<FlightTakeoffIcon />}
             onClick={handleBooking}
             sx={styles.bookButton}
+            disabled={!departureCity || !arrivalCity || !experienceType || loading}
           >
             <Typography variant="h6" sx={styles.bookButtonText}>
-              🎫 Book Your Flight
+              {loading ? '🔄 Searching...' : '🎫 Book Your Flight'}
             </Typography>
           </Button>
         </Box>
       </Box>
 
-      {/* Why Choose Us Section with Grid Animations */}
+      {/* Why Choose Us Section */}
       <Box sx={styles.whyChooseSection}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -726,7 +770,6 @@ export default function Dashboard() {
           initial="hidden"
           animate="visible"
         >
-          {/* FEATURE : Implemented animations*/}
           <Grid container spacing={2} justifyContent="center">
             {[
               { icon: <EventSeatIcon />, title: "Premium Comfort", description: "Experience unparalleled comfort with our spacious seating and premium amenities." },
@@ -761,6 +804,155 @@ export default function Dashboard() {
           </Grid>
         </motion.div>
       </Box>
+
+      {/* Loading Pop-up Dialog */}
+      <Dialog
+        open={loading}
+        onClose={() => {}} // Prevent closing by clicking outside
+        aria-labelledby="search-flight-dialog"
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            padding: 3,
+            background: 'linear-gradient(135deg, #060808 0%, #102a22 45%, #23d59dff 100%)',
+            color: 'white',
+          }
+        }}
+      >
+        <DialogContent sx={{ textAlign: 'center', py: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <CircularProgress 
+              variant="determinate" 
+              value={searchProgress} 
+              size={80}
+              thickness={4}
+              sx={{ 
+                color: 'white',
+                '& .MuiCircularProgress-circle': {
+                  strokeLinecap: 'round',
+                }
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+            </Box>
+          </Box>
+
+          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+            ✈️ Searching Flights
+          </Typography>
+
+          <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
+            {searchMessage}
+          </Typography>
+
+          <Box sx={{ width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <Typography variant="body2">Progress</Typography>
+              <Typography variant="body2">{searchProgress}%</Typography>
+            </Box>
+            <Box sx={{ 
+              width: '100%', 
+              height: 8, 
+              backgroundColor: 'rgba(255,255,255,0.2)', 
+              borderRadius: 4,
+              overflow: 'hidden'
+            }}>
+              <Box sx={{ 
+                width: `${searchProgress}%`, 
+                height: '100%', 
+                backgroundColor: 'white',
+                borderRadius: 4,
+                transition: 'width 0.3s ease-in-out'
+              }} />
+            </Box>
+          </Box>
+
+          <Typography variant="caption" sx={{ opacity: 0.7, display: 'block' }}>
+            Searching for: {departureCity} → {arrivalCity} ({experienceType})
+          </Typography>
+
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+            <CircularProgress size={20} sx={{ color: 'white' }} />
+            <Typography variant="caption">
+              Please wait while we find the best flights for you...
+            </Typography>
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      {/* Optional: Add a subtle backdrop */}
+      {loading && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </AuthenticatedLayout>
   );
+}
+
+// Helper function to get city emoji
+function getCityEmoji(city: string): string {
+  const emojiMap: Record<string, string> = {
+    'New York City': '🗽',
+    'New York': '🗽',
+    'Paris': '🥐',
+    'Tokyo': '🗼',
+    'London': '🇬🇧',
+    'Dubai': '🏙️',
+    'Sydney': '🇦🇺',
+    'Barcelona': '🏖️',
+    'Rome': '🏟️',
+    'Santorini': '🌅',
+    'Venice': '🛶',
+    'Kyoto': '⛩️',
+    'Bali': '🏝️',
+    'Maldives': '🏝️',
+    'Swiss Alps': '🏔️',
+    'Cape Town': '🌄',
+    'Rio de Janeiro': '⛰️',
+    'Iceland': '🧊',
+    'Phuket': '🏖️',
+    'Marrakech': '🕌',
+    'Queenstown': '⛰️',
+    'Cancún': '🌴',
+    'Prague': '🏰',
+    'Singapore': '🌇',
+    'Edinburgh': '🏰',
+    'Hawaii': '🌺',
+    'Budapest': '🏰',
+    'Los Angeles': '🎬',
+    'Maui': '🌺',
+    'Amalfi Coast': '🏖️',
+    'Lisbon': '🌊',
+    'Berlin': '🏛️',
+    'Madrid': '💃',
+    'Amsterdam': '🚲',
+    'Vienna': '🎻',
+    'Viena': '🎻',
+  };
+  
+  return emojiMap[city] || '📍';
+}
+
+// Helper function to get experience icon
+function getExperienceIcon(experienceType: string): string {
+  const iconMap: Record<string, string> = {
+    'First Class': '👑',
+    'Economy Class': '💺',
+    'Business Class': '💼',
+  };
+  
+  return iconMap[experienceType] || '✨';
 }

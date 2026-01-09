@@ -109,8 +109,9 @@ import { DocumentsModal } from '@/Components/FlightDocuments/DocumentsModal';
  *                          INTERFACES
  * 1. ProfileItemProps
  * 2. Wallet 
- * 3. User
- * 4. ProfileManagementProps -> used to pass all the data into 1 interface
+ * 3. TransactionHistory
+ * 4. User
+ * 5. ProfileManagementProps -> used to pass all the data into 1 interface
  **************************************************************************/
 interface ProfileItemProps {
   icon: ReactNode;
@@ -274,7 +275,7 @@ function ProfileItem({ icon, label, value, children, clickable = false, onClick 
 }
 
 function FundsProgressCircle({wallets, users, total_usd, base_currency} : ProfileManagementProps ) {
-  const availableFunds = wallets.reduce((total, wallet) => total + (wallet.converted_value || wallet.value), 0);
+  const availableFunds = total_usd;
   const insufficientFunds = 2500; // Target or required funds
   
   const percentage = Math.min(Math.round((availableFunds / insufficientFunds) * 100), 100);
@@ -1358,7 +1359,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                     {wallets.length > 0 && (
                       <FundCard
                         title="Total Available"
-                        amount={`${totalAmount.toLocaleString()} ${currencySymbols[base_currency] || base_currency}`}
+                        amount={`${total_usd.toLocaleString()} ${currencySymbols[base_currency] || base_currency}`}
                         color="primary"
                       />
                     )}

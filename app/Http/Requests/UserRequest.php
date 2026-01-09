@@ -33,10 +33,12 @@ class UserRequest extends FormRequest
                 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/',
                 'unique:users,email'
             ],
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required',
             'country' => 'required|string|max:255'
         ];
     }
+    
     public function messages()
     {
         return [
@@ -44,6 +46,8 @@ class UserRequest extends FormRequest
             'lastName.required' => 'The last name field is required.',
             'email.unique' => 'This email is already taken.',
             'password.required' => 'The password field is required.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password_confirmation.required' => 'Please confirm your password.',
             'country.required' => 'The country field is required'
         ];
     }

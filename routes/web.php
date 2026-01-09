@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionHistoryController;
@@ -39,9 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     {/********************************Tour Routes******************************** */}
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard/index');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Dashboard/index');
+    // })->name('dashboard');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/dashboard/worldtour', [DestinationController::class, 'index'])->name('tour.view');
 
@@ -68,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/view-bookings/destination', [BookingController::class, 'index'])->name('dashboard.view');
 
     Route::post('/dashboard/submit-booking', [BookingController::class, 'submitBooking'])->name('store');
+
+    Route::patch('/dashboard/view-bookings/payment-process', [BookingController::class, 'paymentBooking'])->name('booking.payment');
 
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');
