@@ -201,6 +201,7 @@ const handlePayment = async (wallet: Wallet, amount: number, currency: string) =
         alert('Payment processed successfully!');
         
         // Optionally refresh wallet data or update UI
+        window.location.reload();
         return response;
 
     } catch (error) {

@@ -91,12 +91,14 @@ class WalletController extends Controller
             ], 404);
         }
             
-        // Calculate new balance
+     
+         // Calculate new balance
         $oldBalance = $wallet->value;
         $wallet->value += $validatedData['value'];
         $wallet->save();
-            
+
         return response()->json([
+
             'success' => true,
             'message' => 'Payment processed successfully! Funds added to wallet.',
             'data' => [
@@ -109,5 +111,7 @@ class WalletController extends Controller
                 'updated_at' => $wallet->updated_at->format('Y-m-d H:i:s'),
             ]
         ], 200);
+
+        
     }
 }
