@@ -39,7 +39,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SearchIcon from '@mui/icons-material/Search';
-import { useForm } from '@inertiajs/inertia-react';
+//Old Import
+// import { useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/react';
 import { styles } from './Dashboard.styles'; 
 import { motion, AnimatePresence } from "framer-motion";
 
