@@ -387,6 +387,7 @@ const FlightExperienceApp: React.FC = () => {
           
           <Button 
             variant="contained" 
+            href={route('tour.view')}
             sx={styles.mainPageBox.appBar.bookingButton}
           >
             Book Now

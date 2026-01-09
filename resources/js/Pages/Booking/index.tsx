@@ -457,7 +457,7 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
                             <Box>
                                 <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                                     <CardTravelIcon sx={{ color: 'primary.main', fontSize: '2rem', mr: 2, verticalAlign: 'middle' }} />
-                                    Available Flights
+                                    Available Flights - Educational Purposes Only, Virtual Money Involved
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     {filteredBookings.length} flights found • Last updated: {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
@@ -999,6 +999,9 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
 
                     {checkoutTab === 0 && (
                         <Box>
+                            <Typography variant="h6" sx={{ color: '#db170dff', mb: 2 }}>
+                                Additional information : transactions are in educational purposes, they do not involve real money
+                            </Typography>
                             <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
                                 Select Payment Method
                             </Typography>
@@ -1082,7 +1085,7 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
                                     <Paper sx={{ p: 3, backgroundColor: 'rgba(14, 165, 233, 0.1)', borderRadius: 2, mb: 3 }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                                             <Box>
-                                                <Typography variant="body2" sx={{ color: '#94a3b8' }}>
+                                                <Typography variant="body2" sx={{ color: '#db240fff' }}>
                                                     Total Available Balance
                                                 </Typography>
                                                 <Typography variant="h4" sx={{ color: '#0ea5e9', fontWeight: 700 }}>

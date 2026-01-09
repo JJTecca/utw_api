@@ -845,6 +845,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
             </Box>
             
             {/* Quick Deposit Options */}
+            <Typography variant="h6" sx={{ color: '#db170dff', mb: 2 }}>
+              Additional information : transactions are in educational purposes, they do not involve real money
+            </Typography>
             <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
               Quick Deposit Amounts
             </Typography>
