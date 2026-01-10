@@ -101,6 +101,8 @@ import { styles } from './ProfileManagement.styles';
 import { UploadButton } from '@/Components/UploadButton';
 import {investmentOpportunities, quickDepositOptions, currencySymbols, supportedCurrencies, currencyNames} from './constants';
 import { InfoModal } from '@/Components/InfoModal/MyModal';
+import Modal from '@/Components/Modal';
+import { DocumentsModal } from '@/Components/FlightDocuments/DocumentsModal';
 
 
 /**************************************************************************
@@ -439,6 +441,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [docsOpen, setDocsOpen] = useState(false);
     
     // Wallet funding states
     const [fundingOpen, setFundingOpen] = useState(false);
@@ -493,6 +496,10 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
     const handleOpenInfo = () => {
         setModalOpen(!modalOpen);
+    };
+
+    const handleOpenDocs = () => {
+        setDocsOpen(!docsOpen);
     };
 
     const handleCloseFunding = () => {
@@ -619,8 +626,8 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
     const settingItems = [
         { text: 'Support requests', icon: <Help />, onClick: () => handleOpenInfo()},
-        { text: 'Referral program', icon: <Share />, onClick: () => console.log('Pilot Referral clicked')},
-        { text: 'Flight documents', icon: <Assignment />, onClick: () => console.log('Flight Documents clicked')},
+        { text: 'Referral program', icon: <Share />, onClick: () => console.log('Referral clicked')},
+        { text: 'Flight documents', icon: <Assignment />, onClick: () => handleOpenDocs()},
     ];
 
     const drawer = (
@@ -839,6 +846,9 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
             </Box>
             
             {/* Quick Deposit Options */}
+            <Typography variant="h6" sx={{ color: '#db170dff', mb: 2 }}>
+              Additional information : transactions are in educational purposes, they do not involve real money
+            </Typography>
             <Typography variant="h6" sx={{ color: '#f1f5f9', mb: 2 }}>
               Quick Deposit Amounts
             </Typography>
@@ -1269,6 +1279,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     <Box sx={styles.rootContainer}>
       <CssBaseline />
       {modalOpen && <InfoModal onClose={()=>setModalOpen(false)}/>}
+      {docsOpen && <DocumentsModal onClose={()=>setDocsOpen(false)}/>}
       
       {/* App Bar for Mobile */}
       {isMobile && (
