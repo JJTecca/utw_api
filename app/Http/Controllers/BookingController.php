@@ -21,6 +21,7 @@ class BookingController extends Controller
         $destination = $request->query('destination_city_name');
         $arrival = $request->query('arrival_city_name');
         $experience = $request->query('experience_type');
+        $passengers = $request->query('passenger_count');
         $bookings = Booking::where('destination_city_name', $destination)
                     ->where('arrival_city_name',$arrival)->where('experience_type',$experience)
                     ->select([
@@ -48,7 +49,7 @@ class BookingController extends Controller
             'user' => $user,
             'wallets' => $wallets,
             'bookings' => BookingResource::collection($bookings)->resolve(), //buna functie , unwraps collection to array
-            'full_price' => ($destinationPrice + $arrivalPrice + rand(100,400)) / 4 //add a random value to show that tickets fluctuate
+            'full_price' => ($destinationPrice + $arrivalPrice + rand(100,400)) * $passengers / 4 //add a random value to show that tickets fluctuate
         ]);
         
     }
