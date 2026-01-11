@@ -232,7 +232,7 @@ export default function Dashboard() {
       setLoading(false);
 
       // Redirect to bookings page with search parameters
-      window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${encodeURIComponent(departureCity)}&arrival_city_name=${encodeURIComponent(arrivalCity)}&experience_type=${encodeURIComponent(experienceType)}`;
+      window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${encodeURIComponent(departureCity)}&arrival_city_name=${encodeURIComponent(arrivalCity)}&experience_type=${encodeURIComponent(experienceType)}&passenger_count=${passengers}`;
 
     } catch (error) {
       console.error("Booking error:", error);
