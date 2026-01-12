@@ -44,6 +44,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from '@inertiajs/react';
 import { styles } from './Dashboard.styles'; 
 import { motion, AnimatePresence } from "framer-motion";
+import { FlightModal } from '@/Components/FlightModal/FlightModal';
+
+
 
 // Define the props interface for the Dashboard component
 interface DashboardProps {
@@ -84,6 +87,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [searchProgress, setSearchProgress] = useState(0);
   const [searchMessage, setSearchMessage] = useState('Searching for flights...');
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Get unique experience types from bookings
   useEffect(() => {
@@ -148,6 +153,10 @@ export default function Dashboard() {
     setDepartureCity(arrivalCity);
     setArrivalCity(temp);
   };
+
+  const handleOpenInfo = () => {
+        setModalOpen(!modalOpen);
+    };
 
   const handleBooking = async () => {
     try {
@@ -305,7 +314,9 @@ export default function Dashboard() {
   };
 
   return (
+    
     <AuthenticatedLayout>
+      {modalOpen && <FlightModal onClose={()=>setModalOpen(false)}/>}
       <Head title="Dashboard" />
       
       {/* Navigation Bar */}
@@ -723,13 +734,14 @@ export default function Dashboard() {
                       </Box>
 
                       <Box sx={styles.flightStatusField}>
-                        <Typography variant="body1" sx={{ ...styles.inputLabel, fontSize: '0.9rem' }}>
-                          Date
-                        </Typography>
-                        <Box sx={styles.dateDisplay}>
-                          <CalendarTodayIcon sx={{ color: '#1e40af', fontSize: '1rem' }} />
-                          <Typography fontWeight="500" fontSize="0.9rem">{currentDate}</Typography>
-                        </Box>
+                        <Button
+                          variant="contained"
+                          startIcon={<SearchIcon />}
+                          sx={styles.flightStatusButton}
+                          onClick={handleOpenInfo}
+                        >
+                          Check Status
+                        </Button>
                       </Box>
                     </Box>
                   </Collapse>
