@@ -24,7 +24,8 @@ class ProfileController extends Controller
     /*************************************
      *   NEW Profile Management Profile view
      **************************************/
-    public function index() { 
+    public function index()
+    {
         // Join table wallets with users
         // Approach with Laravel : $wallets = Wallet::where('user_id', Auth::id())->get();
         $wallets = DB::table('wallets')
@@ -33,57 +34,61 @@ class ProfileController extends Controller
             ->select('wallets.*')
             ->get();
 
-        //Get Auth User
-        $user = User::where('id',Auth::id())->first();
-        //Get the exchange rates from config file
+        // Get Auth User
+        $user = User::where('id', Auth::id())->first();
+
+        // Get the exchange rates from config file
         $exchangeRates = config('exchange.rates');
-        $baseCurrency = 'USD';
+
+        // Use configured base currency (fallback USD)
+        $baseCurrency = config('exchange.base_currency', 'USD');
+
         $preparedWallets = [];
         $totalInUsd = 0;
 
         // Retrieve the transaction of the current user
-        $transaction_history = TransactionHistory::where('user_id',Auth::id())->get();
-
-        /********Testing************
-           dd($wallets);
-           dd($preparedWallets);
-        if(!$users || $wallets) { 
-             return response()->json(['message' => 'No data found',],500);
-        }
-        ***************************/
+        $transaction_history = TransactionHistory::where('user_id', Auth::id())->get();
 
         foreach ($wallets as $wallet) {
             $originalCurrency = $wallet->currency;
-            $originalValue = $wallet->value;
+
+            // Cast value to float to avoid numeric-string quirks
+            $originalValue = (float) $wallet->value;
+
             $convertedValue = $originalValue;
-            
-            // Convert to USD if not already in USD
-            if ($originalCurrency !== $baseCurrency && isset($exchangeRates[$originalCurrency])) {
-                $convertedValue = $originalValue / $exchangeRates[$originalCurrency];
+
+            // Convert to base currency if not already in base currency
+            // Assumption: exchangeRates are "USD -> currency" when baseCurrency = USD,
+            // so currency -> USD = amount / rate.
+            if ($originalCurrency !== $baseCurrency && isset($exchangeRates[$originalCurrency]) && (float)$exchangeRates[$originalCurrency] != 0.0) {
+                $convertedValue = $originalValue / (float) $exchangeRates[$originalCurrency];
             }
-            
+
+            // IMPORTANT FIX: round once and use the same rounded value for wallet + total
+            $roundedConvertedValue = round($convertedValue, 2);
+
             $preparedWallets[] = [
                 'id' => $wallet->id,
                 'user_id' => $wallet->user_id,
                 'currency' => $originalCurrency,
                 'value' => $originalValue,
-                'converted_value' => round($convertedValue, 2), // Rounded to 2 decimals
+                'converted_value' => $roundedConvertedValue, // Rounded to 2 decimals (display value)
                 'converted_currency' => $baseCurrency,
-                'exchange_rate' => $exchangeRates[$originalCurrency] ?? 1
+                'exchange_rate' => $exchangeRates[$originalCurrency] ?? 1,
             ];
-            $totalInUsd += $convertedValue;
+
+            // Sum exactly what you display, so total matches row values
+            $totalInUsd += $roundedConvertedValue;
         }
-        // dd($wallets);
-        
+
         return Inertia::render('ProfileManagement/index', [
             'wallets' => $preparedWallets,
             'users' => $user ? $user->toArray() : null,
             'total_usd' => round($totalInUsd, 2),
             'base_currency' => $baseCurrency,
-            'transaction_history' => $transaction_history ? $transaction_history->toArray() : []
+            'transaction_history' => $transaction_history ? $transaction_history->toArray() : [],
         ]);
     }
-
 
     public function edit(Request $request): Response
     {

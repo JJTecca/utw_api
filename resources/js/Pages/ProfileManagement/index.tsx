@@ -103,6 +103,7 @@ import {investmentOpportunities, quickDepositOptions, currencySymbols, supported
 import { InfoModal } from '@/Components/InfoModal/MyModal';
 import Modal from '@/Components/Modal';
 import { DocumentsModal } from '@/Components/FlightDocuments/DocumentsModal';
+import HelpModal from './HelpModal';
 
 
 /**************************************************************************
@@ -203,6 +204,7 @@ const handlePayment = async (wallet: Wallet, amount: number, currency: string) =
         alert('Payment processed successfully!');
         
         // Optionally refresh wallet data or update UI
+        window.location.reload();
         return response;
 
     } catch (error) {
@@ -441,6 +443,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
     const [modalOpen, setModalOpen] = useState(false);
     const [docsOpen, setDocsOpen] = useState(false);
+    const [helpOpen, setHelpOpen] = useState(false);
     
     // Wallet funding states
     const [fundingOpen, setFundingOpen] = useState(false);
@@ -584,6 +587,17 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
         setFundingTab(newValue);
     };
 
+    const handleOpenHelp = () => {
+      setHelpOpen(true);
+      if (isMobile) {
+          setMobileOpen(false);
+      }
+    };
+
+    const handleCloseHelp = () => {
+        setHelpOpen(false);
+    };
+
     const navigationItems = [
       { 
           text: 'MY FLIGHTS', 
@@ -598,7 +612,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
       { 
           text: 'HELP', 
           icon: <Help />,
-          onClick: () => console.log('Help clicked')
+          onClick: handleOpenHelp
       },
     ];
 
@@ -620,13 +634,19 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
 
     const actionItems = [
         { text: 'Add funds', icon: <AccountBalanceWallet />, onClick: handleOpenFunding },
-        { text: 'Create Additionals', icon: <Assignment /> },
     ];
 
     const settingItems = [
-        { text: 'Support requests', icon: <Help />, onClick: () => handleOpenInfo()},
-        { text: 'Referral program', icon: <Share />, onClick: () => console.log('Referral clicked')},
-        { text: 'Flight documents', icon: <Assignment />, onClick: () => handleOpenDocs()},
+      { 
+        text: 'Flight Support', 
+        icon: <Help />, 
+        onClick: () => handleOpenInfo()
+      },
+      { 
+        text: 'Flight Documents', 
+        icon: <Assignment />, 
+        onClick: () => handleOpenDocs()
+      },
     ];
 
     const drawer = (
@@ -1260,17 +1280,11 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
     </Snackbar>
   );
 
-  const goFB=() => {
-    window.open("https://www.facebook.com/share/17kdweS1hD/", "_blank");
-  }
+  const goFB=() => { window.open("https://www.facebook.com/share/17kdweS1hD/", "_blank"); }
 
-  const goIG=() => {
-    window.open("https://www.instagram.com/utw2026?igsh=Y3o5emJ6bXQ5ODRk", "_blank");
-  }
+  const goIG=() => { window.open("https://www.instagram.com/utw2026?igsh=Y3o5emJ6bXQ5ODRk", "_blank"); }
 
-  const goTT=() => {
-    window.open("https://www.tiktok.com/@utw042?is_from_webapp=1&sender_device=pc", "_blank");
-  }
+  const goTT=() => { window.open("https://www.tiktok.com/@utw042?is_from_webapp=1&sender_device=pc", "_blank"); }
   
 
   return (
@@ -1279,6 +1293,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
       <CssBaseline />
       {modalOpen && <InfoModal onClose={()=>setModalOpen(false)}/>}
       {docsOpen && <DocumentsModal onClose={()=>setDocsOpen(false)}/>}
+      {helpOpen && <HelpModal open={helpOpen} onClose={handleCloseHelp} />}
       
       {/* App Bar for Mobile */}
       {isMobile && (
@@ -1439,24 +1454,21 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                     Aviation Settings
                   </Typography>
                   <List disablePadding>
-                    {settingItems.map((item) => (
-                      <ListItem key={item.text} disablePadding sx={{ marginBottom: 0.5 }}>
-                        <ListItemButton sx={styles.listItemButton}
-                          onClick={item.onClick}>
-                          <ListItemIcon sx={styles.navListItemIcon}>
-                            {item.icon}
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={item.text === 'Support requests' 
-                              ? 'Flight Support' 
-                              : item.text === 'Referral program' 
-                              ? 'Pilot Referral'
-                              : 'Flight Documents'}
-                            primaryTypographyProps={{ color: '#f1f5f9' }}
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    ))}
+                    {settingItems
+                      .filter(item => item.text === 'Flight Support' || item.text === 'Flight Documents')
+                      .map((item) => (
+                        <ListItem key={item.text} disablePadding sx={{ marginBottom: 0.5 }}>
+                          <ListItemButton sx={styles.listItemButton} onClick={item.onClick}>
+                            <ListItemIcon sx={styles.navListItemIcon}>
+                              {item.icon}
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={item.text}  // Now you can just use item.text directly!
+                              primaryTypographyProps={{ color: '#f1f5f9' }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
                   </List>
                 </CardContent>
               </Card>
@@ -1501,7 +1513,7 @@ function ProfileManLayoutContent({ children, users, wallets, total_usd, base_cur
                         }}
                         onClick={item.onClick}
                       >
-                        {item.text === 'Add funds' ? 'Fund Wallet' : 'Create Flight Plan'}
+                        {item.text === 'Add funds' ? 'Fund Wallet' : ''}
                       </Button>
                     ))}
                   </Stack>
