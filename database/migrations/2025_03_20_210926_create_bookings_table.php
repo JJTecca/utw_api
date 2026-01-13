@@ -27,8 +27,7 @@ return new class extends Migration
             $table->string('arrival_airport_id')->nullable(); 
             $table->string('experience_type'); 
             $table->unsignedInteger('flight_number')->nullable(); 
-            $table->dateTime('departure_day_date')->nullable();
-            $table->dateTime('arrival_day_date')->nullable();
+            $table->dateTime('booking_date')->default('2026-01-01 00:00:00');
             $table->text('description')->nullable()->default("");
             $table->timestamps();
         });

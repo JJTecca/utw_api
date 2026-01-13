@@ -61,8 +61,7 @@ interface DashboardProps {
     arrival_airport_id: string;
     experience_type: string;
     flight_number: number;
-    departure_day_date: string;
-    arrival_day_date: string;
+    booking_date: string;
     description: string;
   }>;
 }

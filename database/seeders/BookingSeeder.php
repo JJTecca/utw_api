@@ -90,9 +90,9 @@ class BookingSeeder extends Seeder
             
             foreach ($experienceTypes as $type) {
                 for ($i = 1; $i <= $flightsPerType; $i++) {
-                    // Generate dates (spread across 2025)
-                    $departureDate = date('Y-m-d', strtotime("2025-".rand(1,12)."-".rand(1,28)));
-                    $arrivalDate = date('Y-m-d', strtotime($departureDate . " +" . rand(2,7) . " days"));
+                    // Generate dates (spread across 2026) 
+                    // Datetime is not nullable
+                    $bookingDate = date('Y-m-d', strtotime("2026-".rand(1,12)."-".rand(1,28)));
                     
                     $bookingData[] = [
                         'id' => $bookingId,
@@ -102,9 +102,8 @@ class BookingSeeder extends Seeder
                         'arrival_airport_id' => $route['to_code'],
                         'experience_type' => $type,
                         'flight_number' => $flightNumber,
-                        'departure_day_date' => $departureDate,
-                        'arrival_day_date' => $arrivalDate,
-                        'description' => "This {$type} journey takes you from {$route['from']} to {$route['to']} on flight #{$flightNumber}. Departing on {$departureDate}, you'll arrive by {$arrivalDate}. Enjoy premium travel experience.",
+                        'booking_date' => $bookingDate,
+                        'description' => "This {$type} journey takes you from {$route['from']} to {$route['to']} on flight #{$flightNumber}. Departing on {$bookingDate}. Enjoy premium travel experience.",
                     ];
                     
                     $flightNumber++;
@@ -149,7 +148,6 @@ class BookingSeeder extends Seeder
                     if (count($bookingData) >= 200) break;
                     
                     $departureDate = date('Y-m-d', strtotime("2025-".rand(1,12)."-".rand(1,28)));
-                    $arrivalDate = date('Y-m-d', strtotime($departureDate . " +" . rand(2,7) . " days"));
                     
                     $bookingData[] = [
                         'id' => $bookingId,
@@ -159,9 +157,8 @@ class BookingSeeder extends Seeder
                         'arrival_airport_id' => $route['to_code'],
                         'experience_type' => $type,
                         'flight_number' => $flightNumber,
-                        'departure_day_date' => $departureDate,
-                        'arrival_day_date' => $arrivalDate,
-                        'description' => "This {$type} journey takes you from {$route['from']} to {$route['to']} on flight #{$flightNumber}. Departing on {$departureDate}, you'll arrive by {$arrivalDate}. Enjoy premium travel experience.",
+                        'booking_date' => $bookingDate,
+                        'description' => "This {$type} journey takes you from {$route['from']} to {$route['to']} on flight #{$flightNumber}. Departing on {$bookingDate}. Enjoy premium travel experience.",
                     ];
                     
                     $flightNumber++;

@@ -16,8 +16,7 @@ class Booking extends Model
         'arrival_airport_id',
         'experience_type',
         'flight_number',
-        'departure_day_date',
-        'arrival_day_date',
+        'booking_date',
         'description'        
     ];
 

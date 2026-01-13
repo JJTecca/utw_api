@@ -40,8 +40,7 @@ interface BookingInterface {
     experience_type: string;
     description: string;
     flight_number?: number;
-    departure_day_date?: string;
-    arrival_day_date?: string;
+    booking_date: string;
 }
 
 interface Wallet {
