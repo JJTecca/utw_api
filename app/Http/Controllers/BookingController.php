@@ -24,20 +24,26 @@ class BookingController extends Controller
         $passengers = $request->query('passenger_count');
         $departureDate = $request->query('departure_date');
         $returnDate = $request->query('return_date');
+        
+        // Hardcode end of 2026
+        if(!$returnDate) {
+            $returnDate = '2026-12-31 00:00:00';
+        }
+        //Query to search in between dates
         $bookings = Booking::where('destination_city_name', $destination)
-                    ->where('arrival_city_name',$arrival)->where('experience_type',$experience)->where('return_date',$returnDate)->where('departure_date',$departureDate)
+                    ->where('arrival_city_name',$arrival)->where('experience_type',$experience)
+                    ->whereDate('booking_date', '>=', $departureDate)->whereDate('booking_date', '<=', $returnDate)
                     ->select([
                         'id',
                         'passenger_count',
                         'destination_city_name',
                         'arrival_city_name',
                         'experience_type',
-                        'description',
-                        'departure_date',
-                        'return_date'
+                        'booking_date',
+                        'description'
                     ])
                     ->get(); //first=primu element din colectie , get = all colectie */
-
+        // dd($bookings); //TEST The Bookings
         //Get the prices for X city : if city is Dubai , the destination title contains "Dubai, UAE"
         $destinationPrice = Destination::where('title', 'LIKE', $destination . '%')
                                         ->orWhere('title', 'LIKE', '%' . $destination . '%')
