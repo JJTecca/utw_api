@@ -22,15 +22,19 @@ class BookingController extends Controller
         $arrival = $request->query('arrival_city_name');
         $experience = $request->query('experience_type');
         $passengers = $request->query('passenger_count');
+        $departureDate = $request->query('departure_date');
+        $returnDate = $request->query('return_date');
         $bookings = Booking::where('destination_city_name', $destination)
-                    ->where('arrival_city_name',$arrival)->where('experience_type',$experience)
+                    ->where('arrival_city_name',$arrival)->where('experience_type',$experience)->where('return_date',$returnDate)->where('departure_date',$departureDate)
                     ->select([
                         'id',
                         'passenger_count',
                         'destination_city_name',
                         'arrival_city_name',
                         'experience_type',
-                        'description'
+                        'description',
+                        'departure_date',
+                        'return_date'
                     ])
                     ->get(); //first=primu element din colectie , get = all colectie */
 

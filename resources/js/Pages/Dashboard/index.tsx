@@ -241,7 +241,7 @@ export default function Dashboard() {
       setLoading(false);
 
       // Redirect to bookings page with search parameters
-      window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${encodeURIComponent(departureCity)}&arrival_city_name=${encodeURIComponent(arrivalCity)}&experience_type=${encodeURIComponent(experienceType)}&passenger_count=${passengers}`;
+      window.location.href = `/dashboard/view-bookings/destination?destination_city_name=${encodeURIComponent(departureCity)}&arrival_city_name=${encodeURIComponent(arrivalCity)}&experience_type=${encodeURIComponent(experienceType)}&passenger_count=${passengers}&departure_date=${encodeURIComponent(departureDate)}${tripType === 'round' ? `&return_date=${encodeURIComponent(arrivalDate)}` : ''}`;
 
     } catch (error) {
       console.error("Booking error:", error);
