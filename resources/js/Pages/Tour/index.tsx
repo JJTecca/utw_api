@@ -21,7 +21,7 @@
  * 2. Shows featured destionations for the user to scroll down and get a view, also popular destinations
  * 3. Provides a booking system using his wallet details
  ****************************************************************************************************/
-import React, { useState , PropsWithChildren } from 'react';
+import React, { useState, useEffect , PropsWithChildren } from 'react';
 import {
   Box,
   Typography,
@@ -68,6 +68,7 @@ import {
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
 import { styles } from './Tour.styles';
+import { AvatarButton } from '@/Components/AvatarButton/AvatarButton';
 
 /**************************************************************************
  *                          INTERFACES
@@ -84,6 +85,7 @@ interface User {
   email: string;
   country: string;
   gender: string;
+  picture: string;
 }
 
 interface BaseCurrency {
@@ -142,6 +144,19 @@ const userData = {
     points: 12500,
     status: 'Gold Member',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
+};
+
+const handleSelectedImage = async(files:File[]) => {
+	const formData = new FormData();
+	files.forEach((file) => formData.append('files', file));
+	
+	const response = await fetch('<URL HERE>', {method: 'POST',body: formData}); //Backend URL to handle uploads
+
+  if (!response.ok) {
+    console.log(`Upload failed: ${response.status}`);
+  }
+
+  return response.json();
 };
 
 export default function TravelHomepage({children, user, total_usd, base_currency, destinations, wallets} : PropsWithChildren<TourProps>) {
@@ -805,13 +820,16 @@ export default function TravelHomepage({children, user, total_usd, base_currency
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 {/* Avatar with Status Indicator */}
                 <Box sx={{ position: 'relative' }}>
-                <Box sx={styles.avatarBox}>
-                    <img 
-                    src={userData.avatar} 
-                    alt={user.lastName}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                </Box>
+
+                <AvatarButton 
+                  label = {user.picture? user.picture: userData.avatar} 
+                  allowMultiple={false}
+                  fileTypes={['image/jpeg', 'image/png', 'image/jpg']}
+                  maxFileSize={5 * 1024 * 1024}  // 5 MB
+                  onFileSelect={handleSelectedImage}
+                  styles = {styles.avatarBox}
+                />
+                
                 <Box sx={{
                     position: 'absolute',
                     bottom: 0,
