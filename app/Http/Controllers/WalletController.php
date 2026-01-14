@@ -46,8 +46,8 @@ class WalletController extends Controller
         // Convert the wallet value to the new currency
         // 1. Convert original currency to USD using the original currency rate
         // 2. Then convert the amount from USD to the new currency using the new currency rate
-        $valueInBaseCurrency = $wallet->value / $originalCurrencyRate;  // Convert to base currency (USD)
-        $newValue = $valueInBaseCurrency * $newCurrencyRate;             // Convert to the new currency
+        $valueInUSD = $wallet->value / $exchangeRates[$originalCurrency];
+        $newValue = $valueInUSD * $exchangeRates[$newCurrency];
 
         // Update the wallet with the new currency and value
         $wallet->update([
