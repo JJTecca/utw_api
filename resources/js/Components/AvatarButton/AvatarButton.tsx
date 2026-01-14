@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Button } from '@mui/material';
 import { Assignment } from '@mui/icons-material';
 
-type UploadButtonProps = {
+type AvatarButtonProps = {
 	label: string;
 	fileTypes?: string[];
 	allowMultiple?: boolean;
@@ -15,14 +15,14 @@ type UploadButtonProps = {
      * Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. 
 	 * Copyright from lib.es2015.core.d.ts
 	********************************************************/
-export const UploadButton = ({
+export const AvatarButton = ({
 		label, 
 		maxFileSize = Number.MAX_SAFE_INTEGER, 
 		fileTypes, 
 		allowMultiple, 
 		onFileSelect,
 		styles
-	}:UploadButtonProps) => {
+	}:AvatarButtonProps) => {
 
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -66,12 +66,16 @@ export const UploadButton = ({
 			/>
 			<Button
 				variant="outlined"
-				startIcon={<Assignment />}
+
 				fullWidth
 				sx={styles}
 				onClick={()=>inputRef?.current?.click()}
 			>
-				{label}
+				<img 
+                    src={label} 
+                    alt="Upload"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, }}
+                />
 			</Button>
 		</div>
 	);
