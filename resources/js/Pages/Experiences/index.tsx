@@ -73,6 +73,8 @@ import businessClassExperience from '../../../../public/Images/experience-busine
 import economyClassExperience from '../../../../public/Images/experience-economy-class.jpg';
 import { styles } from './Experiences.styles';
 import { Star } from '@mui/icons-material';
+import { tr } from 'framer-motion/client';
+import { ReviewBoards } from '@/Components/ReviewBoards/ReviewBoards';
 
 const navItems = [ 
   { label: 'About', icon: <InfoCircleOutlined />, path: '/about' } 
@@ -83,6 +85,10 @@ const FlightExperienceApp: React.FC = () => {
   const theme = useTheme();
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [reviewsOpen, setModalOpen] = useState(false);
+  const [travelClass, setTravelClass] = useState<number | null>(null);
+
+  
 
   const classesData = [
     {
@@ -143,6 +149,11 @@ const FlightExperienceApp: React.FC = () => {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
+  };
+
+  const handleOpenReviews = (classId: number) => {
+        setTravelClass(classId);
+        setModalOpen(true);
   };
 
   const drawer = (
@@ -449,6 +460,12 @@ const FlightExperienceApp: React.FC = () => {
        *  
        * *************************************************/}
       <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
+        {reviewsOpen && travelClass != null && (
+          <ReviewBoards
+            onClose={() => { setModalOpen(false); setTravelClass(null); }}
+            classId={travelClass}
+          />
+        )} 
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
             variant="h2"
@@ -541,11 +558,12 @@ const FlightExperienceApp: React.FC = () => {
                 </Grid>
                 
                 <Box sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.buttonBox}>
-                  <Button
+                  <Button onClick={() => handleOpenReviews(index + 1)}
                     variant="contained"
                     endIcon={<ArrowRightOutlined />}
                     size="large"
                     sx={styles.mainPageBox.mainContent.flightClassesGen.contentCard.buttonBox.detailsButton}
+                   
                   >
                     {classInfo.buttonText}
                   </Button>
