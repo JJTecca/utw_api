@@ -55,7 +55,7 @@ class User extends Authenticatable
      * Laravel convention : Singular function name, plural is highly discouraged
      /*****************************************************************************/
     public function booking() {
-        return $this->belongsToMany(Booking::class,'user_booking_links');
+        return $this->belongsToMany(Booking::class, 'user_booking_links', 'user_id', 'booking_id');
     }
 
     public function wallet() {

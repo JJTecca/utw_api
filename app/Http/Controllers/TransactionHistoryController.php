@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransactionHistory;
+use App\Models\UserBookingLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,7 @@ class TransactionHistoryController extends Controller
             'description' => 'required|string|max:255',
             'amount'      => 'required|numeric',
             'status'      => 'required|string',
+            'booking_id'  => 'required|integer|exists:bookings,id'
         ]);
 
         $transaction = TransactionHistory::create([
@@ -24,7 +26,15 @@ class TransactionHistoryController extends Controller
             'status'      => $validated['status'],
         ]);
 
-        return response()->json($transaction, 201);
+        $userBookingLink = UserBookingLink::create([
+            'user_id' => Auth::id(),
+            'booking_id' => $validated['booking_id']
+        ]);
+
+        return response()->json([
+            'transaction' => $transaction,
+            'user_booking_link' => $userBookingLink
+        ,201]);
     }
 
     // 2. GET: Retrieve history for the logged-in user

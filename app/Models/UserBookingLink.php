@@ -6,13 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserBookingLink extends Model
 {
-    /* Laravel convention : Don't really need to have 1st arg the id of the table*/
+    // Explicitly set the table name
+    protected $table = 'user_booking_links';
+    
+    // Allow mass assignment for these fields
     protected $fillable = [
         'user_id',
         'booking_id'
     ];
     
+    // Ensure timestamps are enabled
+    public $timestamps = true;
+    
     /*****************************************************************************
-     * Laravel convention : Singular function name, plural is highly discouraged
-     /*****************************************************************************/
+     * Relationships
+     *****************************************************************************/
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 }

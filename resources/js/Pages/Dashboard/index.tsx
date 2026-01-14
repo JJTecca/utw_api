@@ -46,8 +46,6 @@ import { styles } from './Dashboard.styles';
 import { motion, AnimatePresence } from "framer-motion";
 import { FlightModal } from '@/Components/FlightModal/FlightModal';
 
-
-
 // Define the props interface for the Dashboard component
 interface DashboardProps {
   availableCities: string[];
@@ -64,6 +62,7 @@ interface DashboardProps {
     booking_date: string;
     description: string;
   }>;
+  user_id: number;
 }
 
 export default function Dashboard() {
@@ -86,6 +85,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [searchProgress, setSearchProgress] = useState(0);
   const [searchMessage, setSearchMessage] = useState('Searching for flights...');
+  const [flightStatusNumber, setFlightStatusNumber] = useState('');
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -153,9 +153,50 @@ export default function Dashboard() {
     setArrivalCity(temp);
   };
 
-  const handleOpenInfo = () => {
-        setModalOpen(!modalOpen);
-    };
+  const handleOpenInfo = async () => {
+    if (!flightStatusNumber.trim()) {
+      alert("Please enter a flight number");
+      return;
+    }
+    try {
+      // Get CSRF token
+      const csrfMeta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null;
+      
+      if (!csrfMeta || !csrfMeta.content) {
+        throw new Error("CSRF token meta tag missing or empty. Please reload the page.");
+      }
+
+      const response = await fetch('dashboard/check-flight-status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csrfMeta.content
+        },
+        body: JSON.stringify({
+            userId: dashboardProps.user_id,
+            flightNumber: flightStatusNumber
+        })
+      });
+
+      // Check response
+      if (response) {
+        setModalOpen(true);
+        setSearchMessage('Flight status found! Opening details...');
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } 
+    } catch (error: any) {
+      console.error("Flight status check error:", error);
+    } finally {
+      // Reset loading state after a short delay
+      setTimeout(() => {
+        setLoading(false);
+        setSearchProgress(0);
+        setSearchMessage('Searching for flights...');
+      }, 500);
+    }
+  };
 
   const handleBooking = async () => {
     try {
@@ -315,7 +356,14 @@ export default function Dashboard() {
   return (
     
     <AuthenticatedLayout>
-      {modalOpen && <FlightModal onClose={()=>setModalOpen(false)}/>}
+      {modalOpen && (
+          <FlightModal 
+              onClose={() => setModalOpen(false)}
+              flightNumber={flightStatusNumber}
+              userId={dashboardProps.user_id}
+              open={modalOpen}
+          />
+      )}
       <Head title="Dashboard" />
       
       {/* Navigation Bar */}
@@ -729,6 +777,13 @@ export default function Dashboard() {
                           size="small"
                           variant="outlined"
                           placeholder="TK 1234"
+                          value={flightStatusNumber}
+                          onChange={(e) => setFlightStatusNumber(e.target.value)}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              handleOpenInfo();
+                            }
+                          }}
                         />
                       </Box>
 

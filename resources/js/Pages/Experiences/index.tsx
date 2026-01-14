@@ -1,6 +1,6 @@
 /*************************************************
  * @format Experience Menu (The new one)
- * @author Maior Cristian
+ * @author Maior Cristian, Niculescu Cristian
  * ********************************************* */ 
 /****************************************************************************************************
  * 1. Import only necessary modules, in the correct logical order.

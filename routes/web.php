@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionHistoryController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Models\Wallet;
 use Illuminate\Http\Client\Request;
@@ -73,6 +74,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/submit-booking', [BookingController::class, 'submitBooking'])->name('store');
 
     Route::patch('/dashboard/view-bookings/payment-process', [BookingController::class, 'paymentBooking'])->name('booking.payment');
+
+    Route::post('/dashboard/check-flight-status', [UserController::class, 'checkFlightStatus'])->name('dashboard.check');
 
     Route::get('/dashboard/experiences', function () { 
         return Inertia::render('Experiences/index');

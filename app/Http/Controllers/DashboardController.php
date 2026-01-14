@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -11,6 +12,10 @@ class DashboardController extends Controller
     public function index()
     {
         $allBookings = Booking::all();
+
+        //Get only the user id
+        $currentUser = User::where('id',Auth::id())->pluck('id')->first(); 
+        //dd($currentUser); //Test
 
         $experienceTypes = Booking::distinct()->pluck('experience_type')->toArray();
         $departureCities = Booking::distinct()->pluck('destination_city_name')->toArray();
@@ -27,7 +32,8 @@ class DashboardController extends Controller
             'availableCities' => $allCities,
             'departureCities' => $departureCities,
             'arrivalCities' => $arrivalCities,
-            'bookings' => $allBookings
+            'bookings' => $allBookings,
+            'user_id' => $currentUser
         ]);
     }
 }

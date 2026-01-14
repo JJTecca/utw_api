@@ -24,7 +24,7 @@ class Booking extends Model
      * Laravel convention : Singular function name, plural is highly discouraged
      /*****************************************************************************/
     public function user() {
-        return $this->belongsToMany(User::class, 'user_booking_links');
+        return $this->belongsToMany(User::class, 'user_booking_links', 'booking_id', 'user_id');
     }
 
     public function report() {

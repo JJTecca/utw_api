@@ -315,7 +315,6 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
 
     const selectedWallet = checkoutForm.selectedWallet;
     
-    // Add additional validation for wallet selection
     if (checkoutForm.paymentMethod === 'wallet' && !selectedWallet) {
         setPaymentError('Selected wallet not found.');
         return;
@@ -329,13 +328,13 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
     try {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         
-        // **FIXED: Ensure wallet_id is properly included in payload**
+        // Initial payment payload
         let payload: any = {
-            booking_id: selectedFlight.id,
+            booking_id: selectedFlight.id,  // Use the stored bookingId
             destination_city_name: selectedFlight.destination_city_name,
             arrival_city_name: selectedFlight.arrival_city_name,
             experience_type: selectedFlight.experience_type,
-            price: flightPrice, // This is the price backend expects
+            price: flightPrice,
             payment_method: checkoutForm.paymentMethod,
             notes: bookingNotes || ''
         };
@@ -345,7 +344,6 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
                 ...payload,
                 wallet_id: checkoutForm.wallet_id,
                 currency: selectedWallet?.currency || 'USD'
-                // NOTE: Do NOT include 'value' field - backend uses 'price' field
             };
         }
 
@@ -384,8 +382,6 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
                     booking_id: selectedFlight.id
                 };
 
-                console.log('Sending transaction payload:', transactionPayload);
-
                 const transactionResponse = await fetch('/dashboard/worldtour/transaction-histories', {
                     method: 'POST',
                     headers: {
@@ -396,16 +392,9 @@ export default function Booking({ bookings, full_price, user, wallets }: Booking
                     body: JSON.stringify(transactionPayload),
                     credentials: 'include'
                 });
-
-                if (!transactionResponse.ok) {
-                    console.warn('Transaction history creation failed, but booking was successful');
-                } else {
-                    const transactionData = await transactionResponse.json();
-                    console.log('Transaction history created:', transactionData);
-                }
             }
         } catch (transactionError) {
-            console.warn('Error creating transaction history:', transactionError);
+            console.error('Error creating transaction history:', transactionError);
         }
 
         setPaymentSuccess(true);
