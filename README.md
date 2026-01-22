@@ -1,515 +1,442 @@
-# ✈️ UTW Airlines - Premium Flight Booking Platform
+# ✈️ UTW Airlines - Full-Stack Flight Management System
 
-A full-stack flight booking and management system built with Laravel and React, featuring multi-currency wallet management, flight search, booking workflows, and user profile management.
+A comprehensive airline management system built with a React + TypeScript frontend and a Laravel PHP backend, providing flight booking, wallet-based payments, profile management, and reporting for an airline-style experience.
 
 ---
 
-## 🚀 Tech Stack
+## 📋 Table of Contents
 
-### Backend
-- **Framework**: Laravel 10.x (PHP 8.1+)
-- **Database**: MySQL/PostgreSQL
-- **Authentication**: Laravel Breeze with Inertia.js
-- **API**: RESTful API with Laravel controllers
-- **Validation**: Laravel Form Requests (PSR-1/PSR-12 compliant)
-- **Security**: CSRF protection, middleware authentication, rate limiting
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [API Routes](#api-routes)
+- [Frontend Pages](#frontend-pages)
+- [Installation & Setup](#installation--setup)
+- [Security](#security)
+- [Project Structure](#project-structure)
+
+---
+
+## Overview
+
+UTW Airlines simulează un sistem modern de management de zboruri, cu integrare între un frontend interactiv (React + MUI) și un backend robust (Laravel, MySQL). Platforma acoperă întregul flux: de la căutare și booking de zboruri, până la administrare de profil, portofele multi-valută și rapoarte detaliate per booking.
+
+---
+
+## Key Features
 
 ### Frontend
-- **Framework**: React 18+ with TypeScript
-- **UI Library**: Material-UI (MUI) v5
-- **State Management**: React Hooks (useState, useEffect)
-- **Routing**: Inertia.js (server-side routing)
-- **Animations**: Framer Motion
-- **Icons**: Material-UI Icons, Ant Design Icons
-- **Styling**: MUI sx prop, custom style objects
 
-### Additional Technologies
-- **Currency Exchange**: Custom exchange rate system (config-based)
-- **File Uploads**: Multi-file upload support
-- **Form Handling**: Inertia.js forms
-- **Type Safety**: TypeScript interfaces for props and data models
+- **Dashboard de zboruri** cu:
+  - Căutare dinamică: oraș plecare/sosire, date, număr pasageri, tip de experiență (First/Business/Economy)
+  - Hero slideshow cu imagini de avion și UI animat (Framer Motion)
+  - Secțiune de „Why choose UTW?" cu beneficii afișate card-based
 
----
+- **Booking screen**:
+  - Listă de zboruri cu accordion (detalii, preț, rating, durată mock, companie)
+  - Checkout dialog cu alegere metodă de plată (wallet / bank transfer)
+  - Integrare cu portofelele utilizatorului și calcul total pe baza clasei de călătorie
 
-## 🔐 Security Features
+- **Profile / Wallet management**:
+  - Layout de profil cu carduri pentru date utilizator, status de verificare, acțiuni și setări
+  - Administrare portofele multi-valută (35+ monede, ex: EUR, RON, USD etc.)
+  - Dialog de „Add funds" cu quick deposit, actualizare în timp real a totalului în USD și istoric tranzacții
 
-### Authentication & Authorization
-- **Session-based authentication** with Laravel Breeze
-- **CSRF token protection** on all state-changing requests
-- **Middleware guards** (`auth`, `throttle:60,1`) for protected routes
-- **User authorization checks** (wallet ownership verification)
-- **Password hashing** with bcrypt
+### Backend
 
-### API Security
-- **Rate limiting**: 60 requests per minute per user
-- **Input validation**: Laravel Form Requests with strict rules
-- **SQL injection prevention**: Eloquent ORM with parameterized queries
-- **XSS protection**: React automatic escaping + Laravel sanitization
-- **Encrypted user IDs**: Custom encryption for sensitive data transmission
+- **Laravel 10+** cu routing RESTful și middleware `auth` + `throttle`
+- **Booking management**:
+  - Tabel `bookings` cu informații completă despre zbor (orașe, experiență, număr zbor, descriere etc.)
+  - Pivot `user_booking_links` pentru user–booking Many-to-Many
 
-### Payment Security
-- **Educational purposes only** - no real money involved
-- **Transaction validation**: Server-side balance checks
-- **Wallet authorization**: Users can only access their own wallets
-- **Audit trail**: Transaction history tracking
-- **Error handling**: Graceful failure with user feedback
+- **Reporting**:
+  - Tabel `reports` legat 1:1 de `bookings`, cu câmpuri pentru flight_logs, maintenance, weather, financial, passenger_reports, crew_reports, safety_reports
 
-### Additional Measures
-- **HTTPS enforcement** (recommended for production)
-- **Environment variables** for sensitive configuration
-- **PSR-12 compliance** for clean, maintainable code
-- **TypeScript type safety** to prevent runtime errors
+- **Wallet & Destinations**:
+  - Tabel `wallets` legat de user, cu enum de monede și valoare
+  - Tabel `destinations` pentru „World Tour": titlu, descriere, poză, rating, reviews, price, category, is_featured
 
 ---
 
-## 🌍 Deployment on Railway
+## Tech Stack
+
+### Frontend
+
+- **React 18 + TypeScript** – interfețe strongly typed și hooks (useState, useEffect)
+- **Material-UI (MUI)** – AppBar, Drawer, Cards, Dialogs, Tabs, Forms, Icons
+- **Framer Motion** – animații pentru slide-uri și secțiuni animate
+- **Inertia.js** – comunicare între Laravel și React fără API clasic separat
+
+### Backend
+
+- **Laravel 10+** – routing, controllers, middleware, Eloquent ORM
+- **MySQL** – stocare date pentru users, bookings, reports, wallets, destinations
+- **Sessions & CSRF** – mecanisme implicite Laravel pentru autentificare și protecție request
+
+---
+
+## Architecture
+
+La nivel logic, aplicația este structurată astfel:
+
+- **Client (React + MUI)** – UI pentru dashboard, booking, profil, wallet
+- **Server (Laravel)** – controllers, validare, securitate, business logic și acces DB
+- **Database (MySQL)** – tabele normalizate pentru users, bookings, wallets, reports, destinations
+
+Flux tipic:
+
+1. User-ul accesează `/dashboard` → Inertia renderizează componenta React `Dashboard`
+2. User-ul face booking → frontend trimite request la rutele de booking (`/dashboard/bookings`, `/dashboard/submit-booking`)
+3. Plată → integrare cu route de payment pentru booking sau wallet (`/dashboard/view-bookings/payment-process`, `/profileMenu/payment-process`)
+4. Profil & wallet → `/profile`, `/profileMenu`
+
+---
+
+## Database Schema
+
+### Users
+
+- Tabel `users`:
+  - `id`, `firstName`, `lastName`, `email`, `password`, `country`, `gender`, `remember_token`, timestamps
+- Relații:
+  - One-to-Many cu `wallets`
+  - Many-to-Many cu `bookings` prin `user_booking_links`
+
+### Bookings
+
+- Tabel `bookings`:
+  - `id`, `passenger_count`, `destination_city_name`, `destination_airport_id`, `arrival_city_name`, `arrival_airport_id`, `experience_type`, `flight_number`, `booking_date`, `description`, timestamps
+- Relații:
+  - Many-to-Many cu `users` prin `user_booking_links`
+  - One-to-One cu `reports`
+
+### UserBookingLinks
+
+- Tabel pivot `user_booking_links`:
+  - `id`, `user_id`, `booking_id`, timestamps
+  - FK către `users(id)` și `bookings(id)` cu `onDelete('cascade')`
+
+### Reports
+
+- Tabel `reports`:
+  - `id`, `booking_id`, `flight_logs`, `maintenance`, `weather`, `financial`, `passenger_reports`, `crew_reports`, `safety_reports`, timestamps
+
+### Wallets
+
+- Tabel `wallets`:
+  - `id`, `user_id`, `currency` (ENUM cu ~35 monede), `value`, timestamps
+  - FK către `users(id)` cu `onDelete('cascade')`
+  - Suportate: EUR, RON, USD, JPY, GBP, CHF, AUD, CAD, HKD, SGD, INR, KRW, SEK, MXN, NZD, NOK, TWD, BRL, ZAR, PLN, DKK, IDR, TRY, THB, ILS, HUF, CZK, CLP, PHP, COP, MYR, AED, SAR, PEN
+
+### Destinations
+
+- Tabel `destinations`:
+  - `id`, `title` (unique), `subtitle`, `description`, `image`, `rating`, `reviews`, `price`, `is_featured`, `category`, timestamps
+
+---
+
+## API Routes
+
+> Rutele sunt definite în `routes/web.php` și sunt protejate de middleware `auth` (și, în unele cazuri, de throttling).
+
+### Auth & Profile
+
+- `GET /` → redirect către `/login`
+- `GET /profile` → profile view/edit (protected)
+- `PATCH /profile` → update profil
+- `DELETE /profile` → ștergere user
+- `POST /logout` → logout user
+
+### Dashboard & Flights
+
+- `GET /dashboard` → Dashboard principal (lista bookings, orașe disponibile, user_id)
+- `GET /dashboard/worldtour` → listă destinații (World Tour)
+- `PATCH /dashboard/worldtour/booking-payment` → payment pentru booking World Tour
+- `POST /dashboard/worldtour/transaction-histories` → salvare tranzacții
+
+### Booking
+
+- `POST /dashboard/bookings` → creare booking
+- `GET /dashboard/view-bookings/destination` → listare bookings pentru destinații
+- `POST /dashboard/submit-booking` → submit final booking
+- `PATCH /dashboard/view-bookings/payment-process` → payment pentru booking ales
+
+### Flight Status
+
+- `POST /dashboard/check-flight-status` → verificare status zbor după număr flight
+
+### Profile / Wallet
+
+- `GET /profileMenu` → Profile + Wallet UI
+- `PATCH /profileMenu/payment-process` → alimentare wallet / plată din wallet (payload: user_id, currency, value etc.)
+
+### Encryption Utility
+
+- `GET /get-encrypted-user-id` → întoarce `encrypted_data` pentru user-ul logat (id criptat)
+
+---
+
+## Frontend Pages
+
+### Dashboard Page (Dashboard/index.tsx)
+
+- Câmpuri principale:
+  - `availableCities`, `departureCities`, `arrivalCities`, `bookings`, `user_id`
+- Funcționalități:
+  - Selectare oraș plecare/sosire, tip experiență, date de plecare/întoarcere, număr pasageri
+  - Toggle între secțiuni (flight search, experiences, flight status)
+  - Flight status modal cu input de flight number și request la backend
+
+### Booking Page (Booking/index.tsx)
+
+- Props:
+  - `bookings`, `full_price`, `user`, `wallets`
+- Funcționalități:
+  - Filtrare după oraș plecare, oraș sosire, tip experiență
+  - Calcule preț dinamic (First +50%, Business +25%, Economy -20% față de `full_price`)
+  - Checkout dialog cu selecție wallet, sumă, notițe și submit
+
+### Profile / Wallet Page (ProfileMenu/index.tsx)
+
+- Props:
+  - `users`, `wallets`, `total_usd`, `base_currency`, `transaction_history`
+- Funcționalități:
+  - Drawer responsive cu secțiuni: My Flights, Wallet, Help
+  - Dialog „Verify your account" cu status pending/verified + feedback vizual
+  - Dialog „Add funds" cu select valută, quick deposit, recalcul total USD
+  - Integrare cu upload de documente și modale de ajutor/documente de zbor
+
+---
+
+## Installation & Setup
 
 ### Prerequisites
-1. Railway account ([railway.app](https://railway.app))
-2. GitHub repository with your code
-3. Environment variables configured
 
-### Step-by-Step Deployment
+- PHP 8.1+
+- Composer
+- Node.js 16+
+- npm / yarn
+- MySQL (minim 5.7, recomandat 8.0+)
+- Redis (opțional, pentru cache/sessions)
 
-#### 1. Create New Project on Railway
+### 1. Backend
+
 ```bash
-# Login to Railway CLI (optional)
-npm install -g @railway/cli
-railway login
+composer install
+cp .env.example .env
+php artisan key:generate
 ```
 
-#### 2. Connect GitHub Repository
-1. Go to Railway dashboard → **New Project**
-2. Select **Deploy from GitHub repo**
-3. Choose your UTW Airlines repository
-4. Railway will auto-detect Laravel
-
-#### 3. Configure Environment Variables
-Add these in Railway → **Variables** tab:
+Configurează conexiunea la DB în `.env`:
 
 ```env
-# Application
-APP_NAME="UTW Airlines"
-APP_ENV=production
-APP_KEY=base64:your-generated-key
-APP_DEBUG=false
-APP_URL=https://your-app.railway.app
-
-# Database (Railway provides this automatically)
-DB_CONNECTION=mysql
-DB_HOST=${MYSQLHOST}
-DB_PORT=${MYSQLPORT}
-DB_DATABASE=${MYSQLDATABASE}
-DB_USERNAME=${MYSQLUSER}
-DB_PASSWORD=${MYSQLPASSWORD}
-
-# Session & Cache
-SESSION_DRIVER=database
-CACHE_DRIVER=file
-QUEUE_CONNECTION=sync
-
-# Security
-CSRF_COOKIE_SECURE=true
-SESSION_SECURE_COOKIE=true
-
-# Custom
-EXCHANGE_RATE_BASE=USD
-```
-
-#### 4. Add MySQL Database
-1. In Railway project → **New** → **Database** → **MySQL**
-2. Railway automatically links environment variables
-
-#### 5. Configure Build Settings
-Create `railway.json` in project root:
-
-```json
-{
-  "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "npm install && npm run build && composer install --optimize-autoloader --no-dev"
-  },
-  "deploy": {
-    "startCommand": "php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=$PORT",
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
-  }
-}
-```
-
-#### 6. Add Nixpacks Configuration
-Create `nixpacks.toml`:
-
-```toml
-[phases.setup]
-nixPkgs = ["php81", "php81Packages.composer", "nodejs-18_x"]
-
-[phases.install]
-cmds = [
-  "composer install --optimize-autoloader --no-dev",
-  "npm ci",
-  "npm run build"
-]
-
-[phases.build]
-cmds = ["php artisan config:cache"]
-
-[start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
-```
-
-#### 7. Deploy
-- Push code to GitHub → Railway auto-deploys
-- Monitor build logs in Railway dashboard
-- Access app at `https://your-project.railway.app`
-
-### Post-Deployment
-```bash
-# Run migrations (one-time via Railway CLI)
-railway run php artisan migrate --force
-
-# Generate app key if not set
-railway run php artisan key:generate
-
-# Clear caches
-railway run php artisan cache:clear
-railway run php artisan config:clear
-```
-
----
-
-## 💻 Installation & Setup (Local Development)
-
-### Prerequisites
-- PHP 8.1 or higher
-- Composer 2.x
-- Node.js 18+ and npm
-- MySQL 8.0 or PostgreSQL 13+
-- Git
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/your-username/utw-airlines.git
-cd utw-airlines
-```
-
-### 2. Backend Setup
-```bash
-# Install PHP dependencies
-composer install
-
-# Copy environment file
-cp .env.example .env
-
-# Generate application key
-php artisan key:generate
-
-# Configure database in .env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=utw_airlines
-DB_USERNAME=root
+DB_USERNAME=your_user
 DB_PASSWORD=your_password
 ```
 
-### 3. Database Setup
-```bash
-# Create database
-mysql -u root -p
-CREATE DATABASE utw_airlines;
-EXIT;
+Apoi rulează migrațiile:
 
-# Run migrations
+```bash
 php artisan migrate
-
-# (Optional) Seed database with test data
-php artisan db:seed
 ```
 
-### 4. Frontend Setup
+### 2. Frontend
+
 ```bash
-# Install Node dependencies
 npm install
-
-# Build assets for development
-npm run dev
-
-# Or build for production
-npm run build
+# sau
+yarn install
 ```
 
-### 5. Configure Exchange Rates
-Create `config/exchange.php`:
+Rulează în development:
 
-```php
-<?php
-
-return [
-    'base_currency' => env('EXCHANGE_RATE_BASE', 'USD'),
-    'rates' => [
-        'USD' => 1.0,
-        'EUR' => 0.92,
-        'GBP' => 0.78,
-        'JPY' => 145.0,
-        'RON' => 4.60,
-        'CNY' => 7.24,
-        // Add more currencies as needed
-    ],
-];
-```
-
-### 6. Start Development Server
 ```bash
-# Terminal 1: Laravel server
 php artisan serve
-
-# Terminal 2: Vite dev server
 npm run dev
 ```
 
-Access the application at `http://localhost:8000`
-
-### 7. Create Test User
-```bash
-php artisan tinker
-
-# In tinker console:
-\App\Models\User::factory()->create([
-    'email' => 'test@utw.com',
-    'password' => bcrypt('password')
-]);
-```
-
-### 8. Configure File Permissions (Linux/Mac)
-```bash
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
-```
+Accesează aplicația la `http://localhost:8000`
 
 ---
 
-## 📁 Project Structure
+## Security
 
-```
-utw-airlines/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── BookingController.php
-│   │   │   ├── DashboardController.php
-│   │   │   ├── DestinationController.php
-│   │   │   ├── ProfileController.php
-│   │   │   ├── WalletController.php
-│   │   │   └── TransactionHistoryController.php
-│   │   ├── Requests/
-│   │   │   ├── PaymentRequest.php
-│   │   │   └── WalletRequest.php
-│   │   └── Middleware/
-│   ├── Models/
-│   │   ├── User.php
-│   │   ├── Wallet.php
-│   │   ├── Booking.php
-│   │   ├── Destination.php
-│   │   └── TransactionHistory.php
-│   └── Auxiliar/
-│       └── Encrypt.php
-├── resources/
-│   └── js/
-│       ├── Pages/
-│       │   ├── Dashboard/
-│       │   │   ├── index.tsx
-│       │   │   └── Dashboard.styles.ts
-│       │   ├── Booking/
-│       │   │   ├── index.tsx
-│       │   │   └── Booking.styles.ts
-│       │   ├── Experiences/
-│       │   │   ├── index.tsx
-│       │   │   └── Experiences.styles.ts
-│       │   └── ProfileMenu/
-│       │       ├── index.tsx
-│       │       ├── ProfileManagement.styles.ts
-│       │       ├── constants.tsx
-│       │       └── HelpModal.tsx
-│       ├── Components/
-│       │   ├── FlightModal/
-│       │   ├── InfoModal/
-│       │   ├── FlightDocuments/
-│       │   └── UploadButton/
-│       └── Layouts/
-│           ├── AuthenticatedLayout.tsx
-│           └── BookingLayout.tsx
-├── routes/
-│   └── web.php
-├── database/
-│   └── migrations/
-├── config/
-│   └── exchange.php
-├── public/
-│   └── Images/
-├── .env.example
-├── composer.json
-├── package.json
-├── tsconfig.json
-├── railway.json
-├── nixpacks.toml
-└── README.md
-```
+### Auth & Sessions
+
+- Session-based auth cu cookie-uri criptate
+- Acces la rute sensibile doar prin middleware `auth`
+
+### CSRF Protection
+
+- Token CSRF generat automat și validat de Laravel pentru toate POST/PATCH/DELETE
+- Frontend include token-ul în header-ele request-urilor
+
+### Password Handling
+
+- Parole hash-uite cu bcrypt, niciodată în plain text
+
+### User ID Encryption
+
+- Endpoint dedicat care returnează ID user criptat pentru utilizare sigură în frontend / URL-uri
+
+### Rate Limiting
+
+- Grup de rute protejat cu `throttle:60,1` (maxim 60 request-uri/minut)
+
+### Input Validation & Sanitization
+
+- Mass Assignment Protection în modele Eloquent
+- SQL Injection mitigat prin parameter binding
+- Type Safety pe frontend prin TypeScript interfaces
 
 ---
 
-## 🔧 Configuration
+## Project Structure (High Level)
 
-### Environment Variables
-Key configurations in `.env`:
-
-```env
-# Application
-APP_NAME="UTW Airlines"
-APP_ENV=local
-APP_DEBUG=true
-
-# Security
-SESSION_LIFETIME=120
-SANCTUM_STATEFUL_DOMAINS=localhost
-
-# Custom
-EXCHANGE_RATE_BASE=USD
 ```
+app/
+  Http/Controllers/
+    BookingController.php
+    DashboardController.php
+    DestinationController.php
+    ProfileController.php
+    UserController.php
+    WalletController.php
+  Models/
+    User.php
+    Booking.php
+    Report.php
+    Wallet.php
+    Destination.php
+    UserBookingLink.php
+  Auxiliar/
+    Encrypt.php
 
-### Currency System
-The platform supports 35+ currencies with automatic conversion. Exchange rates are defined in `config/exchange.php` and can be updated as needed.
+database/
+  migrations/
+    0001_01_01_000000_create_users_table.php
+    0001_01_01_000001_create_cache_table.php
+    0001_01_01_000002_create_jobs_table.php
+    2025_03_10_202137_create_personal_access_tokens_table.php
+    2025_03_20_210926_create_bookings_table.php
+    2025_03_20_211923_create_reports_table.php
+    2025_04_19_174951_create_user_booking_links_table.php
+    2025_12_15_064834_create_wallets_table.php
+    2025_12_24_153456_create_destinations_table.php
 
-### File Uploads
-Configure upload limits in `php.ini`:
-```ini
-upload_max_filesize = 10M
-post_max_size = 10M
-```
+resources/js/
+  Layouts/
+    AuthenticatedLayout.tsx
+    BookingLayout.tsx
+  Pages/
+    Dashboard/
+      index.tsx
+      Dashboard.styles.ts
+    Bookings/
+      index.tsx
+      Booking.styles.ts
+    ProfileMenu/
+      index.tsx
+      ProfileManagement.styles.ts
+      constants.ts
+      HelpModal.tsx
+    Experiences/
+      index.tsx
+  Components/
+    FlightModal/
+      FlightModal.tsx
+    FlightDocuments/
+      DocumentsModal.tsx
+    InfoModal/
+      MyModal.tsx
+    Modal.tsx
+    UploadButton.tsx
 
----
+routes/
+  web.php
+  auth.php
 
-## 🧪 Testing
+public/
+  Images/
+    turkish-menu.jpg
+    edit-profile.jpg
+    a350.jpg
+    turkish-dashboard1.jpg
+    Turkish_Boeing_787.jpg
+    Turkish_boeing_777.jpg
+    clouds-255012_1280.jpg
+    turkish-dashboard-2.jpg
 
-### Run PHP Tests
-```bash
-php artisan test
-```
-
-### Run Type Checking
-```bash
-npm run type-check
-```
-
-### Code Quality
-```bash
-# PHP CodeSniffer (PSR-12)
-composer run-script phpcs
-
-# PHP Stan (static analysis)
-composer run-script phpstan
+.env.example
+composer.json
+package.json
+vite.config.js
+tailwind.config.js
 ```
 
 ---
 
-## 📊 Key Features
+## Main Features Deep Dive
 
-### User Management
-- Profile management with verification system
-- Multi-currency wallet support
-- Transaction history tracking
-- Document upload functionality
+### Flight Search & Booking Flow
 
-### Flight Booking
-- Search flights by destination, arrival city, and experience type
-- Three travel classes: First Class, Business Class, Economy Class
-- Dynamic pricing based on class and route
-- Checkout system with wallet integration
-- Flight status checking
+1. User-ul intră pe `/dashboard` și vede formula de căutare
+2. Alege oraș plecare, sosire, date, pasageri și tip experiență (First/Business/Economy)
+3. Click pe „Book Your Flight" → se calculează preț și se merge pe `/dashboard/bookings`
+4. Pagina de booking afișează toate zborurile disponibile
+5. User selectează un zbor și deschide checkout dialog
+6. Alege metoda de plată (Wallet sau Bank Transfer) și confirm
+7. Backend procesează booking și creeaza record în tabel `bookings` + legătura în `user_booking_links`
 
-### Dashboard
-- Interactive flight search with slideshow hero section
-- Round-trip and one-way booking options
-- Passenger count selection
-- City-to-city route filtering
+### Wallet System
 
-### World Tour
-- Destination browsing with detailed information
-- Direct booking to destinations
-- Virtual currency payment system
+- Fiecare user poate avea mai multe portofele (una per valută)
+- Suport pentru ~35 de monede
+- Automatic conversion la USD pentru afișare total
+- Quick deposit opțiuni: $50, $100, $500, $1000
+- Tranzacții tracked în `transaction_history`
 
-### Payment System
-- Multi-wallet support (35+ currencies)
-- Automatic currency conversion
-- USD wallet prioritization
-- Transaction approval workflow
-- Educational payment simulation
+### Flight Status Tracking
 
----
+- User-ul introdu un flight number în modul din dashboard
+- Backend lookup-uiază starea și returnează detalii
+- Modal afișează status, gate, ore de plecare/sosire
 
-## 🤝 Contributing
+### Reporting System
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Code Standards
-- Follow PSR-12 for PHP code
-- Use TypeScript for all React components
-- Write descriptive commit messages
-- Add JSDoc/PHPDoc comments for complex functions
+- După fiecare booking, un report poate fi generat
+- Report conține: flight_logs, maintenance, weather, financial, passenger_reports, crew_reports, safety_reports
+- Legat 1:1 cu booking printr-o cheie străină
 
 ---
 
-## 📝 License
+## Notes for Developers
 
-This project is for educational purposes only. No real money transactions are involved.
-
----
-
-## 👥 Authors
-
-- **Maior Cristian** - *Lead Developer & Software Architect*
-- **Niculescu Cristian** - *Co-Developer Frontend*
-- **Sasu Daniel** - *Co-Developer Security Infrastructure & Backend*
-- **Deconescu Eduard** - *Co-Developer Backend*
+- Frontend folder structure este organizat pe feature: Dashboard, Bookings, ProfileMenu
+- Fiecare pagină principale are un fișier `.tsx` și un fișier `.styles.ts`
+- Material-UI este tema folosită, cu color scheme dark/light support
+- Inertia.js conectează backend-ul cu frontend-ul seamless
+- Type safety este prioritate – folosiți TypeScript `interface` pentru props și responses
+- Rate limiting este setat la 60 req/min. – testați cu Postman dacă faceți batch operations
 
 ---
 
-## 🐛 Known Issues & Limitations
+## Future Enhancements
 
-- Payment system is simulated (educational purposes)
-- Exchange rates are static (not fetched from live APIs)
-- Flight data is mock data for demonstration
-- No real flight API integration
+- Real-time flight notifications (WebSocket)
+- Integrare cu payment gateway real (Stripe, PayPal)
+- Advanced analytics & reporting dashboard
+- Multi-language support
+- Mobile app (React Native)
+- Integration cu airline APIs externe
 
----
 
-## 🔮 Future Enhancements
+**Made with ❤️ by UTW Airlines Development Team**
 
-- [ ] Integration with real flight APIs (Amadeus, Skyscanner)
-- [ ] Real-time currency exchange rate updates
-- [ ] Email notifications for bookings
-- [ ] Multi-language support
-- [ ] Mobile app development
-- [ ] Payment gateway integration (Stripe, PayPal)
-- [ ] Advanced search filters (stops, airlines, times)
-- [ ] Loyalty program implementation
-- [ ] Admin dashboard for flight management
-
----
-
----
-
-## 🙏 Acknowledgments
-
-- Material-UI for the comprehensive component library
-- Laravel community for excellent documentation
-- Inertia.js for seamless React-Laravel integration
-- Railway for simplified deployment
-
----
-
-**Built with ❤️ using Laravel, React, and TypeScript**
+*Last updated: January 2026*
